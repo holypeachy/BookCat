@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BookCat.Site.Data;
 
-static class DataSeeder
+public static class DataSeeder
 {
     public static async Task SeedRolesAsync(IServiceProvider serviceProvider)
     {
