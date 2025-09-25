@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookCat.Site.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250925143307_SeedBookReviewAndBookIdentifierData")]
-    partial class SeedBookReviewAndBookIdentifierData
+    [Migration("20250925150457_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,6 @@ namespace BookCat.Site.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Author")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CoverUrl")
@@ -49,7 +48,6 @@ namespace BookCat.Site.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PublishedDate")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Publisher")
@@ -89,7 +87,6 @@ namespace BookCat.Site.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
@@ -152,18 +149,6 @@ namespace BookCat.Site.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b4556383-7b6c-4e39-afd7-df86664b83c7"),
-                            AdminDeleted = false,
-                            BookId = new Guid("90adc711-8337-468a-a195-8501bac62015"),
-                            Comment = "This book fucking sucks",
-                            PostedAt = new DateTime(2025, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Rating = 1,
-                            UserId = "481de7a8-5903-4bd8-a46a-5a57838ed4ab"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

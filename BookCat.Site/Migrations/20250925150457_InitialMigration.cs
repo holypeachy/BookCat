@@ -60,10 +60,10 @@ namespace BookCat.Site.Migrations
                     GoogleId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Publisher = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PublishedDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublishedDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CoverUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddedOn = table.Column<DateOnly>(type: "date", nullable: false)
                 },
@@ -184,7 +184,7 @@ namespace BookCat.Site.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

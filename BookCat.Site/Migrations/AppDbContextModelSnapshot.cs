@@ -32,7 +32,6 @@ namespace BookCat.Site.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Author")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CoverUrl")
@@ -46,7 +45,6 @@ namespace BookCat.Site.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PublishedDate")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Publisher")
@@ -86,7 +84,6 @@ namespace BookCat.Site.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
@@ -159,7 +156,7 @@ namespace BookCat.Site.Migrations
                             Comment = "This book fucking sucks",
                             PostedAt = new DateTime(2025, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Rating = 1,
-                            UserId = "481de7a8-5903-4bd8-a46a-5a57838ed4ab"
+                            UserId = "b258429f-5fbc-46c0-955e-6a38a64bde61"
                         });
                 });
 

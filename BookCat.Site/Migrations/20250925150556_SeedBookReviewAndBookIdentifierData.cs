@@ -14,7 +14,7 @@ namespace BookCat.Site.Migrations
             migrationBuilder.InsertData(
                 table: "Reviews",
                 columns: new[] { "Id", "AdminDeleted", "BookId", "Comment", "PostedAt", "Rating", "UserId" },
-                values: new object[] { new Guid("b4556383-7b6c-4e39-afd7-df86664b83c7"), false, new Guid("90adc711-8337-468a-a195-8501bac62015"), "This book fucking sucks", new DateTime(2025, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "481de7a8-5903-4bd8-a46a-5a57838ed4ab" });
+                values: new object[] { new Guid("b4556383-7b6c-4e39-afd7-df86664b83c7"), false, new Guid("90adc711-8337-468a-a195-8501bac62015"), "This book fucking sucks", new DateTime(2025, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "b258429f-5fbc-46c0-955e-6a38a64bde61" });
         }
 
         /// <inheritdoc />

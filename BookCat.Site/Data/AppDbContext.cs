@@ -33,7 +33,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             {
                 Id = new Guid("b4556383-7b6c-4e39-afd7-df86664b83c7"),
                 BookId = new Guid("90adc711-8337-468a-a195-8501bac62015"),
-                UserId = "481de7a8-5903-4bd8-a46a-5a57838ed4ab",
+                UserId = "b258429f-5fbc-46c0-955e-6a38a64bde61",
                 Rating = 1,
                 Comment = "This book fucking sucks",
                 PostedAt = new DateTime(2025, 9, 25),

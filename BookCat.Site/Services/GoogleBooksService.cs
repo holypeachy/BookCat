@@ -5,12 +5,13 @@ using Microsoft.Extensions.Options;
 
 namespace BookCat.Site.Services;
 
-public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptions> options)
+public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptions> options, ILogger<GoogleBooksService> logger)
 {
     private readonly HttpClient _httpClient = httpClient;
     private readonly string _apiKey = options.Value.ApiKey;
+    private readonly ILogger<GoogleBooksService> _logger = logger;
     private const string _apiString = "https://www.googleapis.com/books/v1/volumes?q=";
-    private readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
         PropertyNameCaseInsensitive = true
     };
@@ -24,9 +25,9 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
         return ParseResponse(await response.Content.ReadAsStringAsync());
     }
 
-    public async Task<List<BookDto>> BookSearchISBN(string ISBN)
+    public async Task<List<BookDto>> BookSearchIdentifier(string identifier)
     {
-        string uri = _apiString + "isbn:" + ISBN + "&key=" + _apiKey;
+        string uri = _apiString + "isbn:" + identifier + "&key=" + _apiKey;
 
         var response = await _httpClient.GetAsync(uri);
 
@@ -39,17 +40,19 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
         {
             List<BookDto> bookDtos = [];
             GoogleBooksResponse? booksResponse = JsonSerializer.Deserialize<GoogleBooksResponse>(response, _jsonSerializerOptions);
+            
             if (booksResponse is null) return new List<BookDto>();
             if (booksResponse.Items is null) return new List<BookDto>();
+
             foreach (var item in booksResponse.Items)
             {
                 bookDtos.Add(
                     new BookDto
                     {
                         GoogleId = item.Id,
-                        Title = item.VolumeInfo.Title + (item.VolumeInfo.Subtitle is not null ? $": {item.VolumeInfo.Subtitle}" : ""),
+                        Title = item.VolumeInfo.Title,
                         Subtitle = item.VolumeInfo.Subtitle,
-                        Author = string.Join(", ", item.VolumeInfo.Authors),
+                        Author = item.VolumeInfo.Authors is not null ? string.Join(", ", item.VolumeInfo.Authors) : null,
                         Description = item.VolumeInfo.Description,
                         Publisher = item.VolumeInfo.Publisher,
                         PublishedDate = item.VolumeInfo.PublishedDate,
@@ -60,18 +63,19 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
             }
             foreach (var item in bookDtos)
             {
-                Console.WriteLine(item);
+                _logger.LogInformation("BookDto Parsed:\n{}", item.ToString());
                 Console.WriteLine();
             }
             return bookDtos;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogWarning("Exception was raised in {Service} at {Time}\n{Exception}", nameof(GoogleBooksService), DateTime.UtcNow, ex);
             return new List<BookDto>();
         }
     }
 
-    private string? GetBestImage(GoogleBooksImageLinks? links)
+    private static string? GetBestImage(GoogleBooksImageLinks? links)
     {
         if (links is null) return null;
         else if (links.ExtraLarge is not null) return links.ExtraLarge;

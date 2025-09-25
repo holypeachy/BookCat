@@ -18,6 +18,7 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
+        await _booksService.BookSearchIdentifier("978-1-266-79685-2");
         return View();
     }
 
