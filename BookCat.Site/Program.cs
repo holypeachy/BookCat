@@ -71,6 +71,5 @@ TODO:
 * 
 
 * Changes
-* Tiny refactor on GoogleBooksService and on Review.
 * 
 */

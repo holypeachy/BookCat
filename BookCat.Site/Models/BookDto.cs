@@ -17,6 +17,6 @@ public class BookDto
 
     public override string ToString()
     {
-        return $"GoogleID: {GoogleId}, Title: \"{Title}\", Subtitle: \"{Subtitle}\", Author: \"{Author}\", Description: \"{Description}\", Publisher: {Publisher}, PublishedDate: \"{PublishedDate}\", CoverURL: {CoverUrl}, Identifiers: \"{string.Join(" | ", Identifiers)}\"";
+        return $"GoogleID: {GoogleId}, Title: \"{Title}\", Subtitle: \"{Subtitle}\", Author: \"{Author}\", Description: \"{Description}\", Publisher: \"{Publisher}\", PublishedDate: \"{PublishedDate}\", CoverURL: \"{CoverUrl}\", Identifiers: \"{string.Join(" | ", Identifiers)}\"";
     }
 }

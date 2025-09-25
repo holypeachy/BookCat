@@ -61,16 +61,16 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
                     }
                 );
             }
+            int count = 1;
             foreach (var item in bookDtos)
             {
-                _logger.LogInformation("BookDto Parsed:\n{}", item.ToString());
-                Console.WriteLine();
+                _logger.LogInformation("BookDto {count} Parsed:\n{item}", count++, item.ToString());
             }
             return bookDtos;
         }
         catch (Exception ex)
         {
-            _logger.LogWarning("Exception was raised in {Service} at {Time}\n{Exception}", nameof(GoogleBooksService), DateTime.UtcNow, ex);
+            _logger.LogError("Exception was raised in {Service} at {Time}\n{Exception}", nameof(GoogleBooksService), DateTime.UtcNow, ex);
             return new List<BookDto>();
         }
     }
