@@ -71,8 +71,6 @@ TODO:
 * 
 
 * Changes
-* Made a few properties nullable in the schemas to match Google Book API.
-* Had to redo db migrations, again.
-* Add logger to GoogleBooksService.
+* Tiny refactor on GoogleBooksService and on Review.
 * 
 */

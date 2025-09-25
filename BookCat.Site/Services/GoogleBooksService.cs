@@ -10,6 +10,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
     private readonly HttpClient _httpClient = httpClient;
     private readonly string _apiKey = options.Value.ApiKey;
     private readonly ILogger<GoogleBooksService> _logger = logger;
+
     private const string _apiString = "https://www.googleapis.com/books/v1/volumes?q=";
     private readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
@@ -38,11 +39,10 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
     {
         try
         {
-            List<BookDto> bookDtos = [];
             GoogleBooksResponse? booksResponse = JsonSerializer.Deserialize<GoogleBooksResponse>(response, _jsonSerializerOptions);
             
-            if (booksResponse is null) return new List<BookDto>();
-            if (booksResponse.Items is null) return new List<BookDto>();
+            List<BookDto> bookDtos = [];
+            if (booksResponse is null || booksResponse.Items is null) return bookDtos;
 
             foreach (var item in booksResponse.Items)
             {
