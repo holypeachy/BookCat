@@ -23,6 +23,12 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
 
         var response = await _httpClient.GetAsync(uri);
 
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogWarning("Google Books API returned {StatusCode} for {Uri}", response.StatusCode, uri);
+            return [];
+        }
+
         return ParseResponse(await response.Content.ReadAsStringAsync());
     }
 
@@ -31,6 +37,12 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
         string uri = _apiString + "isbn:" + identifier + "&key=" + _apiKey;
 
         var response = await _httpClient.GetAsync(uri);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogWarning("Google Books API returned {StatusCode} for {Uri}", response.StatusCode, uri);
+            return [];
+        }
 
         return ParseResponse(await response.Content.ReadAsStringAsync());
     }
@@ -44,28 +56,26 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
             List<BookDto> bookDtos = [];
             if (booksResponse is null || booksResponse.Items is null) return bookDtos;
 
+            int count = 1;
+            BookDto dto;
             foreach (var item in booksResponse.Items)
             {
-                bookDtos.Add(
-                    new BookDto
-                    {
-                        GoogleId = item.Id,
-                        Title = item.VolumeInfo.Title,
-                        Subtitle = item.VolumeInfo.Subtitle,
-                        Author = item.VolumeInfo.Authors is not null ? string.Join(", ", item.VolumeInfo.Authors) : null,
-                        Description = item.VolumeInfo.Description,
-                        Publisher = item.VolumeInfo.Publisher,
-                        PublishedDate = item.VolumeInfo.PublishedDate,
-                        CoverUrl = GetBestImage(item.VolumeInfo.ImageLinks),
-                        Identifiers = item.VolumeInfo.IndustryIdentifiers
-                    }
-                );
+                dto = new BookDto
+                {
+                    GoogleId = item.Id,
+                    Title = item.VolumeInfo.Title,
+                    Subtitle = item.VolumeInfo.Subtitle,
+                    Author = item.VolumeInfo.Authors is not null ? string.Join(", ", item.VolumeInfo.Authors) : null,
+                    Description = item.VolumeInfo.Description,
+                    Publisher = item.VolumeInfo.Publisher,
+                    PublishedDate = item.VolumeInfo.PublishedDate,
+                    CoverUrl = GetBestImage(item.VolumeInfo.ImageLinks),
+                    Identifiers = item.VolumeInfo.IndustryIdentifiers
+                };
+                _logger.LogInformation("BookDto {count} Parsed:\n{BookDto}", count++, dto);
+                bookDtos.Add(dto);
             }
-            int count = 1;
-            foreach (var item in bookDtos)
-            {
-                _logger.LogInformation("BookDto {count} Parsed:\n{item}", count++, item.ToString());
-            }
+
             return bookDtos;
         }
         catch (Exception ex)
