@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace BookCat.Site.Migrations
 {
     /// <inheritdoc />
-    public partial class DatabaseSetup : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,16 +56,20 @@ namespace BookCat.Site.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    ISBN = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GoogleId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subtitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CoverUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Publisher = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PublishedDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CoverUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddedOn = table.Column<DateOnly>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.ISBN);
+                    table.PrimaryKey("PK_Books", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,12 +179,31 @@ namespace BookCat.Site.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BookIdentifiers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookIdentifiers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookIdentifiers_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BookISBN = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -195,11 +220,25 @@ namespace BookCat.Site.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reviews_Books_BookISBN",
-                        column: x => x.BookISBN,
+                        name: "FK_Reviews_Books_BookId",
+                        column: x => x.BookId,
                         principalTable: "Books",
-                        principalColumn: "ISBN",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Books",
+                columns: new[] { "Id", "AddedOn", "Author", "CoverUrl", "Description", "GoogleId", "PublishedDate", "Publisher", "Subtitle", "Title" },
+                values: new object[] { new Guid("90adc711-8337-468a-a195-8501bac62015"), new DateOnly(2025, 9, 25), "Timothy J. Louwers, Allen D. Blay, Jerry R. Strawser, Jay C. Thibodeau", null, "As auditors, we are trained to investigate beyond appearances to determine the underlying facts-in other words, to look beneath the surface. From the Enron and WorldCom scandals of the early 2000s to the financial crisis of 2007-2008 to present-day issues and challenges related to significant estimation uncertainty, understanding the auditor's responsibility related to fraud, maintaining a clear perspective, probing for details, and understanding the big picture are indispensable to effective auditing. With the availability of greater levels of qualitative and quantitative information (\"Big Data\"), the need for technical skills and challenges facing today's auditor is greater than ever. The Louwers, Bagley, Blay, Strawser, and Thibodeau team has dedicated years of experience in the auditing field to this new edition of Auditing & Assurance Services, supplying the necessary investigative tools for future auditors\"", "3qRuzwEACAAJ", "2023", null, null, "Auditing & Assurance Services" });
+
+            migrationBuilder.InsertData(
+                table: "BookIdentifiers",
+                columns: new[] { "Id", "BookId", "Type", "Value" },
+                values: new object[,]
+                {
+                    { new Guid("146c6c02-ce45-46b0-b811-39ed5cdea789"), new Guid("90adc711-8337-468a-a195-8501bac62015"), "ISBN_10", "1266796851" },
+                    { new Guid("accfc097-bb4b-4577-98dd-07b6880ebb0f"), new Guid("90adc711-8337-468a-a195-8501bac62015"), "ISBN_13", "9781266796852" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -242,9 +281,14 @@ namespace BookCat.Site.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reviews_BookISBN",
+                name: "IX_BookIdentifiers_BookId",
+                table: "BookIdentifiers",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_BookId",
                 table: "Reviews",
-                column: "BookISBN");
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_UserId",
@@ -269,6 +313,9 @@ namespace BookCat.Site.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "BookIdentifiers");
 
             migrationBuilder.DropTable(
                 name: "Reviews");

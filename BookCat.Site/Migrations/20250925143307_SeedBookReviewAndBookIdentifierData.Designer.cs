@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookCat.Site.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250923144319_DatabaseSetup")]
-    partial class DatabaseSetup
+    [Migration("20250925143307_SeedBookReviewAndBookIdentifierData")]
+    partial class SeedBookReviewAndBookIdentifierData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,9 @@ namespace BookCat.Site.Migrations
 
             modelBuilder.Entity("BookCat.Site.Models.Book", b =>
                 {
-                    b.Property<string>("ISBN")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("AddedOn")
                         .HasColumnType("date");
@@ -43,29 +44,92 @@ namespace BookCat.Site.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("GoogleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublishedDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Publisher")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subtitle")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ISBN");
+                    b.HasKey("Id");
 
                     b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("90adc711-8337-468a-a195-8501bac62015"),
+                            AddedOn = new DateOnly(2025, 9, 25),
+                            Author = "Timothy J. Louwers, Allen D. Blay, Jerry R. Strawser, Jay C. Thibodeau",
+                            Description = "As auditors, we are trained to investigate beyond appearances to determine the underlying facts-in other words, to look beneath the surface. From the Enron and WorldCom scandals of the early 2000s to the financial crisis of 2007-2008 to present-day issues and challenges related to significant estimation uncertainty, understanding the auditor's responsibility related to fraud, maintaining a clear perspective, probing for details, and understanding the big picture are indispensable to effective auditing. With the availability of greater levels of qualitative and quantitative information (\"Big Data\"), the need for technical skills and challenges facing today's auditor is greater than ever. The Louwers, Bagley, Blay, Strawser, and Thibodeau team has dedicated years of experience in the auditing field to this new edition of Auditing & Assurance Services, supplying the necessary investigative tools for future auditors\"",
+                            GoogleId = "3qRuzwEACAAJ",
+                            PublishedDate = "2023",
+                            Title = "Auditing & Assurance Services"
+                        });
+                });
+
+            modelBuilder.Entity("BookCat.Site.Models.BookIdentifier", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookIdentifiers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("146c6c02-ce45-46b0-b811-39ed5cdea789"),
+                            BookId = new Guid("90adc711-8337-468a-a195-8501bac62015"),
+                            Type = "ISBN_10",
+                            Value = "1266796851"
+                        },
+                        new
+                        {
+                            Id = new Guid("accfc097-bb4b-4577-98dd-07b6880ebb0f"),
+                            BookId = new Guid("90adc711-8337-468a-a195-8501bac62015"),
+                            Type = "ISBN_13",
+                            Value = "9781266796852"
+                        });
                 });
 
             modelBuilder.Entity("BookCat.Site.Models.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("AdminDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("BookISBN")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
                         .IsRequired()
@@ -83,11 +147,23 @@ namespace BookCat.Site.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookISBN");
+                    b.HasIndex("BookId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b4556383-7b6c-4e39-afd7-df86664b83c7"),
+                            AdminDeleted = false,
+                            BookId = new Guid("90adc711-8337-468a-a195-8501bac62015"),
+                            Comment = "This book fucking sucks",
+                            PostedAt = new DateTime(2025, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rating = 1,
+                            UserId = "481de7a8-5903-4bd8-a46a-5a57838ed4ab"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -292,11 +368,22 @@ namespace BookCat.Site.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BookCat.Site.Models.BookIdentifier", b =>
+                {
+                    b.HasOne("BookCat.Site.Models.Book", "Book")
+                        .WithMany("Identifiers")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
             modelBuilder.Entity("BookCat.Site.Models.Review", b =>
                 {
                     b.HasOne("BookCat.Site.Models.Book", "Book")
                         .WithMany("Reviews")
-                        .HasForeignKey("BookISBN")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -364,6 +451,8 @@ namespace BookCat.Site.Migrations
 
             modelBuilder.Entity("BookCat.Site.Models.Book", b =>
                 {
+                    b.Navigation("Identifiers");
+
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

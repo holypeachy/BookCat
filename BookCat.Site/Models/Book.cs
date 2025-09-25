@@ -1,16 +1,18 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace BookCat.Site.Models;
 
 public class Book
 {
-    [Key]
-    public string ISBN { get; set; }
-    public string Title { get; set; }
-    public string Author { get; set; }
-    public string? CoverUrl { get; set; }
+    public Guid Id { get; set; }
+    public required string GoogleId { get; set; }
+    public required string Title { get; set; }
+    public string? Subtitle { get; set; } = null!;
+    public required string Author { get; set; }
     public string? Description { get; set; }
-    public DateOnly AddedOn { get; set; }
+    public string? Publisher { get; set; }
+    public required string PublishedDate { get; set; }
+    public string? CoverUrl { get; set; }
+    public required DateOnly AddedOn { get; set; }
 
-    public List<Review> Reviews { get; set; } = new();
+    public ICollection<BookIdentifier> Identifiers { get; set; } = [];
+    public List<Review> Reviews { get; set; } = [];
 }

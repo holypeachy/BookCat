@@ -1,12 +1,11 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace BookCat.Site.Models;
 
 public class Review
 {
-    public int Id { get; set; }
-    public string BookISBN { get; set; }
+    public Guid Id { get; set; }
+    public Guid BookId { get; set; }
     public string UserId { get; set; } = null!;
     public int Rating { get; set; }
     public string Comment { get; set; } = null!;

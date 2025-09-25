@@ -55,3 +55,27 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+
+
+/*
+! ISSUES:
+! 
+
+TODO
+TODO: 
+
+? Future Ideas
+? 
+
+* Notes
+* Added GoogleBooks classes for parsing.
+* ISBN can't be used as primary key for books, so I added an Id property.
+* Created BookIdentifier schema/class for a table to store Identifiers for easier querying.
+* Added BookHelpers class.
+* Implemented the Google Books Service.
+* Had to start clean with the database.
+* 
+
+* Changes
+* 
+*/
