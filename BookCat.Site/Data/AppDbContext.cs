@@ -14,6 +14,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<IdentityUser>(entity =>
+        {
+            entity.HasIndex(u => u.NormalizedEmail).IsUnique();
+        });
+
         builder.Entity<Book>().HasData(
             new Book
             {

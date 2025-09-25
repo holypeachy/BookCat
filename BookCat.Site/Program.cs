@@ -11,7 +11,11 @@ builder.Services.AddDbContext<AppDbContext>(
 );
 
 builder.Services.AddDefaultIdentity<IdentityUser>(
-        options => options.SignIn.RequireConfirmedAccount = false
+        options =>
+        {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.User.RequireUniqueEmail = true;
+        }
     )
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
@@ -71,5 +75,8 @@ TODO:
 * 
 
 * Changes
+* use IdentityUser rather than username to login the user.
+* add unique email contraint to Identity options.
+* add database enforcement of unique email to OnModeCreate and do migration.
 * 
 */
