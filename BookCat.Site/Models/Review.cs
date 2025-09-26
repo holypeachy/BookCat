@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
 namespace BookCat.Site.Models;
-
 public class Review
 {
     public Guid Id { get; set; }

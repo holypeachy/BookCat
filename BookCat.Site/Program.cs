@@ -1,4 +1,6 @@
 using BookCat.Site.Data;
+using BookCat.Site.Models;
+using BookCat.Site.Repos;
 using BookCat.Site.Services;
 using Microsoft.AspNetCore.Identity;
 
@@ -22,7 +24,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(
 
 builder.Services.Configure<GoogleBooksOptions>(builder.Configuration.GetSection("GoogleBooks"));
 builder.Services.AddHttpClient<GoogleBooksService>();
+
 builder.Services.AddScoped<GoogleBooksService>();
+builder.Services.AddScoped<IRepo<Book>, BookRepo>();
+builder.Services.AddScoped<IRepo<Review>, ReviewRepo>();
+builder.Services.AddScoped<IRepo<BookIdentifier>, BooksIdentifierRepo>();
 
 var app = builder.Build();
 
@@ -75,8 +81,9 @@ TODO:
 * 
 
 * Changes
-* use IdentityUser rather than username to login the user.
-* add unique email contraint to Identity options.
-* add database enforcement of unique email to OnModeCreate and do migration.
+* Change UserId in Review class to Guid.
+* Add AddedById and AddedBy properties to Book.
+* Add migrations and make sure AddedBy OnDelete is SetNull.
+* Implement repositories BooksRepo, ReviewsRepo, and BookIdentifiersRepo.
 * 
 */

@@ -1,5 +1,7 @@
-namespace BookCat.Site.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
+namespace BookCat.Site.Models;
 public class Book
 {
     public Guid Id { get; set; }
@@ -12,7 +14,9 @@ public class Book
     public string? PublishedDate { get; set; }
     public string? CoverUrl { get; set; }
     public required DateOnly AddedOn { get; set; }
+    public string? AddedById { get; set; }
 
     public ICollection<BookIdentifier> Identifiers { get; set; } = [];
     public List<Review> Reviews { get; set; } = [];
+    public IdentityUser? AddedBy { get; set; }
 }

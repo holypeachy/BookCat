@@ -1,7 +1,6 @@
 using BookCat.Site.Models.GoogleBooks;
 
 namespace BookCat.Site.Models;
-
 public class BookDto
 {
     public required string GoogleId { get; set; }

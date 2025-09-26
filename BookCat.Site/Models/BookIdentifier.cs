@@ -1,5 +1,4 @@
 namespace BookCat.Site.Models;
-
 public class BookIdentifier
 {
     public Guid Id { get; set; }
