@@ -81,9 +81,6 @@ TODO:
 * 
 
 * Changes
-* Change UserId in Review class to Guid.
-* Add AddedById and AddedBy properties to Book.
-* Add migrations and make sure AddedBy OnDelete is SetNull.
-* Implement repositories BooksRepo, ReviewsRepo, and BookIdentifiersRepo.
+* Modify Identity UI and remove unnecessary pages.
 * 
 */
