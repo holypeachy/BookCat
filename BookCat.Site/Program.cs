@@ -81,6 +81,6 @@ TODO:
 * 
 
 * Changes
-* Modify Identity UI and remove unnecessary pages.
+* Start working on navbar.
 * 
 */

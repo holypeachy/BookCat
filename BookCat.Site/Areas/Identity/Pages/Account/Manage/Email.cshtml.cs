@@ -74,7 +74,7 @@ namespace BookCat.Site.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                NewEmail = email,
+                // NewEmail = email,
             };
         }
 
