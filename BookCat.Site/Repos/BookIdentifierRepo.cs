@@ -19,14 +19,6 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Guid id)
-    {
-        BookIdentifier? identifier = await _db.BookIdentifiers.FindAsync(id) ?? throw new KeyNotFoundException();
-        _db.BookIdentifiers.Remove(identifier);
-
-        await _db.SaveChangesAsync();
-    }
-
     public async Task<IEnumerable<BookIdentifier>> GetAllAsync()
     {
         return await _db.BookIdentifiers.ToListAsync();
@@ -41,6 +33,21 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
     public async Task UpdateAsync(BookIdentifier entity)
     {
         _db.BookIdentifiers.Update(entity);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        BookIdentifier? identifier = await _db.BookIdentifiers.FindAsync(id) ?? throw new KeyNotFoundException();
+        _db.BookIdentifiers.Remove(identifier);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(BookIdentifier entity)
+    {
+        _db.BookIdentifiers.Remove(entity);
 
         await _db.SaveChangesAsync();
     }

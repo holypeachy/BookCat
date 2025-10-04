@@ -19,14 +19,6 @@ public class BookRepo : IRepo<Book>
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Guid id)
-    {
-        Book? book = await _db.Books.FindAsync(id) ?? throw new KeyNotFoundException();
-        _db.Books.Remove(book);
-
-        await _db.SaveChangesAsync();
-    }
-
     public async Task<IEnumerable<Book>> GetAllAsync()
     {
         return await _db.Books.ToListAsync();
@@ -41,6 +33,21 @@ public class BookRepo : IRepo<Book>
     public async Task UpdateAsync(Book entity)
     {
         _db.Books.Update(entity);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        Book? book = await _db.Books.FindAsync(id) ?? throw new KeyNotFoundException();
+        _db.Books.Remove(book);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Book entity)
+    {
+        _db.Books.Remove(entity);
 
         await _db.SaveChangesAsync();
     }

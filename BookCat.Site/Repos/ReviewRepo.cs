@@ -19,14 +19,6 @@ public class ReviewRepo : IRepo<Review>
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Guid id)
-    {
-        Review? review = await _db.Reviews.FindAsync(id) ?? throw new KeyNotFoundException();
-        _db.Reviews.Remove(review);
-
-        await _db.SaveChangesAsync();
-    }
-
     public async Task<IEnumerable<Review>> GetAllAsync()
     {
         return await _db.Reviews.ToListAsync();
@@ -41,6 +33,21 @@ public class ReviewRepo : IRepo<Review>
     public async Task UpdateAsync(Review entity)
     {
         _db.Reviews.Update(entity);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        Review? review = await _db.Reviews.FindAsync(id) ?? throw new KeyNotFoundException();
+        _db.Reviews.Remove(review);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(Review entity)
+    {
+        _db.Reviews.Remove(entity);
 
         await _db.SaveChangesAsync();
     }
