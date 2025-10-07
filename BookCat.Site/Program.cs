@@ -12,7 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(builder.Configuration["Db:ConnectionString"])
 );
 
-builder.Services.AddDefaultIdentity<IdentityUser>(
+builder.Services.AddIdentityCore<IdentityUser>(
         options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
@@ -20,7 +20,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(
         }
     )
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddSignInManager<SignInManager<IdentityUser>>()
+    .AddUserManager<UserManager<IdentityUser>>();
 
 builder.Services.Configure<GoogleBooksOptions>(builder.Configuration.GetSection("GoogleBooks"));
 builder.Services.AddHttpClient<GoogleBooksService>();
@@ -57,7 +59,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapRazorPages();
 app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
@@ -81,6 +82,8 @@ TODO:
 * 
 
 * Changes
-* feat: add DeleteAsync overload to IRepo
-* 
+* Remove scaffolded Identity pages and IdentityUI package
+* Remove bootstrap
+* Remove all styling and some default elements
+* Start working on front end
 */
