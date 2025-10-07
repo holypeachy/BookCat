@@ -1,8 +1,32 @@
 html {
-  font-size: 14px;
+  font-size: 16px;
   position: relative;
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: auto;
+  font-style: normal;
+  color: rgb(70, 45, 0);
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+button, input, select, textarea { font: inherit; }
+
+body {
+  margin: 0;
+  background-color: rgb(255, 230, 184);
+}
+
+@media screen and (max-width:600px)  {
+    html{
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width:375px)  {
+    html{
+        font-size: 12px;
+    }
 }

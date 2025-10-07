@@ -1,0 +1,18 @@
+.btn{
+    border: 0px;
+    border-radius: 30px;
+    padding: 20px;
+    background-color: rgb(255, 190, 69);
+}
+
+.btn:hover{
+    background-color: rgb(70, 45, 0);
+    color: white;
+    cursor: pointer;
+}
+
+@media screen and (max-width:600px)  {
+    .btn{
+        padding: 15px;
+    }
+}

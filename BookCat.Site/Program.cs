@@ -82,8 +82,5 @@ TODO:
 * 
 
 * Changes
-* Remove scaffolded Identity pages and IdentityUI package
-* Remove bootstrap
-* Remove all styling and some default elements
-* Start working on front end
+* Add and style nav bar
 */
