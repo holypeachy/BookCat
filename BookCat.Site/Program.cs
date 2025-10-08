@@ -82,5 +82,6 @@ TODO:
 * 
 
 * Changes
-* Add and style nav bar
+* Make navbar responsive
+* Add new default user image
 */

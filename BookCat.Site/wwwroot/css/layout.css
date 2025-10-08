@@ -1,24 +1,25 @@
+header{
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: inherit;
+}
 .nav-bar{
-    padding: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 20px 20px 0px 20px;
-}
-
-.nav-bar a{
-    text-decoration: none;
-    color: inherit;
-}
-
-.nav-logo-text{
-    font-size: 2rem;
-    margin: 0;
+    padding: 4px;
+    box-shadow: 0px 1px 4px var(--shadow-color);
+    font-size: 0.8rem;
 }
 
 .nav-left{
     display: flex;
     align-items: center;
+}
+
+.nav-left a:last-of-type{
+    margin-left: 4px;
 }
 
 .nav-right{
@@ -27,45 +28,82 @@
 }
 
 .nav-logo{
-    width: 60px;
+    width: 50px;
     height: auto;
 }
 
+.nav-logo-text{
+    font-size: 1.4rem;
+    margin-right: 5px;
+}
+
 .nav-catalog-btn{
-    margin-left: 20px;
-    padding: 20px;
-    background-color: rgb(255, 205, 111);
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
 
 .nav-catalog-btn span:last-of-type{
-    margin-left: 10px;
+    margin-left: 3px;
 }
 
-.user-image{
+.user-img-link{
+    display: inline-block;
+    line-height: 0;
+    margin-right: 6px;
+}
+
+.user-img{
+    display: inline-block;
     object-fit: cover;
-    border: 1px black solid;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    border: 1px solid var(--primary-text-color);
     border-radius: 50%;
-    margin-right: 10px;
 }
 
 main{
     background-color: lightblue;
+    height: 200vh;
 }
 
 footer{
     background-color: lightblue;
 }
 
-@media screen and (max-width:375)  {
+@media screen and (min-width: 480px)  {
     .nav-bar{
-        margin: 3px 5px 0px 3px;
+        font-size: clamp(0.9rem, 2vw, 1.2rem);
+        padding: clamp(5px, 2vw, 15px) clamp(5px, 2vw, 50px);
     }
+
+    .nav-logo-text{
+        font-size: clamp(1.4rem, 2vw, 2rem);
+    }
+
     .nav-logo{
+        width: 70px;
+    }
+
+    .nav-logo-text{
+        margin-right: clamp(10px, 2vw, 20px);
+    }
+
+    .user-img-link{
+        margin-right: clamp(8px, 2vw, 20px);
+    }
+
+    .user-img{
         width: 50px;
+    }
+
+
+}
+
+@media screen and (min-width: 1000px)  {
+    .nav-logo{
+        width: 80px;
+    }
+
+    .user-img{
+        width: 60px;
     }
 }

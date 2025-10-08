@@ -1,8 +1,8 @@
 .btn{
     border: 0px;
     border-radius: 30px;
-    padding: 20px;
-    background-color: rgb(255, 190, 69);
+    background-color: var(--button-bg-color);
+    padding: 12px;
 }
 
 .btn:hover{
@@ -11,8 +11,16 @@
     cursor: pointer;
 }
 
-@media screen and (max-width:600px)  {
+.clean-link{
+    text-decoration: none;
+    color: inherit;
+}
+
+@media screen and (min-width: 480px)  {
     .btn{
         padding: 15px;
     }
+}
+
+@media screen and (min-width: 1000px)  {
 }

@@ -1,3 +1,15 @@
+:root{
+  --primary-text-color: rgb(70, 45, 0);
+  --primary-bg-color: rgb(255, 230, 184);
+  --shadow-color: rgb(146, 96, 2);
+  --button-bg-color: rgb(255, 190, 69);
+}
+
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html {
   font-size: 16px;
   position: relative;
@@ -5,28 +17,19 @@ html {
   font-optical-sizing: auto;
   font-weight: auto;
   font-style: normal;
-  color: rgb(70, 45, 0);
+  color: var(--primary-text-color);
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
+body {
+  margin: 0;
+  background-color: var(--primary-bg-color);
 }
 
 button, input, select, textarea { font: inherit; }
 
-body {
-  margin: 0;
-  background-color: rgb(255, 230, 184);
+
+@media screen and (min-width: 480px)  {
 }
 
-@media screen and (max-width:600px)  {
-    html{
-        font-size: 14px;
-    }
-}
-
-@media screen and (max-width:375px)  {
-    html{
-        font-size: 12px;
-    }
+@media screen and (min-width: 1000px)  {
 }

@@ -6,8 +6,9 @@
 @* @if (SignInManager.IsSignedIn(User)) *@
 @if (true)
 {
-    
-    <img class="user-image" src="/images/default_user.png" alt="Site Logo">
+    <a class="user-img-link" asp-controller="User" asp-action="Dash">
+        <img class="user-img" src="/images/default_user.png" alt="User Image">
+    </a>
     <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
     <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
         <button class="btn" id="logout" type="submit">Logout</button>
@@ -15,5 +16,5 @@
 }
 else
 {
-    <a class="btn" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    <a class="btn clean-link" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
 }

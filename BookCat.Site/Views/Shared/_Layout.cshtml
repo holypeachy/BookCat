@@ -23,11 +23,10 @@
                     <a asp-controller="Home" asp-action="Index">
                         <img class="nav-logo" src="/images/bookcat.png" alt="Site Logo">
                     </a>
-                    <a asp-controller="Home" asp-action="Index">
+                    <a class="clean-link" asp-controller="Home" asp-action="Index">
                         <h1 class="nav-logo-text">BookCat</h1>
                     </a>
-                    
-                    <a class="nav-catalog-btn btn" asp-controller="Books" asp-action="Index"><span class="material-symbols-outlined">book_ribbon</span><span>Catalog</span></a>
+                    <a class="nav-catalog-btn btn clean-link" asp-controller="Books" asp-action="Index"><span class="material-symbols-outlined">book_ribbon</span><span>Catalog</span></a>
                 </div>
                 <div class="nav-right">
                     <partial name="_LoginPartial" />
