@@ -82,6 +82,6 @@ TODO:
 * 
 
 * Changes
-* Make navbar responsive
-* Add new default user image
+* Make sure user image is squared
+* 
 */
