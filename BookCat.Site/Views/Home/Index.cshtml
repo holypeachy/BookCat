@@ -1,8 +1,32 @@
-﻿@{
+﻿@model List<Book>
+
+@{
     ViewData["Title"] = "BookCat";
 }
 
-<div>
-    <h1>Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="landing">
+    <div class="landing-text">
+        <h1 class="landing-title">Discover, review, and share your favorite books.</h1>
+        <p>Look up books, read reviews, and share your thoughts. Can’t find it? Be the person to add it to the site, by doing a simple search. </p>
+        <p>Go to the <a class="animated" asp-controller="" asp-action="">Cat-alog</a>!</p>
+    </div>
+    <div class="landing-image">
+        <img src="~/images/landing.png" alt="Landing page image">
+    </div>
+    <h3 class="new-this">New this month</h3>
+</div>
+<div class="card-container">
+    @foreach (Book b in Model){
+        @if(b.CoverUrl is null){
+            <div class="card">
+                <img src="~/images/default_book.png" alt="@b.Title">
+                <div class="card-text">@b.Title askldjfhasdjlkfasd</div>
+            </div>
+        }
+        else{
+            <div class="card">
+                <img src="@b.CoverUrl" alt="@b.Title">
+            </div>
+        }
+    }
 </div>

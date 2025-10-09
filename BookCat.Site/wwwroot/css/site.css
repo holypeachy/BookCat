@@ -3,6 +3,7 @@
   --primary-bg-color: rgb(255, 230, 184);
   --shadow-color: rgb(146, 96, 2);
   --button-bg-color: rgb(255, 190, 69);
+  --select-color: rgb(244, 95, 59);
 }
 
 
@@ -20,9 +21,25 @@ html {
   color: var(--primary-text-color);
 }
 
+*::selection{
+  background-color: var(--select-color);
+}
+
 body {
   margin: 0;
   background-color: var(--primary-bg-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+    color: inherit;
+}
+
+a:hover{
+    cursor: pointer;
+    color: var(--select-color);
 }
 
 button, input, select, textarea { font: inherit; }

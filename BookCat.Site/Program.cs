@@ -82,6 +82,8 @@ TODO:
 * 
 
 * Changes
-* Make sure user image is squared
+* Style footer
+* Style main container
+* Add landing and new-this-month carousel
 * 
 */

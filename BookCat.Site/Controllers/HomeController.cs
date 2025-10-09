@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using BookCat.Site.Models;
 using BookCat.Site.Services;
+using BookCat.Site.Repos;
 
 namespace BookCat.Site.Controllers;
 
@@ -9,18 +10,29 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly GoogleBooksService _booksService;
+    private readonly IRepo<Book> _books;
 
-    public HomeController(ILogger<HomeController> logger, GoogleBooksService booksService)
+    public HomeController(ILogger<HomeController> logger, GoogleBooksService booksService, IRepo<Book> bookRepo)
     {
         _logger = logger;
         _booksService = booksService;
+        _books = bookRepo;
     }
 
     public async Task<IActionResult> Index()
     {
-        // await _booksService.BookSearchIdentifier("978-1-266-79685-2");
-        // await _booksService.BookSearchName("The Maze Runner");
-        return View();
+        IEnumerable<Book> books = await _books.GetAllAsync();
+        List<Book> list =
+        [
+            books.ToList()[0],
+            books.ToList()[0],
+            books.ToList()[0],
+            books.ToList()[0],
+            books.ToList()[0],
+            books.ToList()[0],
+            books.ToList()[0],
+        ];
+        return View(list.GetRange(0, 7));
     }
 
     public IActionResult Privacy()

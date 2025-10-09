@@ -1,0 +1,102 @@
+.landing-title{
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+.landing-text p{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.landing-image{
+    display: flex;
+    justify-content: center;
+}
+
+.landing-image > img{
+    align-self: center;
+    width: 100%;
+    max-width: 300px;
+}
+
+.landing-title::first-letter{
+    font-size: 2em;
+}
+
+.new-this{
+    margin-top: 10px;
+}
+
+.card-container{
+    display: flex;
+    width: 100%;
+    overflow: auto;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+}
+
+.card{
+    text-align: center;
+    font-size: 0.8rem;
+    width: 150px;
+    margin-right: 15px;
+}
+
+.card img{
+    width: 100%;
+    border-radius: 7%;
+}
+
+.card-text{
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.animated{
+    display: inline-block;
+    animation-name: jumping;
+    animation-iteration-count: infinite;
+    animation-duration: 300ms;
+    animation-play-state: paused;
+}
+
+.animated:hover{
+    animation-play-state: running;
+}
+
+@keyframes jumping{
+    50% {transform: translateY(-3px);}
+    100% {transform: translateY(2px);}
+}
+
+@media screen and (min-width: 480px)  {
+    .landing-title{
+        font-size: clamp(1.4rem, 2vw, 2rem);
+    }
+}
+
+@media screen and (min-width: 600px)  {
+    .landing{
+        display: grid;
+        grid-template-columns: auto auto;
+    }
+
+    .new-this{
+        margin-top: 30px;
+    }
+
+    .card{
+        margin-right: clamp(20px, 5vw, 50px);
+        width: clamp(150px, 15vw, 200px);
+        font-size: clamp(0.8rem, 1vw, 1.2rem);
+    }
+}
+
+@media screen and (min-width: 1000px)  {
+    .landing-text p{
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}

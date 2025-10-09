@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/utility.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/landing.css">
 
         <link rel="icon" type="/image/x-icon" href="/images/favicon.png">
         <title>@ViewData["Title"]</title>
@@ -17,27 +18,25 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=book_ribbon" />
     </head>
     <body>
-        <header>
-            <nav class="nav-bar">
-                <div class="nav-left">
-                    <a asp-controller="Home" asp-action="Index">
-                        <img class="nav-logo" src="/images/bookcat.png" alt="Site Logo">
-                    </a>
-                    <a class="clean-link" asp-controller="Home" asp-action="Index">
-                        <h1 class="nav-logo-text">BookCat</h1>
-                    </a>
-                    <a class="nav-catalog-btn btn clean-link" asp-controller="Books" asp-action="Index"><span class="material-symbols-outlined">book_ribbon</span><span>Catalog</span></a>
-                </div>
-                <div class="nav-right">
-                    <partial name="_LoginPartial" />
-                </div>
-            </nav>
-        </header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <a asp-controller="Home" asp-action="Index">
+                    <img class="nav-logo" src="~/images/bookcat.png" alt="Site Logo">
+                </a>
+                <a class="clean-link" asp-controller="Home" asp-action="Index">
+                    <h1 class="nav-logo-text">BookCat</h1>
+                </a>
+                <a class="nav-catalog-btn btn clean-link" asp-controller="Books" asp-action="Index"><span class="material-symbols-outlined">book_ribbon</span><span>Catalog</span></a>
+            </div>
+            <div class="nav-right">
+                <partial name="_LoginPartial" />
+            </div>
+        </nav>
         <main role="main">
             @RenderBody()
         </main>
         <footer>
-            &copy; 2025 - BookCat - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - <img src="~/images/favicon.png" width="20px"> BookCat - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </footer>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
