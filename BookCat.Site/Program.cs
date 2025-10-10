@@ -24,6 +24,17 @@ builder.Services.AddIdentityCore<IdentityUser>(
     .AddSignInManager<SignInManager<IdentityUser>>()
     .AddUserManager<UserManager<IdentityUser>>();
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+})
+.AddCookie(IdentityConstants.ApplicationScheme, options =>
+{
+    options.LoginPath = "/Account/Login";
+});
+
+
 builder.Services.Configure<GoogleBooksOptions>(builder.Configuration.GetSection("GoogleBooks"));
 builder.Services.AddHttpClient<GoogleBooksService>();
 
@@ -82,7 +93,7 @@ TODO:
 * 
 
 * Changes
-* Add book catalog index page
-* ReviewRepo now populates navigation properties automatically
+* Add test view in Books with the code for a star rating selector
+* Add Account controller, login logic, and barebone views for dash and register
 * 
 */

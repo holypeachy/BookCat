@@ -1,0 +1,14 @@
+@using BookCat.Site.Controllers
+@model AccountController.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>Register</h1>
+<form asp-action="Register" method="post" style="display: flex; flex-direction: column; width: 300px;">
+  <input asp-for="Email" type="email" placeholder="Email" required />
+  <input asp-for="Username" type="text" placeholder="Username" required />
+  <input asp-for="Password" type="password" placeholder="Password" required />
+  <input asp-for="ConfirmPassword" type="password" placeholder="Confirm Password" required />
+  <button type="submit">Submit</button>
+</form>

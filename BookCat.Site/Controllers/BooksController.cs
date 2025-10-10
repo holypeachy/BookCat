@@ -38,11 +38,16 @@ public class BooksController : Controller
         model.Books.Add(model.Books[0]);
         model.Books.Add(model.Books[0]);
         model.Books.Add(model.Books[0]);
-        model.Reviews= (await _reviews.GetAllAsync()).ToList();
+        model.Reviews = (await _reviews.GetAllAsync()).ToList();
         model.Reviews.Add(model.Reviews[0]);
         model.Reviews.Add(model.Reviews[0]);
         model.Reviews.Add(model.Reviews[0]);
         return View(model);
+    }
+
+    public async Task<IActionResult> Test()
+    {
+        return View();
     }
 
     public async Task<IActionResult> Search(CatalogIndexModel model)

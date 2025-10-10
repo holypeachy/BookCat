@@ -31,28 +31,35 @@
         }
         </div>
     }
+    else{
+        <h1>Error</h1>
+    }
 </div>
 <div>
     <h3>Recent Reviews</h3>
     <div class="review-card-container">
-        @foreach (Review review in Model.Reviews){
-            <div class="review-card">
-                <div class="user-info">
-                    <img src="~/images/default_user.png" alt="User profile picture">
-                    <p>@review.User.UserName</p>
-                </div>
-                <div class="review-info">
-                    <h3>@review.Book.Title</h3>
-                    <p class="review-title">Review Title</p>
-                    <div class="review-stars">
-                        <span>Rating: </span>
-                        @for (int i = 0; i < review.Rating; i++){
-                            <span class="material-symbols-outlined"> star_rate </span>
-                        }
+        @if(Model.Reviews is null){
+            <h1>Error</h1>
+        }
+        else{
+            @foreach (Review review in Model.Reviews){
+                <div class="review-card">
+                    <div class="user-info">
+                        <img src="~/images/default_user.png" alt="User profile picture">
+                        <p>@review.User.UserName</p>
                     </div>
-                    <p class="review-body">@review.Comment</p>
+                    <div class="review-info">
+                        <h3>@review.Book.Title</h3>
+                        <p class="review-title">Review Title</p>
+                        <div class="review-stars">
+                            @for (int i = 0; i < review.Rating; i++){
+                                <span class="material-symbols-outlined"> star_rate </span>
+                            }
+                        </div>
+                        <p class="review-body">@review.Comment</p>
+                    </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div>

@@ -1,0 +1,9 @@
+@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+@inject UserManager<IdentityUser> UserManager
+
+<h1>Dashboard</h1>
+<h2>Hi here @UserManager.GetUserName(User)</h2>

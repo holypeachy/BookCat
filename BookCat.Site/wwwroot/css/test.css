@@ -1,0 +1,29 @@
+.hidden{
+    display: none;
+}
+
+.inactive-star:hover{
+    cursor: pointer;
+}
+
+.active-star{
+    color: var(--select-color);
+}
+
+.active-star:hover{
+    cursor: pointer;
+}
+
+.star-container{
+    text-align: center;
+    background-color: var(--secondary-bg-color);
+    padding: 20px;
+}
+
+.star-container::selection{
+    background-color: transparent;
+}
+
+.star-container span::selection{
+    background-color: transparent;
+}
