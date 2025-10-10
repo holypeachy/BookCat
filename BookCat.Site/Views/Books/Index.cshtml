@@ -1,0 +1,62 @@
+@using BookCat.Site.Controllers
+@model BooksController.CatalogIndexModel
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+<h1 class="page-title">Book Catalog</h1>
+<form class="search-form" asp-controller="Books" asp-action="Search" method="post">
+    <input class="search-bar" asp-for="Search" type="text" placeholder="Title or ISBN">
+    <span class="material-symbols-outlined search-icon">
+    search
+    </span>
+</form>
+<div class="book-carousel">
+    <h3>Most Recent Books</h3>
+    @if (Model.Books is not null){
+        <div class="book-card-container">
+        @foreach (Book b in Model.Books){
+            @if(b.CoverUrl is null){
+                <div class="book-card">
+                    <img src="~/images/default_book.png" alt="@b.Title">
+                    <div class="book-card-text">@b.Title</div>
+                </div>
+            }
+            else{
+                <div class="book-card">
+                    <img src="@b.CoverUrl" alt="@b.Title">
+                </div>
+            }
+        }
+        </div>
+    }
+</div>
+<div>
+    <h3>Recent Reviews</h3>
+    <div class="review-card-container">
+        @foreach (Review review in Model.Reviews){
+            <div class="review-card">
+                <div class="user-info">
+                    <img src="~/images/default_user.png" alt="User profile picture">
+                    <p>@review.User.UserName</p>
+                </div>
+                <div class="review-info">
+                    <h3>@review.Book.Title</h3>
+                    <p class="review-title">Review Title</p>
+                    <div class="review-stars">
+                        <span>Rating: </span>
+                        @for (int i = 0; i < review.Rating; i++){
+                            <span class="material-symbols-outlined"> star_rate </span>
+                        }
+                    </div>
+                    <p class="review-body">@review.Comment</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/catalog.css">
+}

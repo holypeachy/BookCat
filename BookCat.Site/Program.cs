@@ -82,8 +82,7 @@ TODO:
 * 
 
 * Changes
-* Style footer
-* Style main container
-* Add landing and new-this-month carousel
+* Add book catalog index page
+* ReviewRepo now populates navigation properties automatically
 * 
 */

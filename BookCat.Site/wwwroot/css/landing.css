@@ -42,6 +42,10 @@
     margin-right: 15px;
 }
 
+.card:last-of-type{
+    margin-right: 0px;
+}
+
 .card img{
     width: 100%;
     border-radius: 7%;

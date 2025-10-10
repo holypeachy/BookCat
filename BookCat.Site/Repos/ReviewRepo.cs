@@ -21,12 +21,14 @@ public class ReviewRepo : IRepo<Review>
 
     public async Task<IEnumerable<Review>> GetAllAsync()
     {
-        return await _db.Reviews.ToListAsync();
+        return await _db.Reviews.Include(r => r.Book).Include(r => r.User).ToListAsync();
     }
 
     public async Task<Review> GetByIdAsync(Guid id)
     {
         Review? review = await _db.Reviews.FindAsync(id) ?? throw new KeyNotFoundException();
+        _db.Entry(review).Reference(r => r.Book).Load();
+        _db.Entry(review).Reference(r => r.User).Load();
         return review;
     }
 

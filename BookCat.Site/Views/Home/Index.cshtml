@@ -13,14 +13,14 @@
     <div class="landing-image">
         <img src="~/images/landing.png" alt="Landing page image">
     </div>
-    <h3 class="new-this">New this month</h3>
+    <h3 class="new-this">Most recent</h3>
 </div>
 <div class="card-container">
     @foreach (Book b in Model){
         @if(b.CoverUrl is null){
             <div class="card">
                 <img src="~/images/default_book.png" alt="@b.Title">
-                <div class="card-text">@b.Title askldjfhasdjlkfasd</div>
+                <div class="card-text">@b.Title</div>
             </div>
         }
         else{
@@ -30,3 +30,7 @@
         }
     }
 </div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/landing.css">
+}
