@@ -27,8 +27,8 @@ public class ReviewRepo : IRepo<Review>
     public async Task<Review> GetByIdAsync(Guid id)
     {
         Review? review = await _db.Reviews.FindAsync(id) ?? throw new KeyNotFoundException();
-        _db.Entry(review).Reference(r => r.Book).Load();
-        _db.Entry(review).Reference(r => r.User).Load();
+        await _db.Entry(review).Reference(r => r.Book).LoadAsync();
+        await _db.Entry(review).Reference(r => r.User).LoadAsync();
         return review;
     }
 

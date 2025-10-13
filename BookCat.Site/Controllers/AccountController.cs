@@ -69,10 +69,34 @@ public class AccountController : Controller
     public async Task<IActionResult> Register(RegisterModel model)
     {
         if (User.Identity?.IsAuthenticated == true) await _signInManager.SignOutAsync();
-        Console.WriteLine(model.Email);
-        Console.WriteLine(model.Username);
-        Console.WriteLine(model.Password);
-        return RedirectToAction("Index", "Books");
+
+        if (!ModelState.IsValid) return View(model);
+
+        if (model.Password != model.ConfirmPassword)
+        {
+            ModelState.AddModelError("Password", "Passwords must match");
+            return View(model);
+        }
+
+        var user = new AppUser
+        {
+            Email = model.Email,
+            UserName = model.Username
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password);
+
+        if (result.Succeeded)
+        {
+            await _signInManager.SignInAsync(user, isPersistent: true);
+            Console.Beep();
+            return RedirectToAction("Index", "Books");
+        }
+
+        foreach (var error in result.Errors)
+            ModelState.AddModelError("Email", error.Description);
+
+        return View(model);
     }
 
 

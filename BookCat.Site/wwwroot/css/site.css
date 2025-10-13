@@ -45,8 +45,15 @@ a:hover{
 
 button, input, select, textarea { font: inherit; }
 
+.text-danger{
+  color: var(--select-color);
+}
+
 
 @media screen and (min-width: 480px)  {
+}
+
+@media screen and (min-width: 600px)  {
 }
 
 @media screen and (min-width: 1000px)  {

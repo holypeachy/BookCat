@@ -21,12 +21,13 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
 
     public async Task<IEnumerable<BookIdentifier>> GetAllAsync()
     {
-        return await _db.BookIdentifiers.ToListAsync();
+        return await _db.BookIdentifiers.Include(bi => bi.Book).ToListAsync();
     }
 
     public async Task<BookIdentifier> GetByIdAsync(Guid id)
     {
         BookIdentifier? identifier = await _db.BookIdentifiers.FindAsync(id) ?? throw new KeyNotFoundException();
+        await _db.Entry(identifier).Reference(bi => bi.Book).LoadAsync();
         return identifier;
     }
 

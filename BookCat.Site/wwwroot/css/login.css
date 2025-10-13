@@ -1,0 +1,46 @@
+.login-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form > input{
+    padding: 15px;
+    border-radius: 30px;
+    border: 1px solid var(--primary-text-color);
+    margin: 8px;
+    width: 70%;
+    min-width: 300px;
+    max-width: 400px;
+    background-color: inherit;
+}
+
+.login-form > input:focus{
+    outline: none;
+    box-shadow: 0px 1px 2px var(--primary-text-color);
+}
+
+.login-form > button{
+    margin-top: 10px;
+}
+
+.buttons{
+    width: 50%;
+    min-width: 300px;
+    max-width: 400px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+@media screen and (min-width: 480px)  {
+    .login-form > input{
+        font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+}
+
+@media screen and (min-width: 600px)  {
+}
+
+@media screen and (min-width: 1000px)  {
+}

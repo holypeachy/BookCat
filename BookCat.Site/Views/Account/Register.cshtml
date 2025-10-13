@@ -4,11 +4,23 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>Register</h1>
-<form asp-action="Register" method="post" style="display: flex; flex-direction: column; width: 300px;">
+<form class="login-form" asp-action="Register" method="post">
+  <h1>Register</h1>
+  <span asp-validation-for="Email" class="text-danger"></span>
   <input asp-for="Email" type="email" placeholder="Email" required />
+  <span asp-validation-for="Username" class="text-danger"></span>
   <input asp-for="Username" type="text" placeholder="Username" required />
+  <span asp-validation-for="Password" class="text-danger"></span>
   <input asp-for="Password" type="password" placeholder="Password" required />
+  <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
   <input asp-for="ConfirmPassword" type="password" placeholder="Confirm Password" required />
-  <button type="submit">Submit</button>
+  <button class="btn" type="submit">Submit</button>
 </form>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/login.css">
+}
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}

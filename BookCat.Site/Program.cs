@@ -93,7 +93,7 @@ TODO:
 * 
 
 * Changes
-* Create AppUser class and add pfp property
-* Wipe database and redo migrations
+* Auto populate navigation properties for all repos, not super desirable but eh
+* Add registration functionality and style login and register pages
 * 
 */
