@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using BookCat.Site.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 
 namespace BookCat.Site.Controllers;
 
@@ -72,12 +73,6 @@ public class AccountController : Controller
 
         if (!ModelState.IsValid) return View(model);
 
-        if (model.Password != model.ConfirmPassword)
-        {
-            ModelState.AddModelError("Password", "Passwords must match");
-            return View(model);
-        }
-
         var user = new AppUser
         {
             Email = model.Email,
@@ -113,15 +108,26 @@ public class AccountController : Controller
 
     public class LoginModel
     {
+        [Required]
+        [EmailAddress]
         public required string Email { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
         public required string Password { get; set; }
     }
 
     public class RegisterModel
     {
+        [Required]
+        [EmailAddress]
         public required string Email { get; set; }
+        [Required]
         public required string Username { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
         public required string Password { get; set; }
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public required string ConfirmPassword { get; set; }
     }
 }

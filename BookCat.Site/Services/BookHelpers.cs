@@ -2,12 +2,12 @@ namespace BookCat.Site.Services;
 
 public static class BookHelpers
 {
-    public static string? ExtractISBN(string input)
+    public static bool IsISBN(string input)
     {
         if (ISBN.TryParse(input, out ISBN? isbn))
         {
-            return isbn.ToString();
+            return true;
         }
-        return null;
+        return false;
     }
 }

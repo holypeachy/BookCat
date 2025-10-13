@@ -61,7 +61,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
                 Id = new Guid("accfc097-bb4b-4577-98dd-07b6880ebb0f"),
                 BookId = new Guid("90adc711-8337-468a-a195-8501bac62015"),
                 Type = "ISBN_13",
-                Value = "9781266796852"
+                Value = "978-1266796852"
             }
         );
     }

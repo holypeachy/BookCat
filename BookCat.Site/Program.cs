@@ -93,7 +93,7 @@ TODO:
 * 
 
 * Changes
-* Auto populate navigation properties for all repos, not super desirable but eh
-* Add registration functionality and style login and register pages
+* Add data annotations for Register and Login Dtos
+* Add search functionality
 * 
 */

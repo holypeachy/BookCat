@@ -1,0 +1,9 @@
+@model List<BookDto>
+
+@{
+    ViewData["Title"] = "Add Results";
+}
+
+@foreach (var item in Model){
+    <h1>@item.Title</h1>
+}
