@@ -9,13 +9,11 @@ namespace BookCat.Site.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly GoogleBooksService _booksService;
     private readonly IRepo<Book> _books;
 
-    public HomeController(ILogger<HomeController> logger, GoogleBooksService booksService, IRepo<Book> bookRepo)
+    public HomeController(ILogger<HomeController> logger, IRepo<Book> bookRepo)
     {
         _logger = logger;
-        _booksService = booksService;
         _books = bookRepo;
     }
 

@@ -12,7 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(
     options => options.UseSqlServer(builder.Configuration["Db:ConnectionString"])
 );
 
-builder.Services.AddIdentityCore<IdentityUser>(
+builder.Services.AddIdentityCore<AppUser>(
         options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
@@ -21,8 +21,8 @@ builder.Services.AddIdentityCore<IdentityUser>(
     )
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddSignInManager<SignInManager<IdentityUser>>()
-    .AddUserManager<UserManager<IdentityUser>>();
+    .AddSignInManager<SignInManager<AppUser>>()
+    .AddUserManager<UserManager<AppUser>>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -93,7 +93,7 @@ TODO:
 * 
 
 * Changes
-* Add test view in Books with the code for a star rating selector
-* Add Account controller, login logic, and barebone views for dash and register
+* Create AppUser class and add pfp property
+* Wipe database and redo migrations
 * 
 */

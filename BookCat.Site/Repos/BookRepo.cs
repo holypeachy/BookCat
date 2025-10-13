@@ -6,16 +6,22 @@ namespace BookCat.Site.Repos;
 public class BookRepo : IRepo<Book>
 {
     private readonly AppDbContext _db;
+    private readonly IRepo<BookIdentifier> _bookIdfs;
 
-    public BookRepo(AppDbContext appDbContext)
+    public BookRepo(AppDbContext appDbContext, IRepo<BookIdentifier> bookIdentifierRepo)
     {
         _db = appDbContext;
+        _bookIdfs = bookIdentifierRepo;
     }
     
     public async Task AddAsync(Book entity)
     {
-        await _db.Books.AddAsync(entity);
-
+        Book book = (await _db.Books.AddAsync(entity)).Entity;
+        foreach (var item in book.Identifiers)
+        {
+            await _bookIdfs.AddAsync(item);
+        }
+        
         await _db.SaveChangesAsync();
     }
 
@@ -32,9 +38,7 @@ public class BookRepo : IRepo<Book>
 
     public async Task UpdateAsync(Book entity)
     {
-        _db.Books.Update(entity);
-
-        await _db.SaveChangesAsync();
+        throw new NotImplementedException(nameof(BookRepo) + "UpdateAsync, never update books");
     }
 
     public async Task DeleteAsync(Guid id)

@@ -1,3 +1,4 @@
+using BookCat.Site.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace BookCat.Site.Data;
@@ -20,17 +21,17 @@ public static class DataSeeder
 
     public static async Task SeedUsersAsync(IServiceProvider serviceProvider)
     {
-        UserManager<IdentityUser> userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        UserManager<AppUser> userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
 
         await CreateUserWithRole(userManager, "testadmin@gmail.com", "Admin123!", "holypeach", Roles.Admin);
         await CreateUserWithRole(userManager, "testuser@gmail.com", "User123!", "TestUser", Roles.User);
     }
 
-    private static async Task CreateUserWithRole(UserManager<IdentityUser> userManager, string email, string password, string username, string role)
+    private static async Task CreateUserWithRole(UserManager<AppUser> userManager, string email, string password, string username, string role)
     {
         if (await userManager.FindByEmailAsync(email) is null)
         {
-            IdentityUser user = new()
+            AppUser user = new()
             {
                 Email = email,
                 EmailConfirmed = true,

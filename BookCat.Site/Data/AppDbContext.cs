@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BookCat.Site.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<IdentityUser>(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<AppUser>(options)
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Review> Reviews { get; set; }
@@ -14,7 +14,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<IdentityUser>(entity =>
+        builder.Entity<AppUser>(entity =>
         {
             entity.HasIndex(u => u.NormalizedEmail).IsUnique();
         });
@@ -32,7 +32,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
                 Description = "As auditors, we are trained to investigate beyond appearances to determine the underlying facts-in other words, to look beneath the surface. From the Enron and WorldCom scandals of the early 2000s to the financial crisis of 2007-2008 to present-day issues and challenges related to significant estimation uncertainty, understanding the auditor's responsibility related to fraud, maintaining a clear perspective, probing for details, and understanding the big picture are indispensable to effective auditing. With the availability of greater levels of qualitative and quantitative information (\"Big Data\"), the need for technical skills and challenges facing today's auditor is greater than ever. The Louwers, Bagley, Blay, Strawser, and Thibodeau team has dedicated years of experience in the auditing field to this new edition of Auditing & Assurance Services, supplying the necessary investigative tools for future auditors\"",
                 PublishedDate = "2023",
                 AddedOn = DateOnly.FromDateTime(new DateTime(2025, 9, 25)),
-                AddedById = "b258429f-5fbc-46c0-955e-6a38a64bde61",
+                AddedById = "f01558ea-6592-4bd4-b938-eabe29da6a89",
             }
         );
 
@@ -41,8 +41,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             {
                 Id = new Guid("b4556383-7b6c-4e39-afd7-df86664b83c7"),
                 BookId = new Guid("90adc711-8337-468a-a195-8501bac62015"),
-                UserId = "b258429f-5fbc-46c0-955e-6a38a64bde61",
+                UserId = "f01558ea-6592-4bd4-b938-eabe29da6a89",
                 Rating = 1,
+                Title = "This is my title",
                 Comment = "This book fucking sucks",
                 PostedAt = new DateTime(2025, 9, 25),
                 AdminDeleted = false

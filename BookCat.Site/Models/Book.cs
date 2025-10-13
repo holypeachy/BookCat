@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace BookCat.Site.Models;
 public class Book
 {
@@ -17,5 +15,5 @@ public class Book
 
     public ICollection<BookIdentifier> Identifiers { get; set; } = [];
     public List<Review> Reviews { get; set; } = [];
-    public IdentityUser? AddedBy { get; set; }
+    public AppUser? AddedBy { get; set; }
 }
