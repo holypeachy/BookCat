@@ -93,12 +93,6 @@ TODO:
 * 
 
 * Changes
-* Implement add book to Db action
-* Fix bug where images don't size properly
-* Extract book carousel styling
-* Extract book details styling
-* Extract review styling
-* Add WriteReview and AddReview Actions, add Review view to write review
-* Help I need sleep, there's too much code ahhhhhhh
+* Add Authorize attribute to WriteReview and AddReview
 * 
 */

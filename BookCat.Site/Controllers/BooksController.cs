@@ -189,6 +189,7 @@ public class BooksController : Controller
         return RedirectToAction($"Details", "Books", new { id = book.Id.ToString() });
     }
 
+    [Authorize]
     public async Task<IActionResult> WriteReview(string id)
     {
         Book book = await _books.GetByIdAsync(new Guid(id));
@@ -196,6 +197,7 @@ public class BooksController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> AddReview(ReviewModel model)
     {
         if (model.Rating < 1)
