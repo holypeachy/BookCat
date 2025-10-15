@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using BookCat.Site.Models;
 using BookCat.Site.Services;
 using BookCat.Site.Repos;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BookCat.Site.Controllers;
@@ -14,8 +13,6 @@ public class BooksController : Controller
     {
         public List<Book>? Books { get; set; }
         public List<Review>? Reviews { get; set; }
-        [Required]
-        public string Search { get; set; } = string.Empty;
     }
 
     private readonly ILogger<HomeController> _logger;
@@ -33,6 +30,7 @@ public class BooksController : Controller
         _identifiers = identifierRepo;
     }
 
+    [HttpGet("Books/")]
     public async Task<IActionResult> Index()
     {
         CatalogIndexModel model = new();
@@ -50,23 +48,32 @@ public class BooksController : Controller
         return View(model);
     }
 
+    [HttpGet("Books/Details/{id}")]
+    public async Task<IActionResult> Details(string id)
+    {
+        Console.Beep();
+        var book = await _books.GetByIdAsync(new Guid(id));
+        return View("Details", book);
+    }
+
     public async Task<IActionResult> Test()
     {
         return View();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Search(CatalogIndexModel model)
+    [HttpGet]
+    public async Task<IActionResult> Search(string query)
     {
-        string query = model.Search.Trim();
+        Console.WriteLine(query);
+        string cleanQuery = query.Trim().ToLower();
         List<Book> books;
 
-        if (BookHelpers.IsISBN(query))
+        if (BookHelpers.IsISBN(cleanQuery))
         {
-            var identifiers = (await _identifiers.GetAllAsync()).Where(i => i.Value == query).ToList();
+            var identifiers = (await _identifiers.GetAllAsync()).Where(i => i.Value.ToLower() == cleanQuery).ToList();
             if(identifiers.Count < 1)
             {
-                var bookDtos = await _googleAPI.BookSearchIdentifier(query);
+                var bookDtos = await _googleAPI.BookSearchIdentifier(cleanQuery);
                 return View("AddResults", bookDtos);
             }
 
@@ -80,10 +87,10 @@ public class BooksController : Controller
         else
         {
             books = new();
-            books = (await _books.GetAllAsync()).Where(b => b.Title.Contains(query)).ToList();
+            books = (await _books.GetAllAsync()).Where(b => b.Title.ToLower().Contains(cleanQuery)).ToList();
             if (books.Count < 1)
             {
-                var bookDtos = await _googleAPI.BookSearchName(query);
+                var bookDtos = await _googleAPI.BookSearchName(cleanQuery);
                 return View("AddResults", bookDtos);
             }
 
@@ -91,10 +98,15 @@ public class BooksController : Controller
         }
     }
 
+    [HttpGet]
     [Authorize]
-    public async Task<IActionResult> Add(BookDto bookDto)
+    public async Task<IActionResult> Add(string id)
     {
-        return View();
+        Console.Beep();
+        Console.WriteLine();
+        Console.WriteLine(id);
+        Console.WriteLine();
+        return RedirectToAction("Index", "Books");
     }
 
     public IActionResult Privacy()

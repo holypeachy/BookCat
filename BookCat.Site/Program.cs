@@ -93,7 +93,10 @@ TODO:
 * 
 
 * Changes
-* Add data annotations for Register and Login Dtos
-* Add search functionality
+* Add basic structure and styling to search results
+* Extract search bar styling
+* Fix google api service where it would miss thumbnails to parse
+* Add action to Books controller to add book to Db by GoogleId
+* Add book Details action and View
 * 
 */

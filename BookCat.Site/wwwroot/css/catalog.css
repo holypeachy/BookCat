@@ -2,36 +2,6 @@
     text-align: center;
 }
 
-.search-form{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.search-icon{
-    position: relative;
-    left: -32px;
-}
-
-.search-bar{
-    background-color: inherit;
-    display: inline-block;
-    width: 80%;
-    min-width: 200px;
-    max-width: 500px;
-    border: 1px solid var(--primary-text-color);
-    border-radius: 30px;
-    padding: 8px;
-    padding-left: 20px;
-    padding-right: 35px;
-    font-size: 0.9rem;
-}
-
-.search-bar:focus{
-    outline: none;
-    box-shadow: 0px 1px 2px var(--primary-text-color);
-}
-
 .book-card-container{
     display: flex;
     width: 100%;
@@ -121,16 +91,6 @@
 
 
 @media screen and (min-width: 480px)  {
-    .search-bar{
-        font-size: clamp(0.8rem, 1.4vw, 1.1rem);
-        padding-top: clamp(8px, 2vw, 15px);
-        padding-bottom: clamp(8px, 2vw, 15px);
-    }
-
-    .search-icon{
-        left: -35px;
-    }
-
     .user-info{
         padding: clamp(6px, 1vw, 15px);
     }

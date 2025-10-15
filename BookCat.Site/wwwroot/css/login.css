@@ -43,4 +43,7 @@
 }
 
 @media screen and (min-width: 1000px)  {
+    main{
+        align-content: flex-start;
+    }
 }

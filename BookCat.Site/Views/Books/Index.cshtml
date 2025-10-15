@@ -6,8 +6,8 @@
 }
 
 <h1 class="page-title">Book Catalog</h1>
-<form class="search-form" asp-controller="Books" asp-action="Search" method="post">
-    <input class="search-bar" asp-for="Search" type="text" placeholder="Title or ISBN" required>
+<form class="search-form" asp-controller="Books" asp-action="Search" method="get">
+    <input class="search-bar" name="query" type="text" placeholder="Title or ISBN" required>
     <span class="material-symbols-outlined search-icon">
     search
     </span>
@@ -66,4 +66,5 @@
 
 @section Styles{
     <link rel="stylesheet" href="~/css/catalog.css">
+    <link rel="stylesheet" href="~/css/search-bar.css">
 }

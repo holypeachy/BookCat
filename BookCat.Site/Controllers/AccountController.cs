@@ -40,7 +40,7 @@ public class AccountController : Controller
         var user = await _userManager.FindByEmailAsync(model.Email);
         if (user is null)
         {
-            ModelState.AddModelError("", "Invalid Login Attempt");
+            ModelState.AddModelError("Email", "Invalid Login Attempt");
             return View(model);
         }
 
@@ -48,7 +48,7 @@ public class AccountController : Controller
 
         if (result.Succeeded) return RedirectToAction("Index", "Books");
 
-        ModelState.AddModelError("", "Invalid Login Attempt");
+        ModelState.AddModelError("Email", "Invalid Login Attempt");
         return View(model);
     }
 

@@ -33,8 +33,8 @@ public class BookRepo : IRepo<Book>
     public async Task<Book> GetByIdAsync(Guid id)
     {
         Book? book = await _db.Books.FindAsync(id) ?? throw new KeyNotFoundException();
-        await _db.Entry(book).Reference(b => b.Identifiers).LoadAsync();
-        await _db.Entry(book).Reference(b => b.Reviews).LoadAsync();
+        await _db.Entry(book).Collection(b => b.Identifiers).LoadAsync();
+        await _db.Entry(book).Collection(b => b.Reviews).LoadAsync();
         await _db.Entry(book).Reference(b => b.AddedBy).LoadAsync();
         return book;
     }

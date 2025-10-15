@@ -49,6 +49,9 @@ button, input, select, textarea { font: inherit; }
   color: var(--select-color);
 }
 
+.hidden{
+  display: none;
+}
 
 @media screen and (min-width: 480px)  {
 }

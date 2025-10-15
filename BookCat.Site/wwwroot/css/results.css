@@ -1,0 +1,48 @@
+.search-form{
+    margin: 15px 0px;
+}
+
+.book-card{
+    border: 1px dotted var(--primary-text-color);
+    padding: 5px;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.book-info-wrapper{
+    width: 100%;
+    padding: 5px;
+}
+
+.book-info-wrapper h3{
+    width: 100%;
+    margin: 2px;
+    font-size: 0.9rem;
+}
+
+.book-cover-wrapper{
+    padding: 5px;
+}
+
+.book-info-wrapper p{
+    font-size: 0.8rem;
+    margin: 5px;
+    border-bottom: 1px dashed var(--primary-text-color);
+}
+
+.book-cover{
+    width: 100px;
+    border-radius: 15px;
+}
+
+@media screen and (min-width: 480px)  {
+}
+
+@media screen and (min-width: 600px)  {
+}
+
+@media screen and (min-width: 1000px)  {
+    main{
+        align-content: flex-start;
+    }
+}

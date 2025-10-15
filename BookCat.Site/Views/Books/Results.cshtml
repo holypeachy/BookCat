@@ -4,7 +4,51 @@
     ViewData["Title"] = "Results";
 }
 
+<form class="search-form" asp-controller="Books" asp-action="Search" method="get">
+    <input class="search-bar" name="query" type="text" placeholder="Title or ISBN" required>
+    <span class="material-symbols-outlined search-icon">
+    search
+    </span>
+</form>
 
 @foreach (var item in Model){
-    <h1>@item.Title</h1>
+    <div class="book-card">
+        <div class="book-cover-wrapper">
+            @if(string.IsNullOrEmpty(item.CoverUrl)){
+            <a asp-controller="Books" asp-action="Index">
+                <img class="book-cover" src="~/images/default_book.png" alt="@item.CoverUrl Book Cover">
+            </a>
+            }
+            else{
+                <img class="book-cover" src="@item.CoverUrl" alt="@item.CoverUrl Book Cover">
+            }
+        </div>
+        <div class="book-info-wrapper">
+            <a asp-controller="Books" asp-action="Index">
+                <h3>@item.Title</h3>
+            </a>
+            @if(item.Author is not null){
+                <p>By: @item.Author</p>
+            }
+            @{
+                int count = 0;
+                foreach (var review in item.Reviews)
+                {
+                    count += review.Rating;
+                }
+                float value = (float)count / item.Reviews.Count;
+                string result = string.Format("{0:0.00}", value);
+            }
+            <p>Score: @result / 5</p>
+            <p>Reviews: @item.Reviews.Count</p>
+            @if (item.AddedBy is not null){
+                <p>Added By: @(item.AddedBy.UserName)</p>
+            }
+        </div>
+    </div>
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/search-bar.css">
+    <link rel="stylesheet" href="~/css/results.css">
 }

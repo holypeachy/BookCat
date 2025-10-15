@@ -92,6 +92,8 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
         else if (links.Large is not null) return links.Large;
         else if (links.Medium is not null) return links.Medium;
         else if (links.Small is not null) return links.Small;
+        else if (links.Thumbnail is not null) return links.Thumbnail;
+        else if (links.SmallThumbnail is not null) return links.SmallThumbnail;
         else return null;
     }
 

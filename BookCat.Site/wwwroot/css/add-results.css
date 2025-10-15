@@ -1,0 +1,22 @@
+.add-btn-wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.add-btn-wrapper > a{
+    display: inline-block;
+}
+
+@media screen and (min-width: 480px)  {
+}
+
+@media screen and (min-width: 600px)  {
+}
+
+@media screen and (min-width: 1000px)  {
+    main{
+        align-content: flex-start;
+    }
+}

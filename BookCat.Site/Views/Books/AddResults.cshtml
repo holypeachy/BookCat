@@ -1,9 +1,42 @@
 @model List<BookDto>
 
 @{
-    ViewData["Title"] = "Add Results";
+    ViewData["Title"] = "Results";
 }
 
+<form class="search-form" asp-controller="Books" asp-action="Search" method="get">
+    <input class="search-bar" name="query" type="text" placeholder="Title or ISBN" required>
+    <span class="material-symbols-outlined search-icon">
+    search
+    </span>
+</form>
+
 @foreach (var item in Model){
-    <h1>@item.Title</h1>
+    <div class="book-card">
+        <div class="book-cover-wrapper">
+            @if(string.IsNullOrEmpty(item.CoverUrl)){
+                <img class="book-cover" src="~/images/default_book.png" alt="@item.CoverUrl Book Cover">
+            }
+            else{
+                <img class="book-cover" src="@item.CoverUrl" alt="@item.CoverUrl Book Cover">
+            }
+        </div>
+        <div class="book-info-wrapper">
+            <h3>@item.Title</h3>
+            @if(item.Author is not null){
+                <p>By: @item.Author</p>
+            }
+            <p>Publisher: @item.Publisher</p>
+            <p>Published: @item.PublishedDate</p>
+            <div class="add-btn-wrapper">
+                <a class="btn clean-link" asp-controller="Books" asp-action="Add" asp-route-id="@item.GoogleId">Add +</a>
+            </div>
+        </div>
+    </div>
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/search-bar.css">
+    <link rel="stylesheet" href="~/css/results.css">
+    <link rel="stylesheet" href="~/css/add-results.css">
 }
