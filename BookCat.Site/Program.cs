@@ -93,10 +93,12 @@ TODO:
 * 
 
 * Changes
-* Add basic structure and styling to search results
-* Extract search bar styling
-* Fix google api service where it would miss thumbnails to parse
-* Add action to Books controller to add book to Db by GoogleId
-* Add book Details action and View
+* Implement add book to Db action
+* Fix bug where images don't size properly
+* Extract book carousel styling
+* Extract book details styling
+* Extract review styling
+* Add WriteReview and AddReview Actions, add Review view to write review
+* Help I need sleep, there's too much code ahhhhhhh
 * 
 */

@@ -13,20 +13,25 @@
     </span>
 </form>
 <div class="book-carousel">
-    <h3>Most Recent Books</h3>
+    <h3>Recent Books</h3>
     @if (Model.Books is not null){
-        <div class="book-card-container">
+        <div class="cards-container">
         @foreach (Book b in Model.Books){
             @if(b.CoverUrl is null){
-                <div class="book-card">
-                    <img src="~/images/default_book.png" alt="@b.Title">
-                    <div class="book-card-text">@b.Title</div>
-                </div>
+                <a class="clean-link card-link" asp-controller="Books" asp-action="Details" asp-route-id="@b.Id">
+                    <div class="card">
+                        <img src="~/images/default_book.png" alt="@b.Title">
+                        <div class="card-text">@b.Title</div>
+                    </div>
+                </a>
             }
             else{
-                <div class="book-card">
-                    <img src="@b.CoverUrl" alt="@b.Title">
-                </div>
+                <a class="clean-link card-link" asp-controller="Books" asp-action="Details" asp-route-id="@b.Id">
+                    <div class="card">
+                        <img src="@b.CoverUrl" alt="@b.Title">
+                        <div class="card-text">@b.Title</div>
+                    </div>
+                </a>
             }
         }
         </div>
@@ -67,4 +72,6 @@
 @section Styles{
     <link rel="stylesheet" href="~/css/catalog.css">
     <link rel="stylesheet" href="~/css/search-bar.css">
+    <link rel="stylesheet" href="~/css/book-carousel.css">
+    <link rel="stylesheet" href="~/css/review.css">
 }

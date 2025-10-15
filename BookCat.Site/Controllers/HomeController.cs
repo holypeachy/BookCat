@@ -19,18 +19,10 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        IEnumerable<Book> books = await _books.GetAllAsync();
-        List<Book> list =
-        [
-            books.ToList()[0],
-            books.ToList()[0],
-            books.ToList()[0],
-            books.ToList()[0],
-            books.ToList()[0],
-            books.ToList()[0],
-            books.ToList()[0],
-        ];
-        return View(list.GetRange(0, 7));
+        List<Book> books = (await _books.GetAllAsync()).ToList();
+        books = books.OrderByDescending(b => b.AddedOn).ToList();
+        if (books.Count > 10) books = books.GetRange(0, 10);
+        return View(books);
     }
 
     public IActionResult Privacy()

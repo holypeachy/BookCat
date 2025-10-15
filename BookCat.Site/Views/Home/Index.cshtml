@@ -10,27 +10,33 @@
         <p>Look up books, read reviews, and share your thoughts. Can’t find it? Be the person to add it to the site, by doing a simple search. </p>
         <p>Go to the <a class="animated" asp-controller="Books" asp-action="Index">Cat-alog</a>!</p>
     </div>
-    <div class="landing-image">
-        <img src="~/images/landing.png" alt="Landing page image">
+    <div class="landing-image-wrapper">
+        <img class="landing-image" src="~/images/landing.png" alt="Landing page image">
     </div>
-    <h3 class="new-this">Most recent</h3>
 </div>
-<div class="card-container">
+<h3 class="most-recent">Most recent</h3>
+<div class="cards-container">
     @foreach (Book b in Model){
-        @if(b.CoverUrl is null){
-            <div class="card">
-                <img src="~/images/default_book.png" alt="@b.Title">
-                <div class="card-text">@b.Title</div>
-            </div>
-        }
-        else{
-            <div class="card">
-                <img src="@b.CoverUrl" alt="@b.Title">
-            </div>
-        }
+            @if(b.CoverUrl is null){
+                <a class="clean-link card-link" asp-controller="Books" asp-action="Details" asp-route-id="@b.Id">
+                    <div class="card">
+                        <img src="~/images/default_book.png" alt="Cover for @b.Title">
+                        <div class="card-text">@b.Title</div>
+                    </div>
+                </a>
+            }
+            else{
+                <a class="clean-link card-link" asp-controller="Books" asp-action="Details" asp-route-id="@b.Id">
+                    <div class="card">
+                        <img src="@b.CoverUrl" alt="Cover for @b.Title">
+                        <div class="card-text">@b.Title</div>
+                    </div>
+                </a>
+            }
     }
 </div>
 
 @section Styles{
     <link rel="stylesheet" href="~/css/landing.css">
+    <link rel="stylesheet" href="~/css/book-carousel.css">
 }

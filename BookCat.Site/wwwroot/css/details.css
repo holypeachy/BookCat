@@ -1,0 +1,56 @@
+.book-wrapper{
+    display: flex;
+    padding: 5px;
+}
+
+.book-img-wrapper{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.cover-img{
+    object-fit: cover;
+    width: 150px;
+    height: 225px;
+}
+
+.title{
+    margin: 5px;
+}
+
+.book-info-wrapper{
+
+}
+
+.book-info-wrapper p{
+    margin: 8px;
+}
+
+.book-description{
+    margin-top: 8px;
+    padding: 10px;
+}
+
+.review-btn-wrapper{
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.review-btn{
+
+}
+
+.no-reviews {
+    text-align: center;
+}
+
+@media screen and (min-width: 480px)  {
+}
+
+@media screen and (min-width: 600px)  {
+}
+
+@media screen and (min-width: 1000px)  {
+}

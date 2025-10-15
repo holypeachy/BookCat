@@ -1,0 +1,68 @@
+@model Book
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="book-wrapper">
+    <div class="book-img-wrapper">
+        @if (Model.CoverUrl is null)
+        {
+            <img class="cover-img" src="~/images/default_book.png" atl="Cover for @Model.Title">
+        }
+        else
+        { 
+            <img class="cover-img" src="@Model.CoverUrl" atl="Cover for @Model.Title">
+        }
+    </div>
+    <div class="book-info-wrapper">
+        <h3 class="title">@Model.Title</h3>
+        @if(Model.Subtitle is not null){
+            <h4>@Model.Subtitle</h4>
+        }
+        @if(Model.Author is not null){
+            <p>Author: @Model.Author</p>
+        }
+        @if(Model.Publisher is not null){
+            <p>Publisher: @Model.Publisher</p>
+        }
+        @if(Model.PublishedDate is not null){
+            <p>Published: @Model.PublishedDate</p>
+        }
+        @if(Model.AddedById is not null && Model.AddedBy is not null){
+            <p>Added By: @Model.AddedBy.UserName</p>
+        }
+    </div>
+</div>
+<div class="book-description">
+    <h4>Description</h4>
+    <p>@Model.Description</p>
+</div>
+<form asp-action="AddReview" method="post" style="display: flex; flex-direction: column;">
+    <input name="BookId" class="hidden" type="text" value="@Model.Id" required>
+    <div class="star-container">
+        <span id="star-1" class="material-symbols-outlined inactive-star" onclick="rating(1)">star_rate</span>
+        <span id="star-2" class="material-symbols-outlined inactive-star" onclick="rating(2)">star_rate</span>
+        <span id="star-3" class="material-symbols-outlined inactive-star" onclick="rating(3)">star_rate</span>
+        <span id="star-4" class="material-symbols-outlined inactive-star" onclick="rating(4)">star_rate</span>
+        <span id="star-5" class="material-symbols-outlined inactive-star" onclick="rating(5)">star_rate</span>
+        <input name="Rating" id="hidden-input" class="hidden"
+            type="number" data-val="true"
+            data-val-required="Please select a rating"
+            data-val-range="Rating must be between 1 and 5"
+            data-val-range-min="1"
+            data-val-range-max="5">
+    </div>
+    <input type="text" name="Title" placeholder="Title" required>
+    <textarea name="Comment" placeholder="Review" required></textarea>
+    <input type="submit">
+</form>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/details.css">
+    <link rel="stylesheet" href="~/css/review.css">
+    <link rel="stylesheet" href="~/css/test.css">
+}
+@section Scripts{
+    <script src="~/js/test.js"></script>
+}

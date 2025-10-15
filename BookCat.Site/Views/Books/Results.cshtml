@@ -1,4 +1,5 @@
-@model List<Book>
+@using BookCat.Site.Controllers
+@model BooksController.ResultsModel
 
 @{
     ViewData["Title"] = "Results";
@@ -11,7 +12,7 @@
     </span>
 </form>
 
-@foreach (var item in Model){
+@foreach (var item in Model.Books){
     <div class="book-card">
         <div class="book-cover-wrapper">
             @if(string.IsNullOrEmpty(item.CoverUrl)){
@@ -31,13 +32,16 @@
                 <p>By: @item.Author</p>
             }
             @{
-                int count = 0;
-                foreach (var review in item.Reviews)
-                {
-                    count += review.Rating;
+                string result = "0";
+                if(item.Reviews.Count > 0){
+                    int count = 0;
+                    foreach (var review in item.Reviews)
+                    {
+                        count += review.Rating;
+                    }
+                    float value = (float)count / item.Reviews.Count;
+                    result = string.Format("{0:0.00}", value);
                 }
-                float value = (float)count / item.Reviews.Count;
-                string result = string.Format("{0:0.00}", value);
             }
             <p>Score: @result / 5</p>
             <p>Reviews: @item.Reviews.Count</p>
@@ -47,6 +51,12 @@
         </div>
     </div>
 }
+<div style="text-align: center;">
+    <h3>Not here? Search to add</h3>
+    <div>
+        <a class="btn clean-link"asp-controller="Books" asp-action="ExSearch" asp-route-query="@Model.Query">Add</a>
+    </div>
+</div>
 
 @section Styles{
     <link rel="stylesheet" href="~/css/search-bar.css">
