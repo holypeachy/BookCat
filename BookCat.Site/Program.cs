@@ -93,6 +93,10 @@ TODO:
 * 
 
 * Changes
-* Add Authorize attribute to WriteReview and AddReview
+* Fix crash when adding a review with a newly registered user
+* Assign user role when a new user register
+* Add overload Details action for pagination, logic is mostly done
+* Temp fix null user after deleting account on Db
+* Add GoogleService removes common html tags from book description
 * 
 */

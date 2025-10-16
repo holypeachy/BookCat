@@ -89,7 +89,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
                     Title = item.VolumeInfo.Title,
                     Subtitle = item.VolumeInfo.Subtitle,
                     Author = item.VolumeInfo.Authors is not null ? string.Join(", ", item.VolumeInfo.Authors) : null,
-                    Description = item.VolumeInfo.Description,
+                    Description = CleanDescription(item.VolumeInfo.Description),
                     Publisher = item.VolumeInfo.Publisher,
                     PublishedDate = item.VolumeInfo.PublishedDate,
                     CoverUrl = GetBestImage(item.VolumeInfo.ImageLinks),
@@ -119,7 +119,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
                 Title = item.VolumeInfo.Title,
                 Subtitle = item.VolumeInfo.Subtitle,
                 Author = item.VolumeInfo.Authors is not null ? string.Join(", ", item.VolumeInfo.Authors) : null,
-                Description = item.VolumeInfo.Description,
+                Description = CleanDescription(item.VolumeInfo.Description),
                 Publisher = item.VolumeInfo.Publisher,
                 PublishedDate = item.VolumeInfo.PublishedDate,
                 CoverUrl = GetBestImage(item.VolumeInfo.ImageLinks),
@@ -151,6 +151,12 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
             link = link.Replace("http://", "https://");
         }
         return link;
+    }
+
+    public static string? CleanDescription(string? s)
+    {
+        if (s is null) return null;
+        return s.Replace("<p>", "").Replace("</p>", "").Replace("<b>", "").Replace("</b>", "").Replace("<i>", "").Replace("</i>", "").Replace("<br>", "").Replace("<ul>", "").Replace("</ul>", "").Replace("<ol>", "").Replace("</ol>", "").Replace("<li>", "").Replace("</li>", "");
     }
 
 }

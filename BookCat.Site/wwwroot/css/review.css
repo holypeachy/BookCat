@@ -9,7 +9,7 @@
     padding: 2px;
 }
 
-.review-info > h3{
+.review-info h3{
     margin: 0;
     font-size: 1rem;
 }
@@ -68,7 +68,7 @@
         padding: clamp(6px, 1vw, 15px);
     }
 
-    .review-info > h3{
+    .review-info h3{
         margin: 0;
         font-size: clamp(1rem, 2vw, 1.4rem);
     }

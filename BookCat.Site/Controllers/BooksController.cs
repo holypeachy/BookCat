@@ -6,6 +6,8 @@ using BookCat.Site.Repos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using BookCat.Site.Data;
+using Microsoft.AspNetCore.Authentication;
 
 namespace BookCat.Site.Controllers;
 
@@ -61,7 +63,6 @@ public class BooksController : Controller
     public async Task<IActionResult> Index()
     {
         CatalogIndexModel model = new();
-        model.Reviews = (await _reviews.GetAllAsync()).ToList();
 
         List<Book> books = (await _books.GetAllAsync()).ToList();
         books = books.OrderByDescending(b => b.AddedOn).ToList();
@@ -71,6 +72,7 @@ public class BooksController : Controller
         List<Review> reviews = (await _reviews.GetAllAsync()).ToList();
         reviews = reviews.OrderByDescending(b => b.PostedAt).ToList();
         if (reviews.Count > 5) reviews = reviews.GetRange(0, 5);
+        model.Reviews = reviews;
 
         return View(model);
     }
@@ -79,6 +81,25 @@ public class BooksController : Controller
     public async Task<IActionResult> Details(string id)
     {
         var book = await _books.GetByIdAsync(new Guid(id));
+        book.Reviews = (await _reviews.GetAllAsync()).Where( r => r.Book.Id == book.Id).ToList();
+        book.Reviews = book.Reviews.OrderByDescending(r => r.PostedAt).ToList();
+        // if (book.Reviews.Count > 5) book.Reviews = book.Reviews.GetRange(0, 5);
+        return View("Details", book);
+    }
+
+    [HttpGet("Books/Details/{id}/{page}")]
+    public async Task<IActionResult> Details(string id, int page)
+    {
+        var book = await _books.GetByIdAsync(new Guid(id));
+        book.Reviews = (await _reviews.GetAllAsync()).Where( r => r.Book.Id == book.Id).ToList();
+        // try
+        // {
+        //     book.Reviews = book.Reviews.GetRange(5 * page - 5, 5);
+        // }
+        // catch
+        // {
+        //     return BadRequest($"Number of Products: {book.Reviews.Count}");
+        // }
         book.Reviews = book.Reviews.OrderByDescending(r => r.PostedAt).ToList();
         return View("Details", book);
     }
@@ -88,7 +109,6 @@ public class BooksController : Controller
         return View();
     }
 
-    [HttpGet]
     public async Task<IActionResult> Search(string query)
     {
         string cleanQuery = query.Trim().ToLower();
@@ -124,7 +144,6 @@ public class BooksController : Controller
         }
     }
 
-    [HttpGet]
     public async Task<IActionResult> ExSearch(string query)
     {
         Console.WriteLine(query);
@@ -143,10 +162,15 @@ public class BooksController : Controller
         return View("AddResults", bookDtos);
     }
 
-    [HttpGet]
     [Authorize]
     public async Task<IActionResult> Add(string id)
     {
+        var user = await _userManager.GetUserAsync(User);
+        if (user is null)
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Login", "Account");
+        }
         // Check if it exists in Db
         var dbBooks = (await _books.GetAllAsync()).ToList();
         var results = dbBooks.Where(b => b.GoogleId == id).ToList();
@@ -186,12 +210,18 @@ public class BooksController : Controller
             }
         }
 
-        return RedirectToAction($"Details", "Books", new { id = book.Id.ToString() });
+        return RedirectToAction($"Details", "Books", new { id = book.Id.ToString("D") });
     }
 
     [Authorize]
     public async Task<IActionResult> WriteReview(string id)
     {
+        var user = await _userManager.GetUserAsync(User);
+        if (user is null)
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Login", "Account");
+        }
         Book book = await _books.GetByIdAsync(new Guid(id));
         return View("Review", book);
     }
@@ -200,10 +230,13 @@ public class BooksController : Controller
     [Authorize]
     public async Task<IActionResult> AddReview(ReviewModel model)
     {
-        if (model.Rating < 1)
+        var user = await _userManager.GetUserAsync(User);
+        if (user is null)
         {
-            return View("Review", await _books.GetByIdAsync(new Guid(model.BookId)));
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Login", "Account");
         }
+
         Review review = new()
         {
             Id = Guid.NewGuid(),
@@ -229,4 +262,5 @@ public class BooksController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
 }

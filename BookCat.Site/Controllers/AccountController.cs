@@ -4,6 +4,7 @@ using BookCat.Site.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
+using BookCat.Site.Data;
 
 namespace BookCat.Site.Controllers;
 
@@ -80,11 +81,12 @@ public class AccountController : Controller
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
+        var entityUser = await _userManager.FindByEmailAsync(model.Email);
+        await _userManager.AddToRoleAsync(entityUser, Roles.User);
 
         if (result.Succeeded)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
-            Console.Beep();
             return RedirectToAction("Index", "Books");
         }
 

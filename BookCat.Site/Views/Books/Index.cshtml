@@ -54,8 +54,10 @@
                         <p>@review.User.UserName</p>
                     </div>
                     <div class="review-info">
-                        <h3>@review.Book.Title</h3>
-                        <p class="review-title">Review Title</p>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@review.Book.Id">
+                            <h3>@review.Book.Title</h3>
+                        </a>
+                        <p class="review-title">@review.Title</p>
                         <div class="review-stars">
                             @for (int i = 0; i < review.Rating; i++){
                                 <span class="material-symbols-outlined"> star_rate </span>

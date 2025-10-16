@@ -41,17 +41,12 @@
 <form asp-action="AddReview" method="post" style="display: flex; flex-direction: column;">
     <input name="BookId" class="hidden" type="text" value="@Model.Id" required>
     <div class="star-container">
-        <span id="star-1" class="material-symbols-outlined inactive-star" onclick="rating(1)">star_rate</span>
-        <span id="star-2" class="material-symbols-outlined inactive-star" onclick="rating(2)">star_rate</span>
-        <span id="star-3" class="material-symbols-outlined inactive-star" onclick="rating(3)">star_rate</span>
+        <span id="star-1" class="material-symbols-outlined active-star" onclick="rating(1)">star_rate</span>
+        <span id="star-2" class="material-symbols-outlined active-star" onclick="rating(2)">star_rate</span>
+        <span id="star-3" class="material-symbols-outlined active-star" onclick="rating(3)">star_rate</span>
         <span id="star-4" class="material-symbols-outlined inactive-star" onclick="rating(4)">star_rate</span>
         <span id="star-5" class="material-symbols-outlined inactive-star" onclick="rating(5)">star_rate</span>
-        <input name="Rating" id="hidden-input" class="hidden"
-            type="number" data-val="true"
-            data-val-required="Please select a rating"
-            data-val-range="Rating must be between 1 and 5"
-            data-val-range-min="1"
-            data-val-range-max="5">
+        <input name="Rating" id="hidden-input" class="hidden" type="number" value="3"/>
     </div>
     <input type="text" name="Title" placeholder="Title" required>
     <textarea name="Comment" placeholder="Review" required></textarea>
