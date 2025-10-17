@@ -80,11 +80,19 @@ public class BooksController : Controller
     [HttpGet("Books/Details/{id}")]
     public async Task<IActionResult> Details(string id)
     {
-        var book = await _books.GetByIdAsync(new Guid(id));
-        book.Reviews = (await _reviews.GetAllAsync()).Where( r => r.Book.Id == book.Id).ToList();
-        book.Reviews = book.Reviews.OrderByDescending(r => r.PostedAt).ToList();
-        // if (book.Reviews.Count > 5) book.Reviews = book.Reviews.GetRange(0, 5);
-        return View("Details", book);
+        try
+        {
+            var book = await _books.GetByIdAsync(new Guid(id));
+            book.Reviews = (await _reviews.GetAllAsync()).Where( r => r.Book.Id == book.Id).ToList();
+            book.Reviews = book.Reviews.OrderByDescending(r => r.PostedAt).ToList();
+            // if (book.Reviews.Count > 5) book.Reviews = book.Reviews.GetRange(0, 5);
+            return View("Details", book);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, string.Empty);
+            return View("Error", $"Book with id \"{id}\" not found.");
+        }
     }
 
     [HttpGet("Books/Details/{id}/{page}")]

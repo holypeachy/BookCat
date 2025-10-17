@@ -53,4 +53,14 @@ public class ReviewRepo : IRepo<Review>
 
         await _db.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<Review>> GetByBookIdAsync(Guid id)
+    {
+        return _db.Reviews.Where(r => r.BookId == id);
+    }
+
+    public async Task<IEnumerable<Review>> GetByUserIdAsync(string id)
+    {
+        return _db.Reviews.Where(r => r.UserId == id);
+    }
 }

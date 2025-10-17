@@ -80,23 +80,9 @@ app.Run();
 
 
 /*
-! ISSUES:
-! 
-
-TODO
-TODO: 
-
-? Future Ideas
-? 
-
-* Notes
-* 
-
 * Changes
-* Fix crash when adding a review with a newly registered user
-* Assign user role when a new user register
-* Add overload Details action for pagination, logic is mostly done
-* Temp fix null user after deleting account on Db
-* Add GoogleService removes common html tags from book description
+* Fix password validation on Register action
+* Add GetByBookId and GetByUserId to IRepo
+* Add return url functionality when authentication is needed
 * 
 */

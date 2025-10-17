@@ -27,10 +27,10 @@ public class AccountController : Controller
         return View();
     }
 
-    public async Task<IActionResult> Login()
+    public async Task<IActionResult> Login(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true) return RedirectToAction("Index", "Books");
-        return View();
+        return View(new LoginModel{ReturnUrl = returnUrl ?? string.Empty});
     }
 
     [HttpPost]
@@ -47,7 +47,11 @@ public class AccountController : Controller
 
         var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
 
-        if (result.Succeeded) return RedirectToAction("Index", "Books");
+        if (result.Succeeded)
+        {
+            if(string.IsNullOrEmpty(model.ReturnUrl)) return RedirectToAction("Index", "Books");
+            return LocalRedirect(model.ReturnUrl);
+        } 
 
         ModelState.AddModelError("Email", "Invalid Login Attempt");
         return View(model);
@@ -61,10 +65,10 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    public async Task<IActionResult> Register()
+    public async Task<IActionResult> Register(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true) return RedirectToAction("Index", "Books");
-        return View();
+        return View(new RegisterModel{ ReturnUrl = returnUrl});
     }
 
     [HttpPost]
@@ -81,17 +85,18 @@ public class AccountController : Controller
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
-        var entityUser = await _userManager.FindByEmailAsync(model.Email);
-        await _userManager.AddToRoleAsync(entityUser, Roles.User);
-
+        
         if (result.Succeeded)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
-            return RedirectToAction("Index", "Books");
+
+            var entityUser = await _userManager.FindByEmailAsync(model.Email);
+            await _userManager.AddToRoleAsync(entityUser, Roles.User);
+            if(string.IsNullOrEmpty(model.ReturnUrl)) return RedirectToAction("Index", "Books");
+            return LocalRedirect(model.ReturnUrl);
         }
 
-        foreach (var error in result.Errors)
-            ModelState.AddModelError("Email", error.Description);
+        foreach (var error in result.Errors) ModelState.AddModelError("Email", error.Description);
 
         return View(model);
     }
@@ -110,26 +115,23 @@ public class AccountController : Controller
 
     public class LoginModel
     {
-        [Required]
-        [EmailAddress]
-        public required string Email { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
-        public required string Password { get; set; }
+        [Required, EmailAddress]
+        public string Email { get; set; } = string.Empty;
+        [Required, DataType(DataType.Password)]
+        public string Password { get; set; } = string.Empty;
+        public string? ReturnUrl { get; set; }
     }
 
     public class RegisterModel
     {
+        [Required, EmailAddress]
+        public string Email { get; set; } = string.Empty;
         [Required]
-        [EmailAddress]
-        public required string Email { get; set; }
-        [Required]
-        public required string Username { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
-        public required string Password { get; set; }
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Passwords do not match.")]
-        public required string ConfirmPassword { get; set; }
+        public string Username { get; set; } = string.Empty;
+        [Required, DataType(DataType.Password)]
+        public string Password { get; set; }
+        [DataType(DataType.Password), Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+        public string? ReturnUrl { get; set; }
     }
 }

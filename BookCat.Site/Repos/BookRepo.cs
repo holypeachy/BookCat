@@ -58,4 +58,14 @@ public class BookRepo : IRepo<Book>
 
         await _db.SaveChangesAsync();
     }
+
+    public Task<IEnumerable<Book>> GetByBookIdAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<Book>> GetByUserIdAsync(string id)
+    {
+        return _db.Books.Where(b => b.AddedById == id);
+    }
 }

@@ -52,4 +52,14 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
 
         await _db.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<BookIdentifier>> GetByBookIdAsync(Guid id)
+    {
+        return _db.BookIdentifiers.Where(bi => bi.BookId == id);
+    }
+
+    public Task<IEnumerable<BookIdentifier>> GetByUserIdAsync(string id)
+    {
+        throw new NotImplementedException();
+    }
 }
