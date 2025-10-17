@@ -13,30 +13,6 @@ namespace BookCat.Site.Controllers;
 
 public class BooksController : Controller
 {
-    public class CatalogIndexModel
-    {
-        public List<Book>? Books { get; set; }
-        public List<Review>? Reviews { get; set; }
-    }
-
-    public class ResultsModel
-    {
-        public List<Book>? Books { get; set; }
-        public string Query { get; set; } = string.Empty;
-    }
-
-    public class ReviewModel
-    {
-        [Required]
-        public string BookId { get; set; }
-        [Required]
-        public int Rating { get; set; }
-        [MaxLength(50)]
-        [Required]
-        public string Title { get; set; }
-        [Required]
-        public string Comment { get; set; }
-    }
 
     private readonly ILogger<HomeController> _logger;
     private readonly GoogleBooksService _googleAPI;
@@ -64,13 +40,11 @@ public class BooksController : Controller
     {
         CatalogIndexModel model = new();
 
-        List<Book> books = (await _books.GetAllAsync()).ToList();
-        books = books.OrderByDescending(b => b.AddedOn).ToList();
+        List<Book> books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).ToList();
         if (books.Count > 10) books = books.GetRange(0, 10);
         model.Books = books;
 
-        List<Review> reviews = (await _reviews.GetAllAsync()).ToList();
-        reviews = reviews.OrderByDescending(b => b.PostedAt).ToList();
+        List<Review> reviews = (await _reviews.GetAllAsync()).OrderByDescending(b => b.PostedAt).ToList();
         if (reviews.Count > 5) reviews = reviews.GetRange(0, 5);
         model.Reviews = reviews;
 
@@ -83,8 +57,7 @@ public class BooksController : Controller
         try
         {
             var book = await _books.GetByIdAsync(new Guid(id));
-            book.Reviews = (await _reviews.GetAllAsync()).Where( r => r.Book.Id == book.Id).ToList();
-            book.Reviews = book.Reviews.OrderByDescending(r => r.PostedAt).ToList();
+            book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id))).OrderByDescending(r => r.PostedAt).ToList();
             // if (book.Reviews.Count > 5) book.Reviews = book.Reviews.GetRange(0, 5);
             return View("Details", book);
         }
@@ -99,7 +72,7 @@ public class BooksController : Controller
     public async Task<IActionResult> Details(string id, int page)
     {
         var book = await _books.GetByIdAsync(new Guid(id));
-        book.Reviews = (await _reviews.GetAllAsync()).Where( r => r.Book.Id == book.Id).ToList();
+        book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id))).ToList();
         // try
         // {
         //     book.Reviews = book.Reviews.GetRange(5 * page - 5, 5);
@@ -271,4 +244,28 @@ public class BooksController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
+    public class CatalogIndexModel
+    {
+        public List<Book>? Books { get; set; }
+        public List<Review>? Reviews { get; set; }
+    }
+
+    public class ResultsModel
+    {
+        public List<Book>? Books { get; set; }
+        public string Query { get; set; } = string.Empty;
+    }
+
+    public class ReviewModel
+    {
+        [Required]
+        public string BookId { get; set; }
+        [Required]
+        public int Rating { get; set; }
+        [MaxLength(50)]
+        [Required]
+        public string Title { get; set; }
+        [Required]
+        public string Comment { get; set; }
+    }
 }

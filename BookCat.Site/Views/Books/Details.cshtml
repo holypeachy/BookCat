@@ -48,7 +48,12 @@
     @foreach (Review review in Model.Reviews){
         <div class="review-card">
             <div class="user-info">
-                <img src="~/images/default_user.png" alt="User profile picture">
+                @if(string.IsNullOrEmpty(review.User.UserImageUrl)){
+                    <img src="~/images/default_user.png" alt="User profile picture">
+                }
+                else{
+                    <img src="@review.User.UserImageUrl" alt="User profile picture">
+                }
                 <p>@review.User.UserName</p>
             </div>
             <div class="review-info">

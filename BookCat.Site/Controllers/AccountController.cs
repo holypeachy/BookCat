@@ -30,12 +30,12 @@ public class AccountController : Controller
     public async Task<IActionResult> Login(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true) return RedirectToAction("Index", "Books");
-        return View(new LoginModel{ReturnUrl = returnUrl ?? string.Empty});
+        return View(new LoginViewModel{ReturnUrl = returnUrl ?? string.Empty});
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginModel model)
+    public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid) return View(model);
         var user = await _userManager.FindByEmailAsync(model.Email);
@@ -68,11 +68,11 @@ public class AccountController : Controller
     public async Task<IActionResult> Register(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true) return RedirectToAction("Index", "Books");
-        return View(new RegisterModel{ ReturnUrl = returnUrl});
+        return View(new RegisterViewModel{ ReturnUrl = returnUrl});
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterModel model)
+    public async Task<IActionResult> Register(RegisterViewModel model)
     {
         if (User.Identity?.IsAuthenticated == true) await _signInManager.SignOutAsync();
 
@@ -113,25 +113,31 @@ public class AccountController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public class LoginModel
+    public class LoginViewModel
     {
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
+
         [Required, DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
+
         public string? ReturnUrl { get; set; }
     }
 
-    public class RegisterModel
+    public class RegisterViewModel
     {
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
+
         [Required]
         public string Username { get; set; } = string.Empty;
+
         [Required, DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
+
         [DataType(DataType.Password), Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
         public string? ReturnUrl { get; set; }
     }
 }

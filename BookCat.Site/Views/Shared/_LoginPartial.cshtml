@@ -7,7 +7,15 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <a class="user-img-link" asp-controller="Account" asp-action="Index">
-        <img class="user-img" src="~/images/default_user.png" alt="User Image">
+        @{
+            var user = await UserManager.GetUserAsync(User);
+        }
+        @if(user is null || string.IsNullOrEmpty(user.UserImageUrl)){
+            <img class="user-img" src="~/images/default_user.png" alt="User Image">
+        }
+        else{
+            <img class="user-img" src="@user.UserImageUrl" alt="User Image">
+        }
     </a>
     <form method="post" asp-controller="Account" asp-action="Logout">
         <button class="btn" id="logout" type="submit">Logout</button>

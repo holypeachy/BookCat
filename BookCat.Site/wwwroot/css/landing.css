@@ -1,11 +1,16 @@
-.landing-title{
-    font-size: 1.4rem;
+.landing-text > h1{
+    font-size: 1.6rem;
     margin: 0;
 }
 
-.landing-text p{
+.landing-text > h1::first-letter{
+    font-size: 2em;
+}
+
+.landing-text > p{
     padding-left: 15px;
     padding-right: 15px;
+    font-size: 1.1rem;
 }
 
 .landing-image-wrapper{
@@ -17,14 +22,6 @@
     align-self: center;
     width: 100%;
     max-width: 300px;
-}
-
-.landing-title::first-letter{
-    font-size: 2em;
-}
-
-.most-recent{
-    margin-top: 10px;
 }
 
 
@@ -41,27 +38,60 @@
 }
 
 @keyframes jumping{
-    50% {transform: translateY(-3px);}
-    100% {transform: translateY(3px);}
+    70% {transform: translateY(-5px);}
+    100% {transform: translateY(0px);}
+}
+
+
+.stats{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+    padding: 10px;
+    background-color: var(--secondary-bg-color);
+    border-radius: 20px;
+}
+
+.stat-item{
+    text-align: center;
+    padding: 10px;
+}
+
+.stat-item > h3{
+    margin: 0;
+}
+
+.stat-item > p{
+    margin: 0;
+    font-size: 2rem;
+}
+
+
+.most-recent{
+    margin-top: 10px;
 }
 
 
 @media screen and (min-width: 480px)  {
-    .landing-title{
-        font-size: clamp(1.4rem, 2vw, 2rem);
+    .landing-text > h1{
+        font-size: clamp(1.6rem, 2vw, 2rem);
     }
 }
 
 @media screen and (min-width: 600px)  {
-    .landing{
+    .landing-wrapper{
         display: grid;
         grid-template-columns: auto auto;
     }
 
-    .new-this{
+    .most-recent{
         margin-top: 30px;
     }
 
+    .landing-text > p{
+        font-size: clamp(1.1rem, 2vw, 1.3rem);
+    }
 }
 
 @media screen and (min-width: 1000px)  {

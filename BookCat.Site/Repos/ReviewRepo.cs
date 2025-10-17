@@ -56,11 +56,16 @@ public class ReviewRepo : IRepo<Review>
 
     public async Task<IEnumerable<Review>> GetByBookIdAsync(Guid id)
     {
-        return _db.Reviews.Where(r => r.BookId == id);
+        return _db.Reviews.Where(r => r.BookId == id).Include(r => r.User);
     }
 
     public async Task<IEnumerable<Review>> GetByUserIdAsync(string id)
     {
-        return _db.Reviews.Where(r => r.UserId == id);
+        return _db.Reviews.Where(r => r.UserId == id).Include(r => r.User).Include(r => r.Book);
+    }
+
+    public async Task<int> GetCount()
+    {
+        return await _db.Reviews.CountAsync();
     }
 }

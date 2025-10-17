@@ -68,4 +68,9 @@ public class BookRepo : IRepo<Book>
     {
         return _db.Books.Where(b => b.AddedById == id);
     }
+
+    public async Task<int> GetCount()
+    {
+        return await _db.Books.CountAsync();
+    }
 }

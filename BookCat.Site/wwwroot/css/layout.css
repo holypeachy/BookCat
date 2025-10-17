@@ -59,6 +59,11 @@ main{
     margin-right: 6px;
 }
 
+.user-img-link:hover{
+    border-radius: 50%;
+    box-shadow: 0px 0px 5px black ;
+}
+
 .user-img{
     display: inline-block;
     object-fit: cover;

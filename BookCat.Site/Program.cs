@@ -81,8 +81,9 @@ app.Run();
 
 /*
 * Changes
-* Fix password validation on Register action
-* Add GetByBookId and GetByUserId to IRepo
-* Add return url functionality when authentication is needed
+* Add book and review count to landing
+* Polish landing styling
+* Change privacy page to about
+* Add user profile picture to layout and reviews
 * 
 */

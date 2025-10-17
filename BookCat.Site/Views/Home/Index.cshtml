@@ -1,12 +1,13 @@
-﻿@model List<Book>
+﻿@using BookCat.Site.Controllers
+@model HomeController.IndexViewModel
 
 @{
     ViewData["Title"] = "BookCat";
 }
 
-<div class="landing">
+<div class="landing-wrapper">
     <div class="landing-text">
-        <h1 class="landing-title">Discover, review, and share your favorite books.</h1>
+        <h1>Discover, review, and share your favorite books.</h1>
         <p>Look up books, read reviews, and share your thoughts. Can’t find it? Be the person to add it to the site, by doing a simple search. </p>
         <p>Go to the <a class="animated" asp-controller="Books" asp-action="Index">Cat-alog</a>!</p>
     </div>
@@ -14,9 +15,19 @@
         <img class="landing-image" src="~/images/landing.png" alt="Landing page image">
     </div>
 </div>
+<div class="stats">
+    <div class="stat-item">
+        <h3>Books</h3>
+        <p>@Model.BookCount</p>
+    </div>
+    <div class="stat-item">
+        <h3>Reviews</h3>
+        <p>@Model.ReviewCount</p>
+    </div>
+</div>
 <h3 class="most-recent">Most recent</h3>
 <div class="cards-container">
-    @foreach (Book b in Model){
+    @foreach (Book b in Model.Books){
             @if(b.CoverUrl is null){
                 <a class="clean-link card-link" asp-controller="Books" asp-action="Details" asp-route-id="@b.Id">
                     <div class="card">

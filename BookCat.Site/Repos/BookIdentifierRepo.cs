@@ -62,4 +62,9 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
     {
         throw new NotImplementedException();
     }
+
+    public async Task<int> GetCount()
+    {
+        return await _db.BookIdentifiers.CountAsync();
+    }
 }

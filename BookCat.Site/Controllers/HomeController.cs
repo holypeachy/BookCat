@@ -1,31 +1,39 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using BookCat.Site.Models;
-using BookCat.Site.Services;
 using BookCat.Site.Repos;
 
 namespace BookCat.Site.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
     private readonly IRepo<Book> _books;
+    private readonly IRepo<Review> _reviews;
 
-    public HomeController(ILogger<HomeController> logger, IRepo<Book> bookRepo)
+    public HomeController(IRepo<Book> bookRepo, IRepo<Review> reviewRepo)
     {
-        _logger = logger;
         _books = bookRepo;
+        _reviews = reviewRepo;
     }
 
     public async Task<IActionResult> Index()
     {
-        List<Book> books = (await _books.GetAllAsync()).ToList();
-        books = books.OrderByDescending(b => b.AddedOn).ToList();
-        if (books.Count > 10) books = books.GetRange(0, 10);
-        return View(books);
+        List<Book> books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).ToList();
+        int bookCount = books.Count;
+
+        if (bookCount > 7) books = books.GetRange(0, 7);
+
+        IndexViewModel model = new()
+        {
+            Books = books,
+            BookCount = bookCount,
+            ReviewCount = await _reviews.GetCount()
+        };
+
+        return View(model);
     }
 
-    public IActionResult Privacy()
+    public IActionResult About()
     {
         return View();
     }
@@ -34,5 +42,12 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    public class IndexViewModel
+    {
+        public List<Book> Books { get; set; }
+        public int BookCount { get; set; }
+        public int ReviewCount { get; set; }
     }
 }
