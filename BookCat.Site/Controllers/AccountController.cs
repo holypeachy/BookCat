@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
 using BookCat.Site.Data;
+using BookCat.Site.Repos;
 
 namespace BookCat.Site.Controllers;
 
@@ -12,17 +13,42 @@ public class AccountController : Controller
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly IRepo<Book> _books;
+    private readonly IRepo<Review> _reviews;
 
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IRepo<Book> booksRepo, IRepo<Review> reviewRepo)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _books = booksRepo;
+        _reviews = reviewRepo;
     }
 
     [Authorize]
     public async Task<IActionResult> Index()
     {
-        return View();
+        var user = await _userManager.GetUserAsync(User);
+        var model = new DashViewModel { BooksAdded = (await _books.GetByUserIdAsync(user.Id)).ToList().Count, TotalReviews = (await _reviews.GetByUserIdAsync(user.Id)).ToList().Count, User = user };
+        return View(model);
+    }
+
+    [Authorize, HttpPost]
+    public async Task<IActionResult> ChangePfp(IFormFile pfp)
+    {
+        if (pfp is null || pfp.Length == 0) return View("Error", "No file selected.");
+        var user = await _userManager.GetUserAsync(User);
+
+        var filePath = Path.Combine("wwwroot", "user-images", $"{user.Id}{Path.GetExtension(pfp.FileName)}");
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await pfp.CopyToAsync(stream);
+        }
+
+        filePath = $"/user-images/{user.Id}{Path.GetExtension(pfp.FileName)}";
+        user.UserImageUrl = filePath;
+        await _userManager.UpdateAsync(user);
+
+        return RedirectToAction("Index");
     }
 
     public async Task<IActionResult> Login(string? returnUrl = null)
@@ -134,5 +160,12 @@ public class AccountController : Controller
         public string ConfirmPassword { get; set; } = string.Empty;
 
         public string? ReturnUrl { get; set; }
+    }
+
+    public class DashViewModel
+    {
+        public AppUser User { get; set; }
+        public int BooksAdded { get; set; }
+        public int TotalReviews { get; set; }
     }
 }

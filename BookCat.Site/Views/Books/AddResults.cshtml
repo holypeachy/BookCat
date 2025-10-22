@@ -11,6 +11,9 @@
     </span>
 </form>
 
+@if(Model.Count < 1){
+    <h2 class="no-results">No Results</h2>
+}
 @foreach (var item in Model){
     <div class="book-card">
         <div class="book-cover-wrapper">

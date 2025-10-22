@@ -95,9 +95,7 @@ app.Run();
     project I've picked up on how to style things better so next project I should approach it in a more structured approach.
 
 * Changes
-* Add total score to book details
-* Change how star ratings are displayed
-* Make search results responsive
-* Style details and made it responsive
+* Add index view in User controller
+* Add change profile picture form to user dash
 * 
 */

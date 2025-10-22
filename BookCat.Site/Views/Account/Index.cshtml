@@ -1,9 +1,39 @@
+@using BookCat.Site.Controllers
 @using Microsoft.AspNetCore.Identity
+
+@model AccountController.DashViewModel
 
 @{
     ViewData["Title"] = "Dashboard";
 }
-@inject UserManager<AppUser> UserManager
 
 <h1>Dashboard</h1>
-<h2>Hi here @UserManager.GetUserName(User)</h2>
+
+<div class="user-profile">
+    <div class="user-left">
+        @if(string.IsNullOrEmpty(Model.User.UserImageUrl)){
+            <img class="profile-picture" src="~/images/default_user.png" alt="User profile picture">
+        }
+        else
+        {
+            <img class="profile-picture" src="@Model.User.UserImageUrl" alt="User profile picture">
+        }
+        <h2>@Model.User.UserName</h2>
+    </div>
+    <div class="user-details">
+        <p>Books Added: @Model.BooksAdded</p>
+        <p>Total Reviews: @Model.TotalReviews</p>
+    </div>
+</div>
+<form class="change-pfp-form" asp-controller="Account" asp-action="ChangePfp" method="post" enctype="multipart/form-data">
+    <div>
+        <h3>Change Profile Picture</h3>
+        <input class="btn" type="file" name="pfp" id="pfp" accept="image/*" required/>
+    </div>
+    <button class="btn" type="submit">Upload</button>
+</form>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/user.css">
+    <link rel="stylesheet" href="~/css/user-dash.css">
+}

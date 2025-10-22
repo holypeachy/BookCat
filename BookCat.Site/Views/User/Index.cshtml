@@ -1,0 +1,51 @@
+@using BookCat.Site.Controllers
+@model UserController.UserViewModel
+
+@{
+    ViewData["Title"] = Model.User.UserName;
+}
+
+<div class="user-profile">
+    <div class="user-left">
+        @if(string.IsNullOrEmpty(Model.User.UserImageUrl)){
+            <img class="profile-picture" src="~/images/default_user.png" alt="User profile picture">
+        }
+        else
+        {
+            <img class="profile-picture" src="@Model.User.UserImageUrl" alt="User profile picture">
+        }
+        <h2>@Model.User.UserName</h2>
+    </div>
+    <div class="user-details">
+        <p>Books Added: @Model.BooksAdded</p>
+        <p>Total Reviews: @Model.TotalReviews</p>
+    </div>
+</div>
+<div class="review-card-container">
+    <h3>@(Model.User.UserName)'s most recent reviews (@Model.Reviews.Count)</h3>
+    @foreach (Review review in Model.Reviews){
+        <div class="review-card">
+            <div class="review-info">
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@review.Book.Id">
+                    <h3>@review.Book.Title</h3>
+                </a>
+                <p class="review-title">@review.Title</p>
+                <div class="review-stars">
+                    @for (int i = 0; i < review.Rating; i++){
+                        <span class="material-symbols-outlined on-star"> star_rate </span>
+                    }
+                    @for (int i = 0; i < 5 - review.Rating; i++){
+                        <span class="material-symbols-outlined"> star_rate </span>
+                    }
+                </div>
+                <p class="review-body">@review.Comment</p>
+            </div>
+        </div>
+    }
+</div>
+
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/review.css">
+    <link rel="stylesheet" href="~/css/user.css">
+}
