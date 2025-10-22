@@ -1,51 +1,53 @@
-@model Book
+@using BookCat.Site.Controllers
+@model BooksController.BookDetailsViewModel
 
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = Model.Book.Title;
 }
 
 <div class="book-wrapper">
     <div class="book-img-wrapper">
-        @if (Model.CoverUrl is null)
+        @if (Model.Book.CoverUrl is null)
         {
-            <img class="cover-img" src="~/images/default_book.png" atl="Cover for @Model.Title">
+            <img class="cover-img" src="~/images/default_book.png" atl="Cover for @Model.Book.Title">
         }
         else
         { 
-            <img class="cover-img" src="@Model.CoverUrl" atl="Cover for @Model.Title">
+            <img class="cover-img" src="@Model.Book.CoverUrl" atl="Cover for @Model.Book.Title">
         }
     </div>
     <div class="book-info-wrapper">
-        <h3 class="title">@Model.Title</h3>
-        @if(Model.Subtitle is not null){
-            <h4>@Model.Subtitle</h4>
+        <h3 class="title">@Model.Book.Title</h3>
+        @if(Model.Book.Subtitle is not null){
+            <h4>@Model.Book.Subtitle</h4>
         }
-        @if(Model.Author is not null){
-            <p>Author: @Model.Author</p>
+        @if(Model.Book.Author is not null){
+            <p>Author: @Model.Book.Author</p>
         }
-        @if(Model.Publisher is not null){
-            <p>Publisher: @Model.Publisher</p>
+        @if(Model.Book.Publisher is not null){
+            <p>Publisher: @Model.Book.Publisher</p>
         }
-        @if(Model.PublishedDate is not null){
-            <p>Published: @Model.PublishedDate</p>
+        @if(Model.Book.PublishedDate is not null){
+            <p>Published: @Model.Book.PublishedDate</p>
         }
-        @if(Model.AddedById is not null && Model.AddedBy is not null){
-            <p>Added By: @Model.AddedBy.UserName</p>
+        @if(Model.Book.AddedById is not null && Model.Book.AddedBy is not null){
+            <p>Added By: @Model.Book.AddedBy.UserName</p>
         }
     </div>
 </div>
 <div class="review-btn-wrapper">
-    <a class="clean-link btn review-btn" asp-controller="Books" asp-action="WriteReview" asp-route-id="@Model.Id">Write Review</a>
+    <a class="clean-link btn review-btn" asp-controller="Books" asp-action="WriteReview" asp-route-id="@Model.Book.Id">Write Review</a>
 </div>
 <div class="book-description">
-    <h4>Description</h4>
-    <p>@Model.Description</p>
+    <h3>Description</h3>
+    <p>@Model.Book.Description</p>
 </div>
+<h3>Reviews</h3>
 <div class="review-wrapper">
-    @if(Model.Reviews.Count < 1){
+    @if(Model.Book.Reviews.Count < 1){
         <h3 class="no-reviews">No Reviews Yet</h3>
     }
-    @foreach (Review review in Model.Reviews){
+    @foreach (Review review in Model.Book.Reviews){
         <div class="review-card">
             <div class="user-info">
                 @if(string.IsNullOrEmpty(review.User.UserImageUrl)){
@@ -57,17 +59,46 @@
                 <p>@review.User.UserName</p>
             </div>
             <div class="review-info">
-                <p class="review-title">@review.Title</p>
+                <p class="review-title">Title: @review.Title</p>
                 <div class="review-stars">
+                    <span>Rating: </span>
                     @for (int i = 0; i < review.Rating; i++){
                         <span class="material-symbols-outlined"> star_rate </span>
                     }
                 </div>
+                <p>Posted: @(DateOnly.FromDateTime(review.PostedAt))</p>
                 <p class="review-body">@review.Comment</p>
+            </div>
+            <div>
+
             </div>
         </div>
     }
 </div>
+@if(Model.Book.Reviews.Count > 0){
+    <div class="pagination-wrapper">
+        @if(Model.CurrentPage != 1){
+            <a class="pagination-item btn clean-link" asp-controller="Books" asp-action="Details" asp-route-id="@Model.Book.Id" asp-route-page="@(Model.CurrentPage - 1)">&lt;</a>
+        }
+        else{
+            <span class="pagination-item">&lt;</span>
+        }
+        @for(int i = 1; i < Model.TotalPages + 1; i++){
+            @if(Model.CurrentPage == i){
+                <span class="pagination-item current-page clean-link">@i</span>
+            }
+            else{
+                <a class="pagination-item" asp-controller="Books" asp-action="Details" asp-route-id="@Model.Book.Id" asp-route-page="@i">@i</a>
+            }
+        }
+        @if(Model.CurrentPage != Model.TotalPages){
+            <a class="pagination-item btn clean-link" asp-controller="Books" asp-action="Details" asp-route-id="@Model.Book.Id" asp-route-page="@(Model.CurrentPage + 1)">&gt;</a>
+        }
+        else{
+            <span class="pagination-item">&gt;</span>
+        }
+    </div>
+}
 
 
 @section Styles{

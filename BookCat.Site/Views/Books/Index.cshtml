@@ -1,5 +1,5 @@
 @using BookCat.Site.Controllers
-@model BooksController.CatalogIndexModel
+@model BooksController.CatalogViewModel
 
 @{
     ViewData["Title"] = "Catalog";
@@ -43,35 +43,30 @@
 <div>
     <h3>Recent Reviews</h3>
     <div class="review-card-container">
-        @if(Model.Reviews is null){
-            <h1>Error</h1>
-        }
-        else{
-            @foreach (Review review in Model.Reviews){
-                <div class="review-card">
-                    <div class="user-info">
-                        @if(string.IsNullOrEmpty(review.User.UserImageUrl)){
-                            <img src="~/images/default_user.png" alt="User profile picture">
-                        }
-                        else{
-                            <img src="@review.User.UserImageUrl" alt="User profile picture">
-                        }
-                        <p>@review.User.UserName</p>
-                    </div>
-                    <div class="review-info">
-                        <a asp-controller="Books" asp-action="Details" asp-route-id="@review.Book.Id">
-                            <h3>@review.Book.Title</h3>
-                        </a>
-                        <p class="review-title">@review.Title</p>
-                        <div class="review-stars">
-                            @for (int i = 0; i < review.Rating; i++){
-                                <span class="material-symbols-outlined"> star_rate </span>
-                            }
-                        </div>
-                        <p class="review-body">@review.Comment</p>
-                    </div>
+        @foreach (Review review in Model.Reviews){
+            <div class="review-card">
+                <div class="user-info">
+                    @if(string.IsNullOrEmpty(review.User.UserImageUrl)){
+                        <img src="~/images/default_user.png" alt="User profile picture">
+                    }
+                    else{
+                        <img src="@review.User.UserImageUrl" alt="User profile picture">
+                    }
+                    <p>@review.User.UserName</p>
                 </div>
-            }
+                <div class="review-info">
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@review.Book.Id">
+                        <h3>@review.Book.Title</h3>
+                    </a>
+                    <p class="review-title">@review.Title</p>
+                    <div class="review-stars">
+                        @for (int i = 0; i < review.Rating; i++){
+                            <span class="material-symbols-outlined"> star_rate </span>
+                        }
+                    </div>
+                    <p class="review-body">@review.Comment</p>
+                </div>
+            </div>
         }
     </div>
 </div>

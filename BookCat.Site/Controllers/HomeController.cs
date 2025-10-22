@@ -18,16 +18,13 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        List<Book> books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).ToList();
-        int bookCount = books.Count;
-
-        if (bookCount > 7) books = books.GetRange(0, 7);
+        List<Book> books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).Take(7).ToList();
 
         IndexViewModel model = new()
         {
             Books = books,
-            BookCount = bookCount,
-            ReviewCount = await _reviews.GetCount()
+            BookCount = await _books.GetCountAsync(),
+            ReviewCount = await _reviews.GetCountAsync()
         };
 
         return View(model);

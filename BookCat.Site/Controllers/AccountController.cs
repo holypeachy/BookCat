@@ -10,13 +10,11 @@ namespace BookCat.Site.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
 
-    public AccountController(ILogger<HomeController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
     {
-        _logger = logger;
         _userManager = userManager;
         _signInManager = signInManager;
     }
@@ -38,6 +36,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid) return View(model);
+
         var user = await _userManager.FindByEmailAsync(model.Email);
         if (user is null)
         {
@@ -112,6 +111,7 @@ public class AccountController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
 
     public class LoginViewModel
     {

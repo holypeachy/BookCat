@@ -1,63 +1,70 @@
-@model Book
+@using BookCat.Site.Controllers
+@model BooksController.ReviewViewModel
 
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = Model.Book.Title;
 }
 
 <div class="book-wrapper">
     <div class="book-img-wrapper">
-        @if (Model.CoverUrl is null)
+        @if (Model.Book.CoverUrl is null)
         {
-            <img class="cover-img" src="~/images/default_book.png" atl="Cover for @Model.Title">
+            <img class="cover-img" src="~/images/default_book.png" atl="Cover for @Model.Book.Title">
         }
         else
         { 
-            <img class="cover-img" src="@Model.CoverUrl" atl="Cover for @Model.Title">
+            <img class="cover-img" src="@Model.Book.CoverUrl" atl="Cover for @Model.Book.Title">
         }
     </div>
     <div class="book-info-wrapper">
-        <h3 class="title">@Model.Title</h3>
-        @if(Model.Subtitle is not null){
-            <h4>@Model.Subtitle</h4>
+        <h3 class="title">@Model.Book.Title</h3>
+        @if(Model.Book.Subtitle is not null){
+            <h4>@Model.Book.Subtitle</h4>
         }
-        @if(Model.Author is not null){
-            <p>Author: @Model.Author</p>
+        @if(Model.Book.Author is not null){
+            <p>Author: @Model.Book.Author</p>
         }
-        @if(Model.Publisher is not null){
-            <p>Publisher: @Model.Publisher</p>
+        @if(Model.Book.Publisher is not null){
+            <p>Publisher: @Model.Book.Publisher</p>
         }
-        @if(Model.PublishedDate is not null){
-            <p>Published: @Model.PublishedDate</p>
+        @if(Model.Book.PublishedDate is not null){
+            <p>Published: @Model.Book.PublishedDate</p>
         }
-        @if(Model.AddedById is not null && Model.AddedBy is not null){
-            <p>Added By: @Model.AddedBy.UserName</p>
+        @if(Model.Book.AddedById is not null && Model.Book.AddedBy is not null){
+            <p>Added By: @Model.Book.AddedBy.UserName</p>
         }
     </div>
 </div>
 <div class="book-description">
-    <h4>Description</h4>
-    <p>@Model.Description</p>
+    <h3>Description</h3>
+    <p>@Model.Book.Description</p>
 </div>
-<form asp-action="AddReview" method="post" style="display: flex; flex-direction: column;">
-    <input name="BookId" class="hidden" type="text" value="@Model.Id" required>
+<h3>Write Review</h3>
+<form class="add-review-form" asp-action="AddReview" method="post">
+    <input asp-for="BookId" class="hidden" type="text" value="@Model.Book.Id" required>
     <div class="star-container">
+        <div class="rating-text">Give your rating</div>
         <span id="star-1" class="material-symbols-outlined active-star" onclick="rating(1)">star_rate</span>
         <span id="star-2" class="material-symbols-outlined active-star" onclick="rating(2)">star_rate</span>
         <span id="star-3" class="material-symbols-outlined active-star" onclick="rating(3)">star_rate</span>
         <span id="star-4" class="material-symbols-outlined inactive-star" onclick="rating(4)">star_rate</span>
         <span id="star-5" class="material-symbols-outlined inactive-star" onclick="rating(5)">star_rate</span>
-        <input name="Rating" id="hidden-input" class="hidden" type="number" value="3"/>
+        <input asp-for="Rating" id="hidden-input" class="hidden" type="number" value="3"/>
     </div>
-    <input type="text" name="Title" placeholder="Title" required>
-    <textarea name="Comment" placeholder="Review" required></textarea>
-    <input type="submit">
+    <span asp-validation-for="Title" class="text-danger"></span>
+    <input class="form-title input-border" type="text" asp-for="Title" placeholder="Title" required>
+    <span asp-validation-for="Comment" class="text-danger"></span>
+    <textarea class="form-comment input-border" asp-for="Comment" placeholder="Your Review" required></textarea>
+    <input class="btn form-btn" type="submit">
 </form>
+<div class="spacing">
+</div>
 
 @section Styles{
     <link rel="stylesheet" href="~/css/details.css">
-    <link rel="stylesheet" href="~/css/review.css">
-    <link rel="stylesheet" href="~/css/test.css">
+    <link rel="stylesheet" href="~/css/add-review.css">
 }
 @section Scripts{
-    <script src="~/js/test.js"></script>
+    <script src="~/js/stars.js"></script>
+    <partial name="_ValidationScriptsPartial"/>
 }

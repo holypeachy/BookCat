@@ -22,4 +22,8 @@
         margin: auto;
         width: 80%;
     }
+
+    .review-card-container{
+        margin: 50px;
+    }
 }

@@ -1,0 +1,78 @@
+.spacing{
+    height: 30vh;
+}
+
+.rating-text{
+    margin-bottom: 10px;
+}
+
+.add-review-form{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--secondary-bg-color);
+    padding: 10px;
+    max-width: 600px;
+    border-radius: 30px;
+}
+
+.hidden{
+    display: none;
+}
+
+.inactive-star:hover{
+    cursor: pointer;
+}
+
+.active-star{
+    color: var(--select-color);
+}
+
+.active-star:hover{
+    cursor: pointer;
+}
+
+.star-container{
+    text-align: center;
+    background-color: var(--secondary-bg-color);
+    padding: 20px;
+}
+
+.star-container::selection{
+    background-color: transparent;
+}
+
+.star-container span::selection{
+    background-color: transparent;
+}
+
+.form-title{
+    padding: 10px 15px;
+    background-color: var(--primary-bg-color);
+    border-radius: 30px;
+}
+
+.form-comment{
+    margin-top: 10px;
+    padding: 15px 15px;
+    background-color: var(--primary-bg-color);
+    border-radius: 30px;
+    max-width: 580px;
+    height: 30vh;
+}
+
+.input-border{
+    border: 1px solid var(--primary-text-color);
+}
+
+.input-border:focus{
+    outline: none;
+    box-shadow: 0px 1px 5px var(--primary-text-color);
+}
+
+.form-btn{
+    align-self: center;
+    margin-top: 10px;
+    width: 50%;
+}

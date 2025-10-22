@@ -24,9 +24,10 @@ public class ReviewRepo : IRepo<Review>
         return await _db.Reviews.Include(r => r.Book).Include(r => r.User).ToListAsync();
     }
 
-    public async Task<Review> GetByIdAsync(Guid id)
+    public async Task<Review?> GetByIdAsync(Guid id)
     {
-        Review? review = await _db.Reviews.FindAsync(id) ?? throw new KeyNotFoundException();
+        Review? review = await _db.Reviews.FindAsync(id);
+        if (review is null) return null;
         await _db.Entry(review).Reference(r => r.Book).LoadAsync();
         await _db.Entry(review).Reference(r => r.User).LoadAsync();
         return review;
@@ -39,12 +40,14 @@ public class ReviewRepo : IRepo<Review>
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        Review? review = await _db.Reviews.FindAsync(id) ?? throw new KeyNotFoundException();
+        Review? review = await _db.Reviews.FindAsync(id);
+        if (review is null) return false;
         _db.Reviews.Remove(review);
 
         await _db.SaveChangesAsync();
+        return true;
     }
 
     public async Task DeleteAsync(Review entity)
@@ -64,7 +67,7 @@ public class ReviewRepo : IRepo<Review>
         return _db.Reviews.Where(r => r.UserId == id).Include(r => r.User).Include(r => r.Book);
     }
 
-    public async Task<int> GetCount()
+    public async Task<int> GetCountAsync()
     {
         return await _db.Reviews.CountAsync();
     }

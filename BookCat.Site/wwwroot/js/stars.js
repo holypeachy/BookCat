@@ -1,4 +1,4 @@
-﻿function rating(value) {
+function rating(value) {
     let active = 'active-star'
     let inactive = 'inactive-star'
 

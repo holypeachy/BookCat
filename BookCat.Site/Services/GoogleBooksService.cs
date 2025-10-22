@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using BookCat.Site.Models;
 using BookCat.Site.Models.GoogleBooks;
 using Microsoft.Extensions.Options;
@@ -79,7 +80,6 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
             List<BookDto> bookDtos = [];
             if (booksResponse is null || booksResponse.Items is null) return bookDtos;
 
-            int count = 1;
             BookDto dto;
             foreach (var item in booksResponse.Items)
             {
@@ -95,7 +95,6 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
                     CoverUrl = GetBestImage(item.VolumeInfo.ImageLinks),
                     Identifiers = item.VolumeInfo.IndustryIdentifiers
                 };
-                // _logger.LogInformation("BookDto {count} Parsed:\n{BookDto}", count++, dto);
                 bookDtos.Add(dto);
             }
 
@@ -137,7 +136,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
 
     private static string? GetBestImage(GoogleBooksImageLinks? links)
     {
-        string? link = string.Empty;
+        string? link;
         if (links is null) return null;
         else if (links.ExtraLarge is not null) link = links.ExtraLarge;
         else if (links.Large is not null) link = links.Large;
@@ -156,7 +155,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
     public static string? CleanDescription(string? s)
     {
         if (s is null) return null;
-        return s.Replace("<p>", "").Replace("</p>", "").Replace("<b>", "").Replace("</b>", "").Replace("<i>", "").Replace("</i>", "").Replace("<br>", "").Replace("<ul>", "").Replace("</ul>", "").Replace("<ol>", "").Replace("</ol>", "").Replace("<li>", "").Replace("</li>", "");
+        return Regex.Replace(s, @"<\\?\w*>", " ");
     }
 
 }

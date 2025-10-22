@@ -7,12 +7,11 @@
     overflow: auto;
 
     margin-bottom: 30px;
-    padding-bottom: 50px;
-    padding: 5px;
+    padding: 10px;
 }
 
 .card:hover img{
-    box-shadow: 0px 2px 5px var(--primary-text-color);
+    box-shadow: 0px 2px 10px var(--primary-text-color);
 }
 
 .card-link{

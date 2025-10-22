@@ -24,9 +24,10 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
         return await _db.BookIdentifiers.Include(bi => bi.Book).ToListAsync();
     }
 
-    public async Task<BookIdentifier> GetByIdAsync(Guid id)
+    public async Task<BookIdentifier?> GetByIdAsync(Guid id)
     {
-        BookIdentifier? identifier = await _db.BookIdentifiers.FindAsync(id) ?? throw new KeyNotFoundException();
+        BookIdentifier? identifier = await _db.BookIdentifiers.FindAsync(id);
+        if (identifier is null) return null;
         await _db.Entry(identifier).Reference(bi => bi.Book).LoadAsync();
         return identifier;
     }
@@ -38,12 +39,14 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        BookIdentifier? identifier = await _db.BookIdentifiers.FindAsync(id) ?? throw new KeyNotFoundException();
+        BookIdentifier? identifier = await _db.BookIdentifiers.FindAsync(id);
+        if (identifier is null) return false;
         _db.BookIdentifiers.Remove(identifier);
 
         await _db.SaveChangesAsync();
+        return true;
     }
 
     public async Task DeleteAsync(BookIdentifier entity)
@@ -63,7 +66,7 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
         throw new NotImplementedException();
     }
 
-    public async Task<int> GetCount()
+    public async Task<int> GetCountAsync()
     {
         return await _db.BookIdentifiers.CountAsync();
     }

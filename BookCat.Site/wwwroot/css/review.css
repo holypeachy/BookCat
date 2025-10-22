@@ -3,6 +3,7 @@
     padding: 5px;
     display: flex;
     margin-bottom: 12px;
+    border-radius: 30px;
 }
 
 .review-info{
@@ -10,21 +11,20 @@
 }
 
 .review-info h3{
-    margin: 0;
     font-size: 1rem;
 }
 
 .review-title{
     margin: 3px 0 0 0;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .review-body{
-    font-size: 0.8rem;
+    padding-left: 10px;
 }
 
 .review-stars{
-    padding: 5px;
+    margin: 10px 0;
     display: flex;
     align-content: center;
     color: var(--select-color);
@@ -47,6 +47,7 @@
 .user-info > p{
     font-size: 0.8rem;
     margin: 0;
+    padding: 8px;
 }
 
 
@@ -74,11 +75,11 @@
     }
 
     .review-title{
-        font-size: clamp(0.9rem, 2vw, 1.3rem);
+        font-size: clamp(1.1rem, 2vw, 1.3rem);
     }
 
     .review-body{
-        font-size: clamp(0.8rem, 2vw, 1rem);
+        font-size: clamp(0.8rem, 2vw, 1.2rem);
     }
 
 }
@@ -87,6 +88,10 @@
     .user-info > img{
         width: 50px;
         height: 50px;
+    }
+
+    .review-body{
+        padding-left: 20px;
     }
 }
 

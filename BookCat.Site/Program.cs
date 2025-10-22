@@ -80,10 +80,25 @@ app.Run();
 
 
 /*
+? Things I could improve (for readme)
+? Since this is my first full stack project I can see a lot I could improve.
+    I typically iterate on projects a lot while I'm working on them but I'm in a bit of a time crunch on this one.
+    So here are some things that bother me that I could change:
+? I'm sure I could rethink the IRepo a little bit more.
+? Better usage of LINQ and DbContext SQL.
+? Pagination in Books/Details/ is kinda useless when talking about performance because I request all reviews either way and they are loaded into memory, but ideally I would implement pagination in the repos
+    to prevent it all being loaded to memory.
+? I'm not happy with the naming schemes of the entire project. I haven't used CSS to this scale so naming on my CSS
+   classes is something I could improve a lot.
+? 
+
 * Changes
-* Add book and review count to landing
-* Polish landing styling
-* Change privacy page to about
-* Add user profile picture to layout and reviews
+* use regex to remove html tags from descriptions in GoogleBooksService
+* add review pagination for book details
+* add pagination to front end
+* style reviews a bit more
+* remove test action from Books controller and view
+* rename test.js to stars.js, rename css as well
+* style write review form
 * 
 */

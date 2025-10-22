@@ -6,7 +6,6 @@ using BookCat.Site.Repos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using BookCat.Site.Data;
 using Microsoft.AspNetCore.Authentication;
 
 namespace BookCat.Site.Controllers;
@@ -14,20 +13,17 @@ namespace BookCat.Site.Controllers;
 public class BooksController : Controller
 {
 
-    private readonly ILogger<HomeController> _logger;
     private readonly GoogleBooksService _googleAPI;
     private readonly IRepo<Book> _books;
     private readonly IRepo<Review> _reviews;
     private readonly IRepo<BookIdentifier> _identifiers;
     private readonly UserManager<AppUser> _userManager;
 
-    public BooksController(ILogger<HomeController> logger,
-        GoogleBooksService googleBooksService,
+    public BooksController(GoogleBooksService googleBooksService,
         IRepo<Book> bookRepo, IRepo<Review> reviewRepo,
         IRepo<BookIdentifier> identifierRepo,
         UserManager<AppUser> userManager)
     {
-        _logger = logger;
         _googleAPI = googleBooksService;
         _books = bookRepo;
         _reviews = reviewRepo;
@@ -38,15 +34,10 @@ public class BooksController : Controller
     [HttpGet("Books/")]
     public async Task<IActionResult> Index()
     {
-        CatalogIndexModel model = new();
+        CatalogViewModel model = new();
 
-        List<Book> books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).ToList();
-        if (books.Count > 10) books = books.GetRange(0, 10);
-        model.Books = books;
-
-        List<Review> reviews = (await _reviews.GetAllAsync()).OrderByDescending(b => b.PostedAt).ToList();
-        if (reviews.Count > 5) reviews = reviews.GetRange(0, 5);
-        model.Reviews = reviews;
+        model.Books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).Take(7).ToList();
+        model.Reviews = (await _reviews.GetAllAsync()).OrderByDescending(b => b.PostedAt).Where(b => b.AdminDeleted == false).Take(7).ToList();
 
         return View(model);
     }
@@ -54,40 +45,44 @@ public class BooksController : Controller
     [HttpGet("Books/Details/{id}")]
     public async Task<IActionResult> Details(string id)
     {
-        try
-        {
-            var book = await _books.GetByIdAsync(new Guid(id));
-            book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id))).OrderByDescending(r => r.PostedAt).ToList();
-            // if (book.Reviews.Count > 5) book.Reviews = book.Reviews.GetRange(0, 5);
-            return View("Details", book);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, string.Empty);
-            return View("Error", $"Book with id \"{id}\" not found.");
-        }
+        int pageSize = 5;
+
+        var book = await _books.GetByIdAsync(new Guid(id));
+        if (book is null) return View("Error", $"Book with id \"{id}\" not found.");
+
+        book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id)))
+                        .Where(r => r.AdminDeleted == false).OrderByDescending(r => r.PostedAt).ToList();
+
+        int totalPages = book.Reviews.Count / pageSize;
+        if (book.Reviews.Count % pageSize != 0) totalPages++;
+
+        if (book.Reviews.Count > 5) book.Reviews = book.Reviews.GetRange(0, pageSize);
+
+        return View("Details", new BookDetailsViewModel{ Book = book, CurrentPage = 1, TotalPages = totalPages});
     }
 
     [HttpGet("Books/Details/{id}/{page}")]
     public async Task<IActionResult> Details(string id, int page)
     {
-        var book = await _books.GetByIdAsync(new Guid(id));
-        book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id))).ToList();
-        // try
-        // {
-        //     book.Reviews = book.Reviews.GetRange(5 * page - 5, 5);
-        // }
-        // catch
-        // {
-        //     return BadRequest($"Number of Products: {book.Reviews.Count}");
-        // }
-        book.Reviews = book.Reviews.OrderByDescending(r => r.PostedAt).ToList();
-        return View("Details", book);
-    }
+        int pageSize = 5;
 
-    public async Task<IActionResult> Test()
-    {
-        return View();
+        var book = await _books.GetByIdAsync(new Guid(id));
+        if (book is null) return View("Error", "Book not found");
+
+        book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id)))
+                        .Where(r => r.AdminDeleted == false).OrderByDescending(r => r.PostedAt).ToList();
+
+        int maxPages = book.Reviews.Count / pageSize;
+        if (book.Reviews.Count % pageSize != 0) maxPages++;
+
+        if (page >= maxPages)
+        {
+            book.Reviews = book.Reviews.Skip((maxPages - 1) * pageSize).Take(pageSize).ToList();
+            return View("Details", new BookDetailsViewModel{ Book = book, CurrentPage = page > maxPages ? maxPages : page, TotalPages = maxPages});
+        }
+
+        book.Reviews = book.Reviews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        return View("Details", new BookDetailsViewModel { Book = book, CurrentPage = page < 1 ? 1 : page, TotalPages = maxPages });
     }
 
     public async Task<IActionResult> Search(string query)
@@ -109,7 +104,7 @@ public class BooksController : Controller
             {
                 books.Add(item.Book);
             }
-            return View("Results", new ResultsModel{ Books = books, Query = query});
+            return View("Results", new ResultsViewModel{ Books = books, Query = query});
         }
         else
         {
@@ -121,7 +116,7 @@ public class BooksController : Controller
                 return View("AddResults", bookDtos);
             }
 
-            return View("Results", new ResultsModel{ Books = books, Query = query});
+            return View("Results", new ResultsViewModel{ Books = books, Query = query});
         }
     }
 
@@ -203,13 +198,14 @@ public class BooksController : Controller
             await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
             return RedirectToAction("Login", "Account");
         }
-        Book book = await _books.GetByIdAsync(new Guid(id));
-        return View("Review", book);
+        Book? book = await _books.GetByIdAsync(new Guid(id));
+        if (book is null) return View("Error", $"Book not found {id}");
+        return View("Review", new ReviewViewModel{ Book = book});
     }
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddReview(ReviewModel model)
+    public async Task<IActionResult> AddReview(ReviewViewModel model)
     {
         var user = await _userManager.GetUserAsync(User);
         if (user is null)
@@ -244,27 +240,38 @@ public class BooksController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public class CatalogIndexModel
+    public class BookDetailsViewModel
     {
-        public List<Book>? Books { get; set; }
-        public List<Review>? Reviews { get; set; }
+        public Book Book { get; set; }
+        public int TotalPages { get; set; }
+        public int CurrentPage { get; set; }
     }
 
-    public class ResultsModel
+    public class CatalogViewModel
+    {
+        public List<Book> Books { get; set; } = [];
+        public List<Review> Reviews { get; set; } = [];
+    }
+
+    public class ResultsViewModel
     {
         public List<Book>? Books { get; set; }
         public string Query { get; set; } = string.Empty;
     }
 
-    public class ReviewModel
+    public class ReviewViewModel
     {
+        public Book? Book { get; set; }
+
         [Required]
         public string BookId { get; set; }
-        [Required]
+
+        [Required, Range(1,5, ErrorMessage = "Please select a rating")]
         public int Rating { get; set; }
-        [MaxLength(50)]
-        [Required]
+
+        [Required, MaxLength(50)]
         public string Title { get; set; }
+
         [Required]
         public string Comment { get; set; }
     }
