@@ -19,7 +19,7 @@
     <div class="book-info-wrapper">
         <h3 class="title">@Model.Book.Title</h3>
         @if(Model.Book.Subtitle is not null){
-            <h4>@Model.Book.Subtitle</h4>
+            <h4 class="subtitle">@Model.Book.Subtitle</h4>
         }
         @if(Model.Book.Author is not null){
             <p>Author: @Model.Book.Author</p>
@@ -39,6 +39,7 @@
     <h3>Description</h3>
     <p>@Model.Book.Description</p>
 </div>
+<div id="WriteReview"></div>
 <h3>Write Review</h3>
 <form class="add-review-form" asp-action="AddReview" method="post">
     <input asp-for="BookId" class="hidden" type="text" value="@Model.Book.Id" required>

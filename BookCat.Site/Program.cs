@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+// Dependency Injection
 builder.Services.Configure<GoogleBooksOptions>(builder.Configuration.GetSection("GoogleBooks"));
 builder.Services.AddHttpClient<GoogleBooksService>();
 
@@ -89,16 +90,14 @@ app.Run();
 ? Pagination in Books/Details/ is kinda useless when talking about performance because I request all reviews either way and they are loaded into memory, but ideally I would implement pagination in the repos
     to prevent it all being loaded to memory.
 ? I'm not happy with the naming schemes of the entire project. I haven't used CSS to this scale so naming on my CSS
-   classes is something I could improve a lot.
-? 
+    classes is something I could improve a lot.
+? Actually I'm not too happy with the CSS in general, especially when it comes to media queries. As I've worked on this
+    project I've picked up on how to style things better so next project I should approach it in a more structured approach.
 
 * Changes
-* use regex to remove html tags from descriptions in GoogleBooksService
-* add review pagination for book details
-* add pagination to front end
-* style reviews a bit more
-* remove test action from Books controller and view
-* rename test.js to stars.js, rename css as well
-* style write review form
+* Add total score to book details
+* Change how star ratings are displayed
+* Make search results responsive
+* Style details and made it responsive
 * 
 */

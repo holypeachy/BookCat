@@ -101,11 +101,6 @@ public class AccountController : Controller
     }
 
 
-    public IActionResult Privacy()
-    {
-        return Redirect("/Home/Privacy");
-    }
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

@@ -2,7 +2,7 @@
     background-color: var(--secondary-bg-color);
     padding: 5px;
     display: flex;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     border-radius: 30px;
 }
 
@@ -27,6 +27,9 @@
     margin: 10px 0;
     display: flex;
     align-content: center;
+}
+
+.on-star{
     color: var(--select-color);
 }
 

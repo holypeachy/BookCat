@@ -2,7 +2,10 @@
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    align-items: flex-end;
+    margin: 20px 0px;
+    height: 100%;
+    align-self: flex-end;
 }
 
 .add-btn-wrapper > a{

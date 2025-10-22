@@ -155,7 +155,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
     public static string? CleanDescription(string? s)
     {
         if (s is null) return null;
-        return Regex.Replace(s, @"<\\?\w*>", " ");
+        return Regex.Replace(s, @"</?\w*>", " ");
     }
 
 }

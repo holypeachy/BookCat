@@ -52,13 +52,14 @@ public class BooksController : Controller
 
         book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id)))
                         .Where(r => r.AdminDeleted == false).OrderByDescending(r => r.PostedAt).ToList();
+        int reviewCount = book.Reviews.Count;
 
         int totalPages = book.Reviews.Count / pageSize;
         if (book.Reviews.Count % pageSize != 0) totalPages++;
 
         if (book.Reviews.Count > 5) book.Reviews = book.Reviews.GetRange(0, pageSize);
 
-        return View("Details", new BookDetailsViewModel{ Book = book, CurrentPage = 1, TotalPages = totalPages});
+        return View("Details", new BookDetailsViewModel{ Book = book, CurrentPage = 1, TotalPages = totalPages, TotalReviews = reviewCount});
     }
 
     [HttpGet("Books/Details/{id}/{page}")]
@@ -71,6 +72,7 @@ public class BooksController : Controller
 
         book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id)))
                         .Where(r => r.AdminDeleted == false).OrderByDescending(r => r.PostedAt).ToList();
+        int reviewCount = book.Reviews.Count;
 
         int maxPages = book.Reviews.Count / pageSize;
         if (book.Reviews.Count % pageSize != 0) maxPages++;
@@ -82,7 +84,7 @@ public class BooksController : Controller
         }
 
         book.Reviews = book.Reviews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        return View("Details", new BookDetailsViewModel { Book = book, CurrentPage = page < 1 ? 1 : page, TotalPages = maxPages });
+        return View("Details", new BookDetailsViewModel { Book = book, CurrentPage = page < 1 ? 1 : page, TotalPages = maxPages, TotalReviews = reviewCount});
     }
 
     public async Task<IActionResult> Search(string query)
@@ -229,11 +231,6 @@ public class BooksController : Controller
         return RedirectToAction("Details", "Books", new {id = model.BookId});
     }
 
-    public IActionResult Privacy()
-    {
-        return Redirect("/Home/Privacy");
-    }
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
@@ -243,6 +240,7 @@ public class BooksController : Controller
     public class BookDetailsViewModel
     {
         public Book Book { get; set; }
+        public int TotalReviews { get; set; }
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; }
     }
@@ -269,7 +267,7 @@ public class BooksController : Controller
         [Required, Range(1,5, ErrorMessage = "Please select a rating")]
         public int Rating { get; set; }
 
-        [Required, MaxLength(50)]
+        [Required, MaxLength(70)]
         public string Title { get; set; }
 
         [Required]

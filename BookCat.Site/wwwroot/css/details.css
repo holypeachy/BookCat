@@ -16,14 +16,20 @@
 }
 
 .title{
-    margin: 5px;
+    margin: 5px 0px;
+}
+
+.subtitle{
+    margin: 5px 5px;
+}
+
+.average-rating{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .book-info-wrapper{
-
-}
-
-.book-info-wrapper p{
     margin: 8px;
 }
 
@@ -32,14 +38,15 @@
     padding: 10px;
 }
 
+.book-review-rating{
+    display: flex;
+    vertical-align: center;
+}
+
 .review-btn-wrapper{
     display: flex;
     justify-content: flex-end;
     padding: 10px;
-}
-
-.review-btn{
-
 }
 
 .no-reviews {
@@ -65,6 +72,18 @@
 }
 
 @media screen and (min-width: 600px)  {
+    .cover-img{
+        width: clamp(150px, 15vw, 200px);
+        height: auto;
+    }
+
+    .book-info-wrapper{
+        font-size: clamp(1rem, 2vw, 1.1rem);
+    }
+
+    .book-description{
+        font-size: clamp(1rem, 2vw, 1.1rem);
+    }
 }
 
 @media screen and (min-width: 1000px)  {

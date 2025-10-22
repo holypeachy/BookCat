@@ -12,9 +12,13 @@
     flex-direction: column;
     justify-content: center;
     background-color: var(--secondary-bg-color);
-    padding: 10px;
+    padding: 20px;
     max-width: 600px;
     border-radius: 30px;
+}
+
+#WriteReview{
+    height: 8vh;
 }
 
 .hidden{
@@ -54,7 +58,7 @@
 }
 
 .form-comment{
-    margin-top: 10px;
+    margin-top: 20px;
     padding: 15px 15px;
     background-color: var(--primary-bg-color);
     border-radius: 30px;
@@ -73,6 +77,13 @@
 
 .form-btn{
     align-self: center;
-    margin-top: 10px;
+    margin-top: 20px;
     width: 50%;
+}
+
+
+@media screen and (min-width: 600px)  {
+    #WriteReview{
+        height: 12vh;
+    }
 }

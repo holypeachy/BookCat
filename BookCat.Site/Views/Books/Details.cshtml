@@ -19,7 +19,7 @@
     <div class="book-info-wrapper">
         <h3 class="title">@Model.Book.Title</h3>
         @if(Model.Book.Subtitle is not null){
-            <h4>@Model.Book.Subtitle</h4>
+            <h4 class="subtitle">@Model.Book.Subtitle</h4>
         }
         @if(Model.Book.Author is not null){
             <p>Author: @Model.Book.Author</p>
@@ -33,10 +33,34 @@
         @if(Model.Book.AddedById is not null && Model.Book.AddedBy is not null){
             <p>Added By: @Model.Book.AddedBy.UserName</p>
         }
+        @if(Model.Book.Reviews.Count > 0){
+            int sum = 0;
+            foreach (var r in Model.Book.Reviews){
+                sum += r.Rating;
+            }
+            string average = string.Format("{0:0.0}", sum / Model.Book.Reviews.Count);
+            <p class="average-rating">
+                <span>Average Rating: </span>
+                <span>
+                    @for(int i = 0; i < sum / Model.Book.Reviews.Count; i++){
+                        <span class="material-symbols-outlined on-star"> star_rate </span>
+                    }
+                    @for(int i = 0; i < 5 - sum / Model.Book.Reviews.Count; i++){
+                        <span class="material-symbols-outlined"> star_rate </span>
+                    }
+                </span>
+                <span>(@Model.Book.Reviews.Count Reviews)</span>
+            </p>
+        }
+        else{
+            <p class="average-rating">
+                <span>No Ratings</span>
+            </p>
+        }
     </div>
 </div>
 <div class="review-btn-wrapper">
-    <a class="clean-link btn review-btn" asp-controller="Books" asp-action="WriteReview" asp-route-id="@Model.Book.Id">Write Review</a>
+    <a class="clean-link btn" asp-controller="Books" asp-action="WriteReview" asp-route-id="@Model.Book.Id" asp-fragment="WriteReview">Write Review</a>
 </div>
 <div class="book-description">
     <h3>Description</h3>
@@ -63,6 +87,9 @@
                 <div class="review-stars">
                     <span>Rating: </span>
                     @for (int i = 0; i < review.Rating; i++){
+                        <span class="material-symbols-outlined on-star"> star_rate </span>
+                    }
+                    @for (int i = 0; i < 5 - review.Rating; i++){
                         <span class="material-symbols-outlined"> star_rate </span>
                     }
                 </div>
