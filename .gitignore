@@ -58,3 +58,4 @@ nunit-*.xml
 
 # Custom
 .vscode/
+BookCat.Site/wwwroot/user-images/*
