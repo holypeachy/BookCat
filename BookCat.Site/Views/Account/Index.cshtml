@@ -9,20 +9,32 @@
 
 <h1>Dashboard</h1>
 
-<div class="user-profile">
-    <div class="user-left">
-        @if(string.IsNullOrEmpty(Model.User.UserImageUrl)){
-            <img class="profile-picture" src="~/images/default_user.png" alt="User profile picture">
-        }
-        else
-        {
-            <img class="profile-picture" src="@Model.User.UserImageUrl" alt="User profile picture">
-        }
-        <h2>@Model.User.UserName</h2>
+<div class="user-profile-wrapper">
+    <div class="user-profile">
+        <div class="user-left">
+            @if(string.IsNullOrEmpty(Model.User.UserImageUrl)){
+                <img class="profile-picture" src="~/images/default_user.png" alt="User profile picture">
+            }
+            else
+            {
+                <img class="profile-picture" src="@Model.User.UserImageUrl" alt="User profile picture">
+            }
+            <h2>@Model.User.UserName</h2>
+        </div>
+        <div class="user-details">
+            <p>Books Added: @Model.BooksAdded</p>
+            <p>Total Reviews: @Model.TotalReviews</p>
+            <p>Joined: @(DateOnly.FromDateTime(Model.User.JoinedDateTime))</p>
+        </div>
     </div>
-    <div class="user-details">
-        <p>Books Added: @Model.BooksAdded</p>
-        <p>Total Reviews: @Model.TotalReviews</p>
+    <div class="user-bio">
+        <h3>Bio</h3>
+        @if(string.IsNullOrEmpty(Model.User.Bio)){
+            <p>No Bio</p>
+        }
+        else{
+            <p style="white-space: pre-line">@Model.User.Bio</p>
+        }
     </div>
 </div>
 <form class="change-pfp-form" asp-controller="Account" asp-action="ChangePfp" method="post" enctype="multipart/form-data">
@@ -30,7 +42,14 @@
         <h3>Change Profile Picture</h3>
         <input class="btn" type="file" name="pfp" id="pfp" accept="image/*" required/>
     </div>
-    <button class="btn" type="submit">Upload</button>
+    <button class="btn" type="submit">Submit</button>
+</form>
+<form class="change-pfp-form" asp-controller="Account" asp-action="ChangeBio" method="post">
+    <div class="change-bio-container">
+        <h3>Change Bio</h3>
+        <textarea class="change-bio-input input-border" name="bio" id="bio" placeholder="New Bio" required>@Model.User.Bio</textarea>
+    </div>
+    <button class="btn" type="submit">Update</button>
 </form>
 
 @section Styles{

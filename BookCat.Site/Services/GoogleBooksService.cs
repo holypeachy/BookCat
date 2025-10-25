@@ -58,6 +58,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
         if (!response.IsSuccessStatusCode)
         {
             _logger.LogWarning("Google Books API returned {StatusCode} for {Uri}", response.StatusCode, uri);
+            _logger.LogWarning(await response.Content.ReadAsStringAsync());
             throw new Exception();
         }
 
@@ -89,7 +90,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
                     Title = item.VolumeInfo.Title,
                     Subtitle = item.VolumeInfo.Subtitle,
                     Author = item.VolumeInfo.Authors is not null ? string.Join(", ", item.VolumeInfo.Authors) : null,
-                    Description = CleanDescription(item.VolumeInfo.Description),
+                    Description = item.VolumeInfo.Description,
                     Publisher = item.VolumeInfo.Publisher,
                     PublishedDate = item.VolumeInfo.PublishedDate,
                     CoverUrl = GetBestImage(item.VolumeInfo.ImageLinks),
@@ -118,7 +119,7 @@ public class GoogleBooksService(HttpClient httpClient, IOptions<GoogleBooksOptio
                 Title = item.VolumeInfo.Title,
                 Subtitle = item.VolumeInfo.Subtitle,
                 Author = item.VolumeInfo.Authors is not null ? string.Join(", ", item.VolumeInfo.Authors) : null,
-                Description = CleanDescription(item.VolumeInfo.Description),
+                Description = item.VolumeInfo.Description,
                 Publisher = item.VolumeInfo.Publisher,
                 PublishedDate = item.VolumeInfo.PublishedDate,
                 CoverUrl = GetBestImage(item.VolumeInfo.ImageLinks),

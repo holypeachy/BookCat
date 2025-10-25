@@ -36,6 +36,7 @@ public static class DataSeeder
                 Email = email,
                 EmailConfirmed = true,
                 UserName = username,
+                JoinedDateTime = new DateTime(2025, 5, 23, 4, 6, 10)
             };
 
             IdentityResult result = await userManager.CreateAsync(user, password);

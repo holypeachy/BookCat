@@ -31,8 +31,9 @@
             <p>Published: @Model.Book.PublishedDate</p>
         }
         @if(Model.Book.AddedById is not null && Model.Book.AddedBy is not null){
-            <p>Added By: @Model.Book.AddedBy.UserName</p>
+            <p>Added By: <a asp-controller="User" asp-action="Index" asp-route-id="@Model.Book.AddedById">@Model.Book.AddedBy.UserName</a></p>
         }
+        <p>Date Added: @Model.Book.AddedOn</p>
         @if(Model.Book.Reviews.Count > 0){
             int sum = 0;
             foreach (var r in Model.Book.Reviews){
@@ -64,7 +65,7 @@
 </div>
 <div class="book-description">
     <h3>Description</h3>
-    <p>@Model.Book.Description</p>
+    <p>@Html.Raw(Model.Book.Description)</p>
 </div>
 <h3>Reviews</h3>
 <div class="review-wrapper">

@@ -95,7 +95,11 @@ app.Run();
     project I've picked up on how to style things better so next project I should approach it in a more structured approach.
 
 * Changes
-* Add index view in User controller
-* Add change profile picture form to user dash
+* add char limit to usernames
+* add user link in book details
+* GoogleBooksService no longer removes HTML tags from description, and description html is no longer escaped in views
+* Add JoinedDateTime property to AppUser
+* Add bio property to user
+* User can now change bio on dashboard
 * 
 */

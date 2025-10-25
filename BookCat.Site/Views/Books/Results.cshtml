@@ -30,6 +30,9 @@
             <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">
                 <h3>@item.Title</h3>
             </a>
+            @if(item.Subtitle is not null){
+                <h4>@item.Subtitle</h4>
+            }
             @if(item.Author is not null){
                 <p>By: @item.Author</p>
             }

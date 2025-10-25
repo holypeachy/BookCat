@@ -51,10 +51,21 @@ public class AccountController : Controller
         return RedirectToAction("Index");
     }
 
+
+    [Authorize, HttpPost]
+    public async Task<IActionResult> ChangeBio(string bio)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        user.Bio = bio;
+        await _userManager.UpdateAsync(user);
+
+        return RedirectToAction("Index");
+    }
+
     public async Task<IActionResult> Login(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true) return RedirectToAction("Index", "Books");
-        return View(new LoginViewModel{ReturnUrl = returnUrl ?? string.Empty});
+        return View(new LoginViewModel { ReturnUrl = returnUrl ?? string.Empty });
     }
 
     [HttpPost]
@@ -106,7 +117,8 @@ public class AccountController : Controller
         var user = new AppUser
         {
             Email = model.Email,
-            UserName = model.Username
+            UserName = model.Username,
+            JoinedDateTime = DateTime.Now
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
@@ -150,7 +162,7 @@ public class AccountController : Controller
         [Required, EmailAddress]
         public string Email { get; set; } = string.Empty;
 
-        [Required]
+        [Required, Length(5, 15, ErrorMessage = "Username must be between 5-20 characters")]
         public string Username { get; set; } = string.Empty;
 
         [Required, DataType(DataType.Password)]

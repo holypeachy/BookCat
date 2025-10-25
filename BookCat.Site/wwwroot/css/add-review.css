@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: var(--secondary-bg-color);
+    background-color: var(--primary-bg-color);
     padding: 20px;
     max-width: 600px;
     border-radius: 30px;
@@ -39,7 +39,6 @@
 
 .star-container{
     text-align: center;
-    background-color: var(--secondary-bg-color);
     padding: 20px;
 }
 
@@ -53,27 +52,20 @@
 
 .form-title{
     padding: 10px 15px;
-    background-color: var(--primary-bg-color);
+    background-color: inherit;
     border-radius: 30px;
 }
 
 .form-comment{
     margin-top: 20px;
     padding: 15px 15px;
-    background-color: var(--primary-bg-color);
+    background-color: inherit;
     border-radius: 30px;
-    max-width: 580px;
+    max-width: 100%;
     height: 30vh;
+    min-height: 200px;
 }
 
-.input-border{
-    border: 1px solid var(--primary-text-color);
-}
-
-.input-border:focus{
-    outline: none;
-    box-shadow: 0px 1px 5px var(--primary-text-color);
-}
 
 .form-btn{
     align-self: center;

@@ -5,20 +5,32 @@
     ViewData["Title"] = Model.User.UserName;
 }
 
-<div class="user-profile">
-    <div class="user-left">
-        @if(string.IsNullOrEmpty(Model.User.UserImageUrl)){
-            <img class="profile-picture" src="~/images/default_user.png" alt="User profile picture">
-        }
-        else
-        {
-            <img class="profile-picture" src="@Model.User.UserImageUrl" alt="User profile picture">
-        }
-        <h2>@Model.User.UserName</h2>
+<div class="user-profile-wrapper">
+    <div class="user-profile">
+        <div class="user-left">
+            @if(string.IsNullOrEmpty(Model.User.UserImageUrl)){
+                <img class="profile-picture" src="~/images/default_user.png" alt="User profile picture">
+            }
+            else
+            {
+                <a href="@Model.User.UserImageUrl" target="_blank"><img class="profile-picture" src="@Model.User.UserImageUrl" alt="User profile picture"></a>
+            }
+            <h2>@Model.User.UserName</h2>
+        </div>
+        <div class="user-details">
+            <p>Books Added: @Model.BooksAdded</p>
+            <p>Total Reviews: @Model.TotalReviews</p>
+            <p>Joined: @(DateOnly.FromDateTime(Model.User.JoinedDateTime))</p>
+        </div>
     </div>
-    <div class="user-details">
-        <p>Books Added: @Model.BooksAdded</p>
-        <p>Total Reviews: @Model.TotalReviews</p>
+    <div class="user-bio">
+        <h3>Bio</h3>
+        @if(string.IsNullOrEmpty(Model.User.Bio)){
+            <p>No Bio</p>
+        }
+        else{
+            <p style="white-space: pre-line">@Model.User.Bio</p>
+        }
     </div>
 </div>
 <div class="review-card-container">

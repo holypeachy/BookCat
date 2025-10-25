@@ -12,3 +12,24 @@
 .change-pfp-form input{
     margin: 10px;
 }
+
+.change-pfp-form button{
+    margin: 10px;
+}
+
+.change-bio-input{
+    background-color: inherit;
+    max-width: 100%;
+    border-radius: 30px;
+    padding: 15px 20px;
+    height: 30vh;
+    min-height: 150px;
+}
+
+.change-bio-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+

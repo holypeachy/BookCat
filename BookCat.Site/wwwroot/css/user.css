@@ -3,13 +3,16 @@
     margin: auto;
 }
 
-.user-profile{
-    max-width: 1000px;
-    margin: auto;
-    display: flex;
-    padding: 20px;
+.user-profile-wrapper{
     background-color: var(--secondary-bg-color);
     border-radius: 30px;
+    padding: 20px;
+    max-width: 1000px;
+}
+
+.user-profile{
+    margin: auto;
+    display: flex;
 }
 
 .user-left{
@@ -24,6 +27,10 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
+}
+
+.user-bio{
+    padding: 20px;
 }
 
 .review-card{

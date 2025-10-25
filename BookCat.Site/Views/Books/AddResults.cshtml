@@ -26,6 +26,9 @@
         </div>
         <div class="book-info-wrapper">
             <h3>@item.Title</h3>
+            @if(item.Subtitle is not null){
+                <h4>@item.Subtitle</h4>
+            }
             @if(item.Author is not null){
                 <p>By: @item.Author</p>
             }
