@@ -93,13 +93,9 @@ app.Run();
     classes is something I could improve a lot.
 ? Actually I'm not too happy with the CSS in general, especially when it comes to media queries. As I've worked on this
     project I've picked up on how to style things better so next project I should approach it in a more structured approach.
+? There are roles and a flag for reviews to be admin deleted, but I didn't implement any kind of moderation.
 
 * Changes
-* add char limit to usernames
-* add user link in book details
-* GoogleBooksService no longer removes HTML tags from description, and description html is no longer escaped in views
-* Add JoinedDateTime property to AppUser
-* Add bio property to user
-* User can now change bio on dashboard
+* User profile picture is now given a guid for a name and the old file is removed
 * 
 */

@@ -54,10 +54,11 @@
     padding: 10px 15px;
     background-color: inherit;
     border-radius: 30px;
+    margin: 20px 0;
 }
 
 .form-comment{
-    margin-top: 20px;
+    margin: 20px 0;
     padding: 15px 15px;
     background-color: inherit;
     border-radius: 30px;

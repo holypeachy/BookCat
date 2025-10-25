@@ -32,19 +32,26 @@ public class AccountController : Controller
         return View(model);
     }
 
-    [Authorize, HttpPost]
+    [Authorize, HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePfp(IFormFile pfp)
     {
         if (pfp is null || pfp.Length == 0) return View("Error", "No file selected.");
         var user = await _userManager.GetUserAsync(User);
 
-        var filePath = Path.Combine("wwwroot", "user-images", $"{user.Id}{Path.GetExtension(pfp.FileName)}");
+        if (!string.IsNullOrEmpty(user.UserImageUrl))
+        {
+            string oldPath = Path.Combine("wwwroot", user.UserImageUrl.TrimStart('/'));
+            if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
+        }
+
+        string newFileName = $"{Guid.NewGuid()}{Path.GetExtension(pfp.FileName)}";
+        var filePath = Path.Combine("wwwroot", "user-images", newFileName);
         using (var stream = new FileStream(filePath, FileMode.Create))
         {
             await pfp.CopyToAsync(stream);
         }
 
-        filePath = $"/user-images/{user.Id}{Path.GetExtension(pfp.FileName)}";
+        filePath = $"/user-images/{newFileName}";
         user.UserImageUrl = filePath;
         await _userManager.UpdateAsync(user);
 
@@ -52,7 +59,7 @@ public class AccountController : Controller
     }
 
 
-    [Authorize, HttpPost]
+    [Authorize, HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangeBio(string bio)
     {
         var user = await _userManager.GetUserAsync(User);
@@ -69,7 +76,6 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid) return View(model);
@@ -94,7 +100,6 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();

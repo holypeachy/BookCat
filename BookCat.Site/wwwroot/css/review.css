@@ -38,6 +38,8 @@
     padding: 4px;
     padding-top: 10px;
     width: 30%;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 .user-info img{

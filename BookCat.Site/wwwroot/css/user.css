@@ -12,7 +12,6 @@
 
 .user-profile{
     margin: auto;
-    display: flex;
 }
 
 .user-left{
@@ -49,6 +48,10 @@
 }
 
 @media screen and (min-width: 600px)  {
+    .user-profile{
+        margin: auto;
+        display: flex;
+    }
 }
 
 @media screen and (min-width: 1000px)  {
