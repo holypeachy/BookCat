@@ -31,7 +31,7 @@
             <p>Published: @Model.Book.PublishedDate</p>
         }
         @if(Model.Book.AddedById is not null && Model.Book.AddedBy is not null){
-            <p>Added By: @Model.Book.AddedBy.UserName</p>
+            <p>Added By: <a asp-controller="User" asp-action="Index" asp-route-id="@Model.Book.AddedById">@Model.Book.AddedBy.UserName</a></p>
         }
         <p>Date Added: @Model.Book.AddedOn</p>
     </div>
@@ -40,8 +40,9 @@
     <h3>Description</h3>
     <p>@Html.Raw(Model.Book.Description)</p>
 </div>
-<div id="WriteReview"></div>
-<h3>Write Review</h3>
+<div id="WriteReview">
+    <h3>Write Review</h3>
+</div>
 <form class="add-review-form" asp-action="AddReview" method="post">
     <input asp-for="BookId" class="hidden" type="text" value="@Model.Book.Id" required>
     <div class="star-container">

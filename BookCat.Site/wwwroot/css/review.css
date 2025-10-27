@@ -1,42 +1,15 @@
 .review-card{
     background-color: var(--secondary-bg-color);
-    padding: 5px;
+    padding: 10px;
     display: flex;
     margin-bottom: 20px;
     border-radius: 30px;
 }
 
-.review-info{
-    padding: 2px;
-}
-
-.review-info h3{
-    font-size: 1rem;
-}
-
-.review-title{
-    margin: 3px 0 0 0;
-    font-size: 1.1rem;
-}
-
-.review-body{
-    padding-left: 10px;
-}
-
-.review-stars{
-    margin: 10px 0;
-    display: flex;
-    align-content: center;
-}
-
-.on-star{
-    color: var(--select-color);
-}
-
 .user-info{
     text-align: center;
     padding: 4px;
-    padding-top: 10px;
+    padding-top: 20px;
     width: 30%;
     flex-grow: 0;
     flex-shrink: 0;
@@ -51,55 +24,88 @@
 }
 
 .user-info p{
-    font-size: 0.9rem;
     margin: 0;
     padding: 8px;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 0.9em;
 }
+
+.review-info{
+    width: 70%;
+    padding: 5px;
+}
+
+.review-info-profile{
+    width: 100%;
+    padding: 5px;
+}
+
+.review-title{
+    margin: 3px 0 0 0;
+}
+
+.review-body{
+    margin-left: clamp(10px, 1.5vw, 20px);
+}
+
+.review-stars{
+    margin: 10px 0;
+    display: flex;
+    align-content: center;
+}
+
+.on-star{
+    color: var(--select-color);
+}
+
 
 
 @media screen and (min-width: 480px)  {
+    .review-card{
+        font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+
     .user-info{
         padding: clamp(6px, 1vw, 15px);
+        padding-top: clamp(20px, 2vw, 30px);
     }
 
     .user-info p{
-        font-size: clamp(0.9rem, 2vw, 1.2rem);
+        font-size: 1em;
     }
-    
+
     .review-info{
         padding: clamp(6px, 1vw, 15px);
     }
-
-    .review-info h3{
-        margin: 0;
-        font-size: clamp(1rem, 2vw, 1.4rem);
+    
+    .review-info-profile{
+        padding: clamp(6px, 1vw, 15px);
     }
 
-    .review-title{
-        font-size: clamp(1.1rem, 2vw, 1.3rem);
-    }
-
-    .review-body{
-        font-size: clamp(0.8rem, 2vw, 1.2rem);
-    }
-
-}
-
-@media screen and (min-width: 600px)  {
     .user-info img{
         width: 70px;
         height: 70px;
     }
+    
+}
 
-    .review-body{
-        padding-left: 20px;
+@media screen and (min-width: 600px)  {
+    .user-info{
+        width: 25%;
+    }
+
+    .review-info{
+        width: 75%;
     }
 }
 
 @media screen and (min-width: 1000px)  {
     .user-info{
         width: 20%;
+    }
+
+    .review-info{
+        width: 80%;
     }
 }

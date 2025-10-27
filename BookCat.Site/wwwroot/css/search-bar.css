@@ -30,7 +30,7 @@
 
 @media screen and (min-width: 480px)  {
     .search-bar{
-        font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+        font-size: clamp(1rem, 1.4vw, 1.1rem);
         padding-top: clamp(8px, 2vw, 15px);
         padding-bottom: clamp(8px, 2vw, 15px);
     }

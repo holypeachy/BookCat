@@ -29,7 +29,7 @@
             <p>No Bio</p>
         }
         else{
-            <p style="white-space: pre-line">@Model.User.Bio</p>
+            <p class="include-new-lines">@Model.User.Bio</p>
         }
     </div>
 </div>
@@ -37,7 +37,7 @@
     <h3>@(Model.User.UserName)'s most recent reviews (@Model.Reviews.Count)</h3>
     @foreach (Review review in Model.Reviews){
         <div class="review-card">
-            <div class="review-info">
+            <div class="review-info-profile">
                 <a asp-controller="Books" asp-action="Details" asp-route-id="@review.Book.Id">
                     <h3>@review.Book.Title</h3>
                 </a>
@@ -50,7 +50,8 @@
                         <span class="material-symbols-outlined"> star_rate </span>
                     }
                 </div>
-                <p class="review-body">@review.Comment</p>
+                <p>@(DateOnly.FromDateTime(review.PostedAt))</p>
+                <p class="review-body include-new-lines">@review.Comment</p>
             </div>
         </div>
     }

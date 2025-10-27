@@ -63,6 +63,14 @@
 <div class="review-btn-wrapper">
     <a class="clean-link btn" asp-controller="Books" asp-action="WriteReview" asp-route-id="@Model.Book.Id" asp-fragment="WriteReview">Write Review</a>
 </div>
+<div class="book-idfs">
+    @foreach(var idf in Model.Book.Identifiers){
+        if(idf.Type is null){
+            <p>Unknown Identifier: @idf.Value</p>
+        }
+        <p>@idf.Type: @idf.Value</p>
+    }
+</div>
 <div class="book-description">
     <h3>Description</h3>
     <p>@Html.Raw(Model.Book.Description)</p>
@@ -97,7 +105,7 @@
                     }
                 </div>
                 <p>Posted: @(DateOnly.FromDateTime(review.PostedAt))</p>
-                <p class="review-body">@review.Comment</p>
+                <p class="review-body include-new-lines">@review.Comment</p>
             </div>
             <div>
 

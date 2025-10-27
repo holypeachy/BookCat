@@ -12,13 +12,15 @@
     flex-direction: column;
     justify-content: center;
     background-color: var(--primary-bg-color);
-    padding: 20px;
+    padding: 10px;
     max-width: 600px;
-    border-radius: 30px;
 }
 
 #WriteReview{
     height: 8vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .hidden{
@@ -51,7 +53,7 @@
 }
 
 .form-title{
-    padding: 10px 15px;
+    padding: 0.6em 1em;
     background-color: inherit;
     border-radius: 30px;
     margin: 20px 0;
@@ -59,7 +61,7 @@
 
 .form-comment{
     margin: 20px 0;
-    padding: 15px 15px;
+    padding: 0.8em 1em;
     background-color: inherit;
     border-radius: 30px;
     max-width: 100%;
@@ -74,9 +76,17 @@
     width: 50%;
 }
 
+@media screen and (min-width: 480px)  {
+    .add-review-form{
+        font-size: clamp(1rem, 1.5vw, 1.15rem);
+    }
+    #WriteReview{
+        font-size: clamp(1rem, 1.5vw, 1.15rem);
+    }
+}
 
 @media screen and (min-width: 600px)  {
     #WriteReview{
-        height: 12vh;
+        height: 14vh;
     }
 }

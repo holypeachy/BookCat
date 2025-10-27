@@ -1,5 +1,5 @@
 .review-card-container{
-    max-width: 600px;
+    max-width: 800px;
     margin: auto;
 }
 
@@ -8,9 +8,6 @@
     border-radius: 30px;
     padding: 20px;
     max-width: 1000px;
-}
-
-.user-profile{
     margin: auto;
 }
 
@@ -37,7 +34,7 @@
 }
 
 .user-details{
-    font-size: 1.2rem;
+    font-size: 1.2em;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,11 +45,18 @@
 }
 
 @media screen and (min-width: 600px)  {
+    .user-profile-wrapper{
+        font-size: clamp(1rem, 1.5vw, 1.2rem);
+    }
+
     .user-profile{
-        margin: auto;
         display: flex;
     }
 }
 
 @media screen and (min-width: 1000px)  {
+    .profile-picture{
+        width: 150px;
+        height: 150px;
+    }
 }

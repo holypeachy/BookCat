@@ -1,18 +1,17 @@
 .book-wrapper{
-    display: flex;
     padding: 5px;
+    font-size: 1rem;
 }
 
 .book-img-wrapper{
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
+    margin: 10px;
+    float: left;
 }
 
 .cover-img{
     object-fit: cover;
     width: 150px;
-    height: 225px;
+    height: auto;
 }
 
 .title{
@@ -30,7 +29,7 @@
 }
 
 .book-info-wrapper{
-    margin: 8px;
+    padding: 8px;
 }
 
 .book-description{
@@ -47,6 +46,10 @@
     display: flex;
     justify-content: flex-end;
     padding: 10px;
+}
+
+.book-idfs{
+    font-size: clamp(1rem, 2vw, 1.2rem);
 }
 
 .no-reviews {
@@ -69,20 +72,24 @@
 }
 
 @media screen and (min-width: 480px)  {
+    .cover-img{
+        width: clamp(150px, 25vw, 250px);
+    }
 }
 
 @media screen and (min-width: 600px)  {
-    .cover-img{
-        width: clamp(150px, 15vw, 200px);
-        height: auto;
+    .book-wrapper{
+        font-size: clamp(1rem, 2vw, 1.1rem);
+        display: flex;
+        float: none;
     }
 
     .book-info-wrapper{
-        font-size: clamp(1rem, 2vw, 1.1rem);
+        font-size: clamp(1em, 1.5vw, 1.1em);
     }
 
     .book-description{
-        font-size: clamp(1rem, 2vw, 1.1rem);
+        font-size: clamp(1em, 1.5vw, 1.2em);
     }
 }
 

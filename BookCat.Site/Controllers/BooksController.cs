@@ -42,28 +42,8 @@ public class BooksController : Controller
         return View(model);
     }
 
-    [HttpGet("Books/Details/{id}")]
-    public async Task<IActionResult> Details(string id)
-    {
-        int pageSize = 5;
-
-        var book = await _books.GetByIdAsync(new Guid(id));
-        if (book is null) return View("Error", $"Book with id \"{id}\" not found.");
-
-        book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id)))
-                        .Where(r => r.AdminDeleted == false).OrderByDescending(r => r.PostedAt).ToList();
-        int reviewCount = book.Reviews.Count;
-
-        int totalPages = book.Reviews.Count / pageSize;
-        if (book.Reviews.Count % pageSize != 0) totalPages++;
-
-        if (book.Reviews.Count > 5) book.Reviews = book.Reviews.GetRange(0, pageSize);
-
-        return View("Details", new BookDetailsViewModel{ Book = book, CurrentPage = 1, TotalPages = totalPages, TotalReviews = reviewCount});
-    }
-
-    [HttpGet("Books/Details/{id}/{page}")]
-    public async Task<IActionResult> Details(string id, int page)
+    [HttpGet("Books/Details/{id}/{page?}")]
+    public async Task<IActionResult> Details(string id, int page = 1)
     {
         int pageSize = 5;
 
@@ -72,6 +52,14 @@ public class BooksController : Controller
 
         book.Reviews = (await _reviews.GetByBookIdAsync(new Guid(id)))
                         .Where(r => r.AdminDeleted == false).OrderByDescending(r => r.PostedAt).ToList();
+
+        var currentUser = await _userManager.GetUserAsync(User);
+        Guid? userReviewId = null;
+        if(currentUser is not null)
+        {
+            var reviews = book.Reviews.Where(r => r.UserId == currentUser.Id).Take(1).ToList();
+            if (reviews.Count > 0) userReviewId = reviews[0].Id;
+        }
         int reviewCount = book.Reviews.Count;
 
         int maxPages = book.Reviews.Count / pageSize;
@@ -80,11 +68,11 @@ public class BooksController : Controller
         if (page >= maxPages)
         {
             book.Reviews = book.Reviews.Skip((maxPages - 1) * pageSize).Take(pageSize).ToList();
-            return View("Details", new BookDetailsViewModel{ Book = book, CurrentPage = page > maxPages ? maxPages : page, TotalPages = maxPages});
+            return View("Details", new BookDetailsViewModel{ Book = book, CurrentPage = page > maxPages ? maxPages : page, TotalPages = maxPages, UserReviewId = userReviewId});
         }
 
         book.Reviews = book.Reviews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        return View("Details", new BookDetailsViewModel { Book = book, CurrentPage = page < 1 ? 1 : page, TotalPages = maxPages, TotalReviews = reviewCount});
+        return View("Details", new BookDetailsViewModel { Book = book, CurrentPage = page < 1 ? 1 : page, TotalPages = maxPages, TotalReviews = reviewCount, UserReviewId = userReviewId});
     }
 
     public async Task<IActionResult> Search(string query)
@@ -243,6 +231,7 @@ public class BooksController : Controller
         public int TotalReviews { get; set; }
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; }
+        public Guid? UserReviewId { get; set; }
     }
 
     public class CatalogViewModel
@@ -264,7 +253,7 @@ public class BooksController : Controller
         [Required]
         public string BookId { get; set; }
 
-        [Required, Range(1,5, ErrorMessage = "Please select a rating")]
+        [Required, Range(1, 5, ErrorMessage = "Please select a rating")]
         public int Rating { get; set; }
 
         [Required, MaxLength(70)]
@@ -273,4 +262,5 @@ public class BooksController : Controller
         [Required]
         public string Comment { get; set; }
     }
+
 }

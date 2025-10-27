@@ -91,11 +91,14 @@ app.Run();
     to prevent it all being loaded to memory.
 ? I'm not happy with the naming schemes of the entire project. I haven't used CSS to this scale so naming on my CSS
     classes is something I could improve a lot.
+? There are roles and a flag for reviews to be admin deleted, but I didn't implement any kind of moderation.
 ? Actually I'm not too happy with the CSS in general, especially when it comes to media queries. As I've worked on this
     project I've picked up on how to style things better so next project I should approach it in a more structured approach.
-? There are roles and a flag for reviews to be admin deleted, but I didn't implement any kind of moderation.
+? CSS could be reworked, after working with CSS a lot more I can see ways of improving the way I approach styling pages.
 
 * Changes
-* User profile picture is now given a guid for a name and the old file is removed
+* Fix font resizing
+* Allow newlines when rendering reviews
+* Add identifiers to details page
 * 
 */
