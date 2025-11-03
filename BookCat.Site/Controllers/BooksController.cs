@@ -34,10 +34,11 @@ public class BooksController : Controller
     [HttpGet("Books/")]
     public async Task<IActionResult> Index()
     {
-        CatalogViewModel model = new();
-
-        model.Books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).Take(7).ToList();
-        model.Reviews = (await _reviews.GetAllAsync()).OrderByDescending(b => b.PostedAt).Where(b => b.AdminDeleted == false).Take(7).ToList();
+        CatalogViewModel model = new()
+        {
+            Books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).Take(7).ToList(),
+            Reviews = (await _reviews.GetAllAsync()).OrderByDescending(b => b.PostedAt).Where(b => b.AdminDeleted == false).Take(7).ToList()
+        };
 
         return View(model);
     }
@@ -57,7 +58,7 @@ public class BooksController : Controller
         Guid? userReviewId = null;
         if(currentUser is not null)
         {
-            var reviews = book.Reviews.Where(r => r.UserId == currentUser.Id).Take(1).ToList();
+            var reviews = book.Reviews.Where(r => r.UserId == currentUser.Id).ToList();
             if (reviews.Count > 0) userReviewId = reviews[0].Id;
         }
         int reviewCount = book.Reviews.Count;
@@ -68,11 +69,22 @@ public class BooksController : Controller
         if (page >= maxPages)
         {
             book.Reviews = book.Reviews.Skip((maxPages - 1) * pageSize).Take(pageSize).ToList();
-            return View("Details", new BookDetailsViewModel{ Book = book, CurrentPage = page > maxPages ? maxPages : page, TotalPages = maxPages, UserReviewId = userReviewId});
+            return View("Details", new BookDetailsViewModel{
+                Book = book,
+                CurrentPage = page > maxPages ? maxPages : page,
+                TotalPages = maxPages,
+                UserReviewId = userReviewId
+            });
         }
 
         book.Reviews = book.Reviews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        return View("Details", new BookDetailsViewModel { Book = book, CurrentPage = page < 1 ? 1 : page, TotalPages = maxPages, TotalReviews = reviewCount, UserReviewId = userReviewId});
+        return View("Details", new BookDetailsViewModel {
+            Book = book,
+            CurrentPage = page < 1 ? 1 : page,
+            TotalPages = maxPages,
+            TotalReviews = reviewCount,
+            UserReviewId = userReviewId
+        });
     }
 
     public async Task<IActionResult> Search(string query)
@@ -131,12 +143,6 @@ public class BooksController : Controller
     [Authorize]
     public async Task<IActionResult> Add(string id)
     {
-        var user = await _userManager.GetUserAsync(User);
-        if (user is null)
-        {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Login", "Account");
-        }
         // Check if it exists in Db
         var dbBooks = (await _books.GetAllAsync()).ToList();
         var results = dbBooks.Where(b => b.GoogleId == id).ToList();
@@ -183,37 +189,27 @@ public class BooksController : Controller
     public async Task<IActionResult> WriteReview(string id)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user is null)
-        {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Login", "Account");
-        }
+        
         Book? book = await _books.GetByIdAsync(new Guid(id));
         book.Reviews = (await _reviews.GetByBookIdAsync(book.Id)).ToList();
         if (book is null) return View("Error", $"Book not found {id}");
 
         var matchingReviews = book.Reviews.Where(r => r.UserId == user.Id).ToList();
-        if (matchingReviews.Count > 0) return RedirectToAction("Details", "Books", new { id = id });
+        if (matchingReviews.Count > 0) return RedirectToAction("Details", "Books", new { id });
 
         return View("Review", new AddReviewViewModel{ Book = book});
     }
 
-    [HttpPost]
-    [Authorize]
+    [HttpPost, Authorize]
     public async Task<IActionResult> AddReview(AddReviewViewModel model)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user is null)
-        {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Login", "Account");
-        }
 
         Review review = new()
         {
             Id = Guid.NewGuid(),
             BookId = new Guid(model.BookId),
-            UserId = (await _userManager.GetUserAsync(User)).Id,
+            UserId = user.Id,
             Rating = model.Rating,
             Title = model.Title,
             Comment = model.Comment,
@@ -228,30 +224,29 @@ public class BooksController : Controller
     public async Task<IActionResult> EditReview(Guid id)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user is null)
-        {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Login", "Account");
-        }
 
         Review? review = await _reviews.GetByIdAsync(id);
         if (review is null) return View("Error", $"Review not found {id}");
         if (review.UserId != user.Id) return View("Error", $"This review doesn't belong to you!");
-        return View("EditReview", new EditReviewViewModel { Book = review.Book, Rating = review.Rating, Title = review.Title, ReviewId = review.Id.ToString(), Comment = review.Comment});
+        return View("EditReview", new EditReviewViewModel {
+            Book = review.Book,
+            Rating = review.Rating,
+            Title = review.Title,
+            ReviewId = review.Id.ToString(),
+            Comment = review.Comment
+        });
     }
 
     [HttpPost, Authorize, ValidateAntiForgeryToken]
     public async Task<IActionResult> EditReview(EditReviewViewModel model)
     {
         var user = await _userManager.GetUserAsync(User);
-        if (user is null)
-        {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Login", "Account");
-        }
+
         Review? review = await _reviews.GetByIdAsync(new Guid(model.ReviewId));
+
         if (review is null) return View("Error", $"Review not found {model.ReviewId}");
         if (review.UserId != user.Id) return View("Error", $"This review doesn't belong to you!");
+
         review.Title = model.Title;
         review.Comment = model.Comment;
         review.Rating = model.Rating;
@@ -260,19 +255,11 @@ public class BooksController : Controller
         return RedirectToAction("Details", "Books", new { id = review.BookId});
     }
 
-
     [HttpPost, Authorize, ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteReview(string id, string returnUrl)
     {
-        Console.WriteLine("Delete");
-        Console.WriteLine(id);
-        Console.WriteLine("ID");
         var user = await _userManager.GetUserAsync(User);
-        if (user is null)
-        {
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            return RedirectToAction("Login", "Account");
-        }
+
         Review? review = await _reviews.GetByIdAsync(new Guid(id));
         if (review.UserId != user.Id) return View("Error", $"This review doesn't belong to you!");
         

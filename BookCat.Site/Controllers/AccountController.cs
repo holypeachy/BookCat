@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
 using BookCat.Site.Data;
 using BookCat.Site.Repos;
+using Microsoft.AspNetCore.Authentication;
 
 namespace BookCat.Site.Controllers;
 
@@ -28,14 +29,19 @@ public class AccountController : Controller
     public async Task<IActionResult> Index()
     {
         var user = await _userManager.GetUserAsync(User);
-        var model = new DashViewModel { BooksAdded = (await _books.GetByUserIdAsync(user.Id)).ToList().Count, TotalReviews = (await _reviews.GetByUserIdAsync(user.Id)).ToList().Count, User = user};
+        var model = new DashViewModel
+        {
+            BooksAdded = (await _books.GetByUserIdAsync(user.Id)).ToList().Count,
+            TotalReviews = (await _reviews.GetByUserIdAsync(user.Id)).ToList().Count,
+            User = user
+        };
         return View(model);
     }
 
     [Authorize, HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePfp(IFormFile pfp)
     {
-        if (pfp is null || pfp.Length == 0) return View("Error", "No file selected.");
+        if (pfp is null || pfp.Length == 0) return View("Error", "Error when uploading file.");
         var user = await _userManager.GetUserAsync(User);
 
         if (!string.IsNullOrEmpty(user.UserImageUrl))
@@ -58,12 +64,11 @@ public class AccountController : Controller
         return RedirectToAction("Index");
     }
 
-
     [Authorize, HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> ChangeBio(string bio)
+    public async Task<IActionResult> ChangeBio(string? bio)
     {
         var user = await _userManager.GetUserAsync(User);
-        user.Bio = bio;
+        user.Bio = bio ?? string.Empty;
         await _userManager.UpdateAsync(user);
 
         return RedirectToAction("Index");
@@ -115,8 +120,6 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
-        if (User.Identity?.IsAuthenticated == true) await _signInManager.SignOutAsync();
-
         if (!ModelState.IsValid) return View(model);
 
         var user = new AppUser
@@ -132,8 +135,8 @@ public class AccountController : Controller
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
 
-            var entityUser = await _userManager.FindByEmailAsync(model.Email);
-            await _userManager.AddToRoleAsync(entityUser, Roles.User);
+            var userEntity = await _userManager.FindByEmailAsync(model.Email);
+            await _userManager.AddToRoleAsync(userEntity, Roles.User);
             if (string.IsNullOrEmpty(model.ReturnUrl)) return RedirectToAction("Index", "Books");
             return LocalRedirect(model.ReturnUrl);
         }

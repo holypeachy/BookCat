@@ -23,6 +23,7 @@
             <a class="btn clean-link" asp-controller="User" asp-action="Index" asp-route-id="@Model.User.Id">Public Profile</a>
         </div>
         <div class="user-details">
+            <p>Email: @Model.User.Email</p>
             <p>Books Added: @Model.BooksAdded</p>
             <p>Total Reviews: @Model.TotalReviews</p>
             <p>Joined: @(DateOnly.FromDateTime(Model.User.JoinedDateTime))</p>
@@ -48,7 +49,7 @@
 <form class="change-pfp-form" asp-controller="Account" asp-action="ChangeBio" method="post">
     <div class="change-bio-container">
         <h3>Change Bio</h3>
-        <textarea class="change-bio-input input-border" name="bio" id="bio" placeholder="New Bio" required>@Model.User.Bio</textarea>
+        <textarea class="change-bio-input input-border" name="bio" id="bio" placeholder="New Bio">@Model.User.Bio</textarea>
     </div>
     <button class="btn" type="submit">Update</button>
 </form>

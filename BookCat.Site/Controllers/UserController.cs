@@ -24,10 +24,12 @@ public class UserController : Controller
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user is null) return View("Error", $"User with id \"{id}\" not found.");
-        var model = new UserViewModel();
-        model.User = user;
-        model.BooksAdded = (await _books.GetByUserIdAsync(user.Id)).ToList().Count;
-        model.Reviews = (await _reviews.GetByUserIdAsync(user.Id)).Where(r => r.AdminDeleted == false).OrderByDescending(r => r.PostedAt).ToList();
+        var model = new UserViewModel
+        {
+            User = user,
+            BooksAdded = (await _books.GetByUserIdAsync(user.Id)).ToList().Count,
+            Reviews = (await _reviews.GetByUserIdAsync(user.Id)).Where(r => r.AdminDeleted == false).OrderByDescending(r => r.PostedAt).ToList()
+        };
         model.TotalReviews = model.Reviews.Count;
         model.Reviews = model.Reviews.Take(10).ToList();
 

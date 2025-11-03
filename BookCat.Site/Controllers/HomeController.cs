@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using BookCat.Site.Models;
 using BookCat.Site.Repos;
+using BookCat.Site.Data;
 
 namespace BookCat.Site.Controllers;
 
@@ -9,16 +10,18 @@ public class HomeController : Controller
 {
     private readonly IRepo<Book> _books;
     private readonly IRepo<Review> _reviews;
+    private readonly AppDbContext _db;
 
-    public HomeController(IRepo<Book> bookRepo, IRepo<Review> reviewRepo)
+    public HomeController(IRepo<Book> bookRepo, IRepo<Review> reviewRepo, AppDbContext db)
     {
         _books = bookRepo;
         _reviews = reviewRepo;
+        _db = db;
     }
 
     public async Task<IActionResult> Index()
     {
-        List<Book> books = (await _books.GetAllAsync()).OrderByDescending(b => b.AddedOn).Take(7).ToList();
+        List<Book> books = _db.Books.OrderByDescending(b => b.AddedOn).Take(7).ToList();
 
         IndexViewModel model = new()
         {

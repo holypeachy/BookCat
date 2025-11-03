@@ -24,6 +24,6 @@
 else
 {
     @if (ViewData["Title"] is null || ViewData["Title"] != "Login"){
-        <a class="btn clean-link" asp-controller="Account" asp-action="Login">Login</a>
+        <a class="btn clean-link" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path">Login</a>
     }
 }

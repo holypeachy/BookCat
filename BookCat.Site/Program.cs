@@ -1,4 +1,5 @@
 using BookCat.Site.Data;
+using BookCat.Site.Middleware;
 using BookCat.Site.Models;
 using BookCat.Site.Repos;
 using BookCat.Site.Services;
@@ -70,6 +71,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ValidateUserMiddleware>();
 
 app.MapStaticAssets();
 app.MapControllerRoute(
@@ -97,6 +99,6 @@ app.Run();
 ? CSS could be reworked, after working with CSS a lot more I can see ways of improving the way I approach styling pages.
 
 * Changes
-* Users can now edit and delete reviews
+* Add middleware to check if authenticated user exists from cookie
 * 
 */
