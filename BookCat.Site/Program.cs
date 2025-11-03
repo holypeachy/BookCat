@@ -97,8 +97,6 @@ app.Run();
 ? CSS could be reworked, after working with CSS a lot more I can see ways of improving the way I approach styling pages.
 
 * Changes
-* Fix font resizing
-* Allow newlines when rendering reviews
-* Add identifiers to details page
+* Users can now edit and delete reviews
 * 
 */

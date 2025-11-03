@@ -1,5 +1,7 @@
 @using BookCat.Site.Controllers
+@using Microsoft.AspNetCore.Identity
 @model BooksController.BookDetailsViewModel
+@inject UserManager<AppUser> UserManager
 
 @{
     ViewData["Title"] = Model.Book.Title;
@@ -61,7 +63,13 @@
     </div>
 </div>
 <div class="review-btn-wrapper">
-    <a class="clean-link btn" asp-controller="Books" asp-action="WriteReview" asp-route-id="@Model.Book.Id" asp-fragment="WriteReview">Write Review</a>
+    @if(Model.UserReviewId is null){
+        <a class="clean-link btn" asp-controller="Books" asp-action="WriteReview" asp-route-id="@Model.Book.Id" asp-fragment="WriteReview">Write Review</a>
+    }
+    else{
+        <a class="clean-link btn" asp-controller="Books" asp-action="EditReview" asp-route-id="@Model.UserReviewId" asp-fragment="WriteReview">Edit Review</a>
+    }
+    
 </div>
 <div class="book-idfs">
     @foreach(var idf in Model.Book.Identifiers){
@@ -92,6 +100,19 @@
                     }
                     <p>@review.User.UserName</p>
                 </a>
+                @{
+                    var currentUser = await UserManager.GetUserAsync(User);
+                }
+                @if(currentUser is not null && currentUser.Id == review.UserId){
+                    <div class="edit-btns">
+                        <a class="btn clean-link" asp-controller="Books" asp-action="EditReview" asp-route-id="@review.Id" asp-fragment="WriteReview">Edit</a>
+                        <form asp-controller="Books" asp-action="DeleteReview" method="post">
+                            <input class="hidden" type="text" value="@review.Id" name="id">
+                            <input class="hidden" type="text" value="/Books/Details/@Model.Book.Id" name="returnUrl">
+                            <input class="btn-danger" type="submit" value="Delete">
+                        </form>
+                    </div>
+                }
             </div>
             <div class="review-info">
                 <p class="review-title">Title: @review.Title</p>
@@ -106,9 +127,6 @@
                 </div>
                 <p>Posted: @(DateOnly.FromDateTime(review.PostedAt))</p>
                 <p class="review-body include-new-lines">@review.Comment</p>
-            </div>
-            <div>
-
             </div>
         </div>
     }

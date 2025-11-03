@@ -28,7 +28,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Index()
     {
         var user = await _userManager.GetUserAsync(User);
-        var model = new DashViewModel { BooksAdded = (await _books.GetByUserIdAsync(user.Id)).ToList().Count, TotalReviews = (await _reviews.GetByUserIdAsync(user.Id)).ToList().Count, User = user };
+        var model = new DashViewModel { BooksAdded = (await _books.GetByUserIdAsync(user.Id)).ToList().Count, TotalReviews = (await _reviews.GetByUserIdAsync(user.Id)).ToList().Count, User = user};
         return View(model);
     }
 
@@ -91,9 +91,9 @@ public class AccountController : Controller
 
         if (result.Succeeded)
         {
-            if(string.IsNullOrEmpty(model.ReturnUrl)) return RedirectToAction("Index", "Books");
+            if (string.IsNullOrEmpty(model.ReturnUrl)) return RedirectToAction("Index", "Books");
             return LocalRedirect(model.ReturnUrl);
-        } 
+        }
 
         ModelState.AddModelError("Email", "Invalid Login Attempt");
         return View(model);
@@ -109,7 +109,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Register(string? returnUrl = null)
     {
         if (User.Identity?.IsAuthenticated == true) return RedirectToAction("Index", "Books");
-        return View(new RegisterViewModel{ ReturnUrl = returnUrl});
+        return View(new RegisterViewModel { ReturnUrl = returnUrl });
     }
 
     [HttpPost]
@@ -127,14 +127,14 @@ public class AccountController : Controller
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
-        
+
         if (result.Succeeded)
         {
             await _signInManager.SignInAsync(user, isPersistent: true);
 
             var entityUser = await _userManager.FindByEmailAsync(model.Email);
             await _userManager.AddToRoleAsync(entityUser, Roles.User);
-            if(string.IsNullOrEmpty(model.ReturnUrl)) return RedirectToAction("Index", "Books");
+            if (string.IsNullOrEmpty(model.ReturnUrl)) return RedirectToAction("Index", "Books");
             return LocalRedirect(model.ReturnUrl);
         }
 
@@ -142,7 +142,6 @@ public class AccountController : Controller
 
         return View(model);
     }
-
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

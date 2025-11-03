@@ -6,7 +6,20 @@
 }
 
 .btn:hover{
-    background-color: rgb(70, 45, 0);
+    background-color: var(--primary-text-color);
+    color: white;
+    cursor: pointer;
+}
+
+.btn-danger{
+    border: 0px;
+    border-radius: 30px;
+    background-color: var(--select-color);
+    padding: 12px;
+}
+
+.btn-danger:hover {
+    background-color: var(--danger-secondary-color);
     color: white;
     cursor: pointer;
 }

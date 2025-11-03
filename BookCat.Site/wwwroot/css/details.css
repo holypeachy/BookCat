@@ -33,8 +33,7 @@
 }
 
 .book-description{
-    margin-top: 8px;
-    padding: 10px;
+    margin: 20px 0 5vh 0;
 }
 
 .book-review-rating{
@@ -50,6 +49,7 @@
 
 .book-idfs{
     font-size: clamp(1rem, 2vw, 1.2rem);
+    margin: 20px 0 5vh 0;
 }
 
 .no-reviews {

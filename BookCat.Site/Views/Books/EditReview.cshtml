@@ -1,5 +1,5 @@
 @using BookCat.Site.Controllers
-@model BooksController.AddReviewViewModel
+@model BooksController.EditReviewViewModel
 
 @{
     ViewData["Title"] = Model.Book.Title;
@@ -41,18 +41,19 @@
     <p>@Html.Raw(Model.Book.Description)</p>
 </div>
 <div id="WriteReview">
-    <h3>Write Review</h3>
+    <h3>Edit Review</h3>
 </div>
-<form class="add-review-form" asp-action="AddReview" method="post">
-    <input asp-for="BookId" class="hidden" type="text" value="@Model.Book.Id" required>
+<form class="add-review-form" asp-action="EditReview" method="post">
+    <input asp-for="ReviewId" class="hidden" type="text" value="@Model.ReviewId" required>
     <div class="star-container">
-        <div class="rating-text">Give your rating</div>
-        <span id="star-1" class="material-symbols-outlined active-star" onclick="rating(1)">star_rate</span>
-        <span id="star-2" class="material-symbols-outlined active-star" onclick="rating(2)">star_rate</span>
-        <span id="star-3" class="material-symbols-outlined active-star" onclick="rating(3)">star_rate</span>
-        <span id="star-4" class="material-symbols-outlined inactive-star" onclick="rating(4)">star_rate</span>
-        <span id="star-5" class="material-symbols-outlined inactive-star" onclick="rating(5)">star_rate</span>
-        <input asp-for="Rating" id="hidden-input" class="hidden" type="number" value="3"/>
+        <div class="rating-text">Edit your rating</div>
+        @for(int i = 1; i <= Model.Rating; i++){
+            <span id="star-@i" class="material-symbols-outlined active-star" onclick="rating(@i)">star_rate</span>
+        }
+        @for(int i = Model.Rating + 1; i <= 5; i++){
+            <span id="star-@i" class="material-symbols-outlined inactive-star" onclick="rating(@i)">star_rate</span>
+        }
+        <input asp-for="Rating" id="hidden-input" class="hidden" type="number" value="@Model.Rating"/>
     </div>
     <span asp-validation-for="Title" class="text-danger"></span>
     <input class="form-title input-border" type="text" asp-for="Title" placeholder="Title" required>

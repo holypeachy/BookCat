@@ -189,13 +189,18 @@ public class BooksController : Controller
             return RedirectToAction("Login", "Account");
         }
         Book? book = await _books.GetByIdAsync(new Guid(id));
+        book.Reviews = (await _reviews.GetByBookIdAsync(book.Id)).ToList();
         if (book is null) return View("Error", $"Book not found {id}");
-        return View("Review", new ReviewViewModel{ Book = book});
+
+        var matchingReviews = book.Reviews.Where(r => r.UserId == user.Id).ToList();
+        if (matchingReviews.Count > 0) return RedirectToAction("Details", "Books", new { id = id });
+
+        return View("Review", new AddReviewViewModel{ Book = book});
     }
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> AddReview(ReviewViewModel model)
+    public async Task<IActionResult> AddReview(AddReviewViewModel model)
     {
         var user = await _userManager.GetUserAsync(User);
         if (user is null)
@@ -216,7 +221,65 @@ public class BooksController : Controller
         };
         await _reviews.AddAsync(review);
 
-        return RedirectToAction("Details", "Books", new {id = model.BookId});
+        return RedirectToAction("Details", "Books", new { id = model.BookId });
+    }
+    
+    [Authorize]
+    public async Task<IActionResult> EditReview(Guid id)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user is null)
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Login", "Account");
+        }
+
+        Review? review = await _reviews.GetByIdAsync(id);
+        if (review is null) return View("Error", $"Review not found {id}");
+        if (review.UserId != user.Id) return View("Error", $"This review doesn't belong to you!");
+        return View("EditReview", new EditReviewViewModel { Book = review.Book, Rating = review.Rating, Title = review.Title, ReviewId = review.Id.ToString(), Comment = review.Comment});
+    }
+
+    [HttpPost, Authorize, ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditReview(EditReviewViewModel model)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user is null)
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Login", "Account");
+        }
+        Review? review = await _reviews.GetByIdAsync(new Guid(model.ReviewId));
+        if (review is null) return View("Error", $"Review not found {model.ReviewId}");
+        if (review.UserId != user.Id) return View("Error", $"This review doesn't belong to you!");
+        review.Title = model.Title;
+        review.Comment = model.Comment;
+        review.Rating = model.Rating;
+        await _reviews.UpdateAsync(review);
+
+        return RedirectToAction("Details", "Books", new { id = review.BookId});
+    }
+
+
+    [HttpPost, Authorize, ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteReview(string id, string returnUrl)
+    {
+        Console.WriteLine("Delete");
+        Console.WriteLine(id);
+        Console.WriteLine("ID");
+        var user = await _userManager.GetUserAsync(User);
+        if (user is null)
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            return RedirectToAction("Login", "Account");
+        }
+        Review? review = await _reviews.GetByIdAsync(new Guid(id));
+        if (review.UserId != user.Id) return View("Error", $"This review doesn't belong to you!");
+        
+        await _reviews.DeleteAsync(review);
+
+        if (Url.IsLocalUrl(returnUrl)) return LocalRedirect(returnUrl);
+        return RedirectToAction("Index", "Books");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -246,12 +309,29 @@ public class BooksController : Controller
         public string Query { get; set; } = string.Empty;
     }
 
-    public class ReviewViewModel
+    public class AddReviewViewModel
     {
         public Book? Book { get; set; }
 
         [Required]
         public string BookId { get; set; }
+
+        [Required, Range(1, 5, ErrorMessage = "Please select a rating")]
+        public int Rating { get; set; }
+
+        [Required, MaxLength(70)]
+        public string Title { get; set; }
+
+        [Required]
+        public string Comment { get; set; }
+    }
+
+    public class EditReviewViewModel
+    {
+        public Book Book { get; set; }
+
+        [Required]
+        public string ReviewId { get; set; }
 
         [Required, Range(1, 5, ErrorMessage = "Please select a rating")]
         public int Rating { get; set; }

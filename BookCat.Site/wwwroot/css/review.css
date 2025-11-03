@@ -59,6 +59,17 @@
     color: var(--select-color);
 }
 
+.edit-btns{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.edit-btns a{
+    margin: clamp(10px, 1vw, 20px);
+}
 
 
 @media screen and (min-width: 480px)  {
@@ -97,6 +108,10 @@
 
     .review-info{
         width: 75%;
+    }
+
+    .edit-btns{
+        flex-direction: row;
     }
 }
 
