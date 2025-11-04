@@ -21,7 +21,7 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
 
     public async Task<IEnumerable<BookIdentifier>> GetAllAsync()
     {
-        return await _db.BookIdentifiers.Include(bi => bi.Book).ToListAsync();
+        return await _db.BookIdentifiers.ToListAsync();
     }
 
     public async Task<BookIdentifier?> GetByIdAsync(Guid id)
@@ -39,14 +39,13 @@ public class BooksIdentifierRepo : IRepo<BookIdentifier>
         await _db.SaveChangesAsync();
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
         BookIdentifier? identifier = await _db.BookIdentifiers.FindAsync(id);
-        if (identifier is null) return false;
+        if (identifier is null) return;
         _db.BookIdentifiers.Remove(identifier);
 
         await _db.SaveChangesAsync();
-        return true;
     }
 
     public async Task DeleteAsync(BookIdentifier entity)

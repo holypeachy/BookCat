@@ -19,7 +19,6 @@ public class ValidateUserMiddleware
             var user = await userManager.GetUserAsync(context.User);
             if (user == null)
             {
-                // user was deleted!
                 await signInManager.SignOutAsync();
                 context.Response.Redirect("/Home/Index");
                 return;

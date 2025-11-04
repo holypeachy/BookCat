@@ -1,0 +1,9 @@
+.delete-review{
+    text-align: center;
+    margin-top: clamp(10px, 2vw, 20px);
+}
+
+.delete-btn{
+    width: 30%;
+    max-width: 200px;
+}

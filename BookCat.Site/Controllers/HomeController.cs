@@ -11,6 +11,13 @@ public class HomeController : Controller
     private readonly IRepo<Book> _books;
     private readonly IRepo<Review> _reviews;
     private readonly AppDbContext _db;
+    public List<string> Messages = new()
+    {
+        "Meow!", "Book worms!!!", "How about some tea?", "Get your bookshelf ready!", "📖😺 Lots of text here!", "Writer's Block?",
+        "90% bug free!", "Tell your friends!", "20 GOTO 10!", "Forced to use JavaScript", "I love matcha!", "Kangaroo Court 🦘",
+        "Instant Crush 🤖", "Akane Kurokawa"
+    };
+    public readonly Random _rand = new();
 
     public HomeController(IRepo<Book> bookRepo, IRepo<Review> reviewRepo, AppDbContext db)
     {
@@ -27,7 +34,8 @@ public class HomeController : Controller
         {
             Books = books,
             BookCount = await _books.GetCountAsync(),
-            ReviewCount = await _reviews.GetCountAsync()
+            ReviewCount = await _reviews.GetCountAsync(),
+            Message = Messages[_rand.Next(0, Messages.Count)]
         };
 
         return View(model);
@@ -49,5 +57,6 @@ public class HomeController : Controller
         public List<Book> Books { get; set; }
         public int BookCount { get; set; }
         public int ReviewCount { get; set; }
+        public string Message { get; set; }
     }
 }

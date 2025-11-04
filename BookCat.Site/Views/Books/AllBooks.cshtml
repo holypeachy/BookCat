@@ -1,0 +1,91 @@
+@using BookCat.Site.Controllers
+@using Microsoft.AspNetCore.Identity
+@model BooksController.AllBooksViewModel
+@inject UserManager<AppUser> UserManager
+
+@{
+    ViewData["Title"] = "All Books";
+}
+
+<h1>All Books (@Model.TotalBooks)</h1>
+<form class="search-form" asp-controller="Books" asp-action="Search" method="get">
+    <input class="search-bar" name="query" type="text" placeholder="Title or ISBN" required>
+    <span class="material-symbols-outlined search-icon">
+        search
+    </span>
+</form>
+@foreach (var item in Model.Books){
+    <div class="book-card">
+        <div class="book-cover-wrapper">
+            @if(string.IsNullOrEmpty(item.CoverUrl)){
+            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">
+                <img class="book-cover" src="~/images/default_book.png" alt="@item.CoverUrl Book Cover">
+            </a>
+            }
+            else{
+            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">
+                <img class="book-cover" src="@item.CoverUrl" alt="@item.CoverUrl Book Cover">
+            </a>
+            }
+        </div>
+        <div class="book-info-wrapper">
+            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">
+                <h3>@item.Title</h3>
+            </a>
+            @if(item.Subtitle is not null){
+                <h4>@item.Subtitle</h4>
+            }
+            @if(item.Author is not null){
+                <p>By: @item.Author</p>
+            }
+            @{
+                string result = "0";
+                if(item.Reviews.Count > 0){
+                    int count = 0;
+                    foreach (var review in item.Reviews)
+                    {
+                        count += review.Rating;
+                    }
+                    float value = (float)count / item.Reviews.Count;
+                    result = string.Format("{0:0.00}", value);
+                }
+            }
+            <p>Score: @result / 5</p>
+            <p>Reviews: @item.Reviews.Count</p>
+            @if (item.AddedBy is not null){
+                <p>Added By: @(item.AddedBy.UserName)</p>
+            }
+        </div>
+    </div>
+}
+@if(Model.Books.Count > 0){
+    <div class="pagination-wrapper">
+        @if(Model.CurrentPage != 1){
+            <a class="pagination-item btn clean-link" asp-controller="Books" asp-action="AllBooks" asp-route-page="@(Model.CurrentPage - 1)">&lt;</a>
+        }
+        else{
+            <span class="pagination-item">&lt;</span>
+        }
+        @for(int i = 1; i < Model.TotalPages + 1; i++){
+            @if(Model.CurrentPage == i){
+                <span class="pagination-item current-page clean-link">@i</span>
+            }
+            else{
+                <a class="pagination-item" asp-controller="Books" asp-action="AllBooks" asp-route-page="@i">@i</a>
+            }
+        }
+        @if(Model.CurrentPage != Model.TotalPages){
+            <a class="pagination-item btn clean-link" asp-controller="Books" asp-action="AllBooks" asp-route-page="@(Model.CurrentPage + 1)">&gt;</a>
+        }
+        else{
+            <span class="pagination-item">&gt;</span>
+        }
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pagination.css">
+    <link rel="stylesheet" href="~/css/results.css">
+    <link rel="stylesheet" href="~/css/search-bar.css">
+        <link rel="stylesheet" href="~/css/all-books.css">
+}

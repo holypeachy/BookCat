@@ -21,7 +21,7 @@ public class ReviewRepo : IRepo<Review>
 
     public async Task<IEnumerable<Review>> GetAllAsync()
     {
-        return await _db.Reviews.Include(r => r.Book).Include(r => r.User).ToListAsync();
+        return await _db.Reviews.Include(r => r.User).ToListAsync();
     }
 
     public async Task<Review?> GetByIdAsync(Guid id)
@@ -40,14 +40,13 @@ public class ReviewRepo : IRepo<Review>
         await _db.SaveChangesAsync();
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
         Review? review = await _db.Reviews.FindAsync(id);
-        if (review is null) return false;
+        if (review is null) return;
         _db.Reviews.Remove(review);
 
         await _db.SaveChangesAsync();
-        return true;
     }
 
     public async Task DeleteAsync(Review entity)

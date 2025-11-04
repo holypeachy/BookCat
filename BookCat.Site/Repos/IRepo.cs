@@ -8,7 +8,7 @@ public interface IRepo<T> where T : class
     Task<IEnumerable<T>> GetByBookIdAsync(Guid id);
     Task<IEnumerable<T>> GetByUserIdAsync(string id);
     Task UpdateAsync(T entity);
-    Task<bool> DeleteAsync(Guid id);
+    Task DeleteAsync(Guid id);
     Task DeleteAsync(T entity);
     Task<int> GetCountAsync();
 }

@@ -97,10 +97,13 @@ app.Run();
 ? Actually I'm not too happy with the CSS in general, especially when it comes to media queries. As I've worked on this
     project I've picked up on how to style things better so next project I should approach it in a more structured approach.
 ? CSS could be reworked, after working with CSS a lot more I can see ways of improving the way I approach styling pages.
+? CSS naming was quite messy, I know now what sort of code I should turn into reusable classes.
 
 * Changes
-* Add change email, change password, and delete account functionality
-* Add ConfirmTextAttribute for delete account validation text
-* Add confirmation for mobile logout
+* Add user profile review pagination
+* Add AllBooks page
+* Improve pagination validation
+* Resize profile pictures on upload
+* Optimize repos to reduce memory load
 * 
 */

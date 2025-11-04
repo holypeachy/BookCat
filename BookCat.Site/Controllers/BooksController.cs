@@ -56,7 +56,7 @@ public class BooksController : Controller
 
         var currentUser = await _userManager.GetUserAsync(User);
         Guid? userReviewId = null;
-        if(currentUser is not null)
+        if (currentUser is not null)
         {
             var reviews = book.Reviews.Where(r => r.UserId == currentUser.Id).ToList();
             if (reviews.Count > 0) userReviewId = reviews[0].Id;
@@ -69,7 +69,8 @@ public class BooksController : Controller
         if (page >= maxPages)
         {
             book.Reviews = book.Reviews.Skip((maxPages - 1) * pageSize).Take(pageSize).ToList();
-            return View("Details", new BookDetailsViewModel{
+            return View("Details", new BookDetailsViewModel
+            {
                 Book = book,
                 CurrentPage = page > maxPages ? maxPages : page,
                 TotalPages = maxPages,
@@ -77,14 +78,45 @@ public class BooksController : Controller
             });
         }
 
-        book.Reviews = book.Reviews.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-        return View("Details", new BookDetailsViewModel {
+        book.Reviews = book.Reviews.Skip((page < 1 ? 1 : page) - 1).Take(pageSize).ToList();
+        return View("Details", new BookDetailsViewModel
+        {
             Book = book,
             CurrentPage = page < 1 ? 1 : page,
             TotalPages = maxPages,
             TotalReviews = reviewCount,
             UserReviewId = userReviewId
         });
+    }
+
+    [HttpGet("Books/AllBooks/{page?}")]
+    public async Task<IActionResult> AllBooks(int page = 1)
+    {
+        int pageSize = 10;
+
+        AllBooksViewModel model = new()
+        {
+            Books = (await _books.GetAllAsync()).OrderBy(b => b.Title).ToList(),
+            TotalBooks = await _books.GetCountAsync(),
+        };
+
+        int maxPages = model.Books.Count / pageSize;
+        if (model.Books.Count % pageSize != 0) maxPages++;
+
+
+        if (page >= maxPages)
+        {
+            model.Books = model.Books.Skip((maxPages - 1) * pageSize).Take(pageSize).ToList();
+            model.TotalPages = maxPages;
+            model.CurrentPage = maxPages;
+            return View(model);
+        }
+
+        model.CurrentPage = page < -1 ? 1 : page;
+        model.Books = model.Books.Skip(model.CurrentPage - 1).Take(pageSize).ToList();
+        model.TotalPages = maxPages;
+
+        return View(model);
     }
 
     public async Task<IActionResult> Search(string query)
@@ -95,7 +127,7 @@ public class BooksController : Controller
         if (BookHelpers.IsISBN(cleanQuery))
         {
             var identifiers = (await _identifiers.GetAllAsync()).Where(i => i.Value.ToLower() == cleanQuery).ToList();
-            if(identifiers.Count < 1)
+            if (identifiers.Count < 1)
             {
                 var bookDtos = await _googleAPI.BookSearchIdentifier(cleanQuery);
                 return View("AddResults", bookDtos);
@@ -106,7 +138,7 @@ public class BooksController : Controller
             {
                 books.Add(item.Book);
             }
-            return View("Results", new ResultsViewModel{ Books = books, Query = query});
+            return View("Results", new ResultsViewModel { Books = books, Query = query });
         }
         else
         {
@@ -118,7 +150,7 @@ public class BooksController : Controller
                 return View("AddResults", bookDtos);
             }
 
-            return View("Results", new ResultsViewModel{ Books = books, Query = query});
+            return View("Results", new ResultsViewModel { Books = books, Query = query });
         }
     }
 
@@ -189,7 +221,7 @@ public class BooksController : Controller
     public async Task<IActionResult> WriteReview(string id)
     {
         var user = await _userManager.GetUserAsync(User);
-        
+
         Book? book = await _books.GetByIdAsync(new Guid(id));
         book.Reviews = (await _reviews.GetByBookIdAsync(book.Id)).ToList();
         if (book is null) return View("Error", $"Book not found {id}");
@@ -197,7 +229,7 @@ public class BooksController : Controller
         var matchingReviews = book.Reviews.Where(r => r.UserId == user.Id).ToList();
         if (matchingReviews.Count > 0) return RedirectToAction("Details", "Books", new { id });
 
-        return View("Review", new AddReviewViewModel{ Book = book});
+        return View("Review", new AddReviewViewModel { Book = book });
     }
 
     [HttpPost, Authorize]
@@ -219,7 +251,7 @@ public class BooksController : Controller
 
         return RedirectToAction("Details", "Books", new { id = model.BookId });
     }
-    
+
     [Authorize]
     public async Task<IActionResult> EditReview(Guid id)
     {
@@ -228,7 +260,8 @@ public class BooksController : Controller
         Review? review = await _reviews.GetByIdAsync(id);
         if (review is null) return View("Error", $"Review not found {id}");
         if (review.UserId != user.Id) return View("Error", $"This review doesn't belong to you!");
-        return View("EditReview", new EditReviewViewModel {
+        return View("EditReview", new EditReviewViewModel
+        {
             Book = review.Book,
             Rating = review.Rating,
             Title = review.Title,
@@ -252,7 +285,7 @@ public class BooksController : Controller
         review.Rating = model.Rating;
         await _reviews.UpdateAsync(review);
 
-        return RedirectToAction("Details", "Books", new { id = review.BookId});
+        return RedirectToAction("Details", "Books", new { id = review.BookId });
     }
 
     [HttpPost, Authorize, ValidateAntiForgeryToken]
@@ -262,7 +295,7 @@ public class BooksController : Controller
 
         Review? review = await _reviews.GetByIdAsync(new Guid(id));
         if (review.UserId != user.Id) return View("Error", $"This review doesn't belong to you!");
-        
+
         await _reviews.DeleteAsync(review);
 
         if (Url.IsLocalUrl(returnUrl)) return LocalRedirect(returnUrl);
@@ -330,4 +363,11 @@ public class BooksController : Controller
         public string Comment { get; set; }
     }
 
+    public class AllBooksViewModel
+    {
+        public List<Book> Books { get; set; }
+        public int TotalBooks { get; set; }
+        public int TotalPages { get; set; }
+        public int CurrentPage { get; set; }
+    }
 }

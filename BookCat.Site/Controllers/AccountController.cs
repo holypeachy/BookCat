@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
 using BookCat.Site.Data;
 using BookCat.Site.Repos;
-using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json.Serialization;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace BookCat.Site.Controllers;
 
@@ -51,12 +51,18 @@ public class AccountController : Controller
             if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
         }
 
-        string newFileName = $"{Guid.NewGuid()}{Path.GetExtension(pfp.FileName)}";
+
+        using var image = await Image.LoadAsync(pfp.OpenReadStream());
+
+        image.Mutate(x => x.Resize(500, 0));
+
+        string newFileName = $"{Guid.NewGuid()}.jpg";
         var filePath = Path.Combine("wwwroot", "user-images", newFileName);
-        using (var stream = new FileStream(filePath, FileMode.Create))
+
+        await image.SaveAsJpegAsync(filePath, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder
         {
-            await pfp.CopyToAsync(stream);
-        }
+            Quality = 80
+        });
 
         filePath = $"/user-images/{newFileName}";
         user.UserImageUrl = filePath;
@@ -140,7 +146,15 @@ public class AccountController : Controller
 
         var result = await _userManager.DeleteAsync(user);
 
-        if (result.Succeeded) return RedirectToAction("Index", "Home");
+        if (result.Succeeded)
+        {
+            if (!string.IsNullOrEmpty(user.UserImageUrl))
+            {
+                string oldPath = Path.Combine("wwwroot", user.UserImageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
+            }
+            return RedirectToAction("Index", "Home");
+        }
 
         foreach (var error in result.Errors) ModelState.AddModelError("ConfirmDelete", error.Description);
 

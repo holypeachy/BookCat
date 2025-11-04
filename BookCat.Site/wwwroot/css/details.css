@@ -56,21 +56,6 @@
     text-align: center;
 }
 
-.pagination-wrapper{
-    display: flex;
-    justify-content: center;
-    font-size: 1.7rem;
-    margin: 20px;
-}
-
-.pagination-item{
-    padding: 10px;
-}
-
-.current-page{
-    color: var(--select-color);
-}
-
 @media screen and (min-width: 480px)  {
     .cover-img{
         width: clamp(150px, 25vw, 250px);

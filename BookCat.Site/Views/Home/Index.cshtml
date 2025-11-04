@@ -10,7 +10,7 @@
         <h1>Discover, review, and share the stories that shape you.</h1>
         <p>BookCat is your cozy corner of the internet for book lovers. Browse an ever-growing catalog, 
         read authentic reviews, and add your own thoughts with a purr-sonal touch. Can’t find a book? Just search for it — our cat librarian will fetch it for you!</p>
-        <p>Go to the <a class="animated" asp-controller="Books" asp-action="Index">Cat-alog</a>!</p>
+        <p><a class="animated" asp-controller="Books" asp-action="Index">@Model.Message</a></p>
     </div>
     <div class="landing-image-wrapper">
         <img class="landing-image" src="~/images/landing.png" alt="Landing page image">
