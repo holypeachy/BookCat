@@ -99,6 +99,8 @@ app.Run();
 ? CSS could be reworked, after working with CSS a lot more I can see ways of improving the way I approach styling pages.
 
 * Changes
-* Add middleware to check if authenticated user exists from cookie
+* Add change email, change password, and delete account functionality
+* Add ConfirmTextAttribute for delete account validation text
+* Add confirmation for mobile logout
 * 
 */

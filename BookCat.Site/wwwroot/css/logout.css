@@ -1,0 +1,19 @@
+.desktop{
+    display: none;
+}
+
+@media screen and (min-width: 480px)  {
+}
+
+@media screen and (min-width: 600px)  {
+    .desktop{
+        display: block;
+    }
+
+    .mobile{
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1000px)  {
+}

@@ -20,10 +20,15 @@
                 <a href="@Model.User.UserImageUrl" target="_blank"><img class="profile-picture" src="@Model.User.UserImageUrl" alt="User profile picture"></a>
             }
             <h2>@Model.User.UserName</h2>
-            <a class="btn clean-link" asp-controller="User" asp-action="Index" asp-route-id="@Model.User.Id">Public Profile</a>
+            <a class="btn clean-link t-align-center" asp-controller="User" asp-action="Index" asp-route-id="@Model.User.Id">Public Profile</a>
         </div>
         <div class="user-details">
             <p>Email: @Model.User.Email</p>
+            <div class="change-btns">
+                <a class="btn clean-link" asp-controller="Account" asp-action="ChangeEmail">Change Email</a>
+                <a class="btn clean-link" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+                <a class="btn-danger clean-link" asp-controller="Account" asp-action="DeleteAccount">Delete Account</a>
+            </div>
             <p>Books Added: @Model.BooksAdded</p>
             <p>Total Reviews: @Model.TotalReviews</p>
             <p>Joined: @(DateOnly.FromDateTime(Model.User.JoinedDateTime))</p>

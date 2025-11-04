@@ -17,7 +17,10 @@
             <img class="user-img" src="@user.UserImageUrl" alt="User Image">
         }
     </a>
-    <form method="post" asp-controller="Account" asp-action="Logout">
+    <form class="mobile" method="post" asp-controller="Account" asp-action="Logout" onsubmit="return confirm('Logout: Are you sure?');">
+        <button class="btn" id="logout" type="submit">Logout</button>
+    </form>
+    <form class="desktop" method="post" asp-controller="Account" asp-action="Logout">
         <button class="btn" id="logout" type="submit">Logout</button>
     </form>
 }

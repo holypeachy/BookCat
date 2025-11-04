@@ -5,17 +5,17 @@
 }
 
 <form class="login-form" asp-action="Register" method="post">
-  <h1>Register</h1>
-  <input class="hidden" asp-for="ReturnUrl" type="text" value="@Model.ReturnUrl"/>
-  <span asp-validation-for="Email" class="text-danger"></span>
-  <input asp-for="Email" type="email" placeholder="Email" required />
-  <span asp-validation-for="Username" class="text-danger"></span>
-  <input asp-for="Username" type="text" placeholder="Username" required />
-  <span asp-validation-for="Password" class="text-danger"></span>
-  <input asp-for="Password" type="password" placeholder="Password" required />
-  <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-  <input asp-for="ConfirmPassword" type="password" placeholder="Confirm Password" required />
-  <button class="btn" type="submit">Submit</button>
+    <h1>Register</h1>
+    <input class="hidden" asp-for="ReturnUrl" type="text" value="@Model.ReturnUrl"/>
+    <span asp-validation-for="Email" class="text-danger"></span>
+    <input asp-for="Email" type="email" placeholder="Email" required />
+    <span asp-validation-for="Username" class="text-danger"></span>
+    <input asp-for="Username" type="text" placeholder="Username" required />
+    <span asp-validation-for="Password" class="text-danger"></span>
+    <input asp-for="Password" type="password" placeholder="Password" required />
+    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    <input asp-for="ConfirmPassword" type="password" placeholder="Confirm Password" required />
+    <button class="btn" type="submit">Submit</button>
 </form>
 
 @section Styles{

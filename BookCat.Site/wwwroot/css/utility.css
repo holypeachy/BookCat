@@ -29,6 +29,9 @@
     color: inherit;
 }
 
+.t-align-center{
+    text-align: center;
+}
 
 @media screen and (min-width: 480px)  {
     .btn{

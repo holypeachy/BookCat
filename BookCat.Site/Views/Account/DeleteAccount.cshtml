@@ -1,0 +1,24 @@
+@using BookCat.Site.Controllers
+@model AccountController.DeleteAccountViewModel
+
+@{
+    ViewData["Title"] = "Delete Account";
+}
+
+<form class="login-form" asp-action="DeleteAccount" method="post" onsubmit="return confirm('Are you sure you want to DELETE your account?');">
+    <h1>Delete Account</h1>
+    <h2 class="text-danger"></h2>
+    <span asp-validation-for="Password" class="text-danger"></span>
+    <input asp-for="Password" type="password" placeholder="Password" required />
+    <span asp-validation-for="ConfirmDelete" class="text-danger"></span>
+    <input asp-for="ConfirmDelete" type="text" placeholder="Type &quot;Delete&quot;" required />
+    <button class="btn" type="submit">Submit</button>
+</form>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user.css">
+    <link rel="stylesheet" href="~/css/login.css">
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

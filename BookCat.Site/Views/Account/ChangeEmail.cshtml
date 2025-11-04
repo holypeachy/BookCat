@@ -1,0 +1,22 @@
+@using BookCat.Site.Controllers
+@model AccountController.ChangeEmailViewModel
+
+@{
+    ViewData["Title"] = "Change Email";
+}
+
+<form class="login-form" asp-action="ChangeEmail" method="post">
+    <h1>Change Email</h1>
+    <input asp-for="Email" type="email" value="@Model.Email" disabled/>
+    <span asp-validation-for="NewEmail" class="text-danger"></span>
+    <input asp-for="NewEmail" type="email" placeholder="New Email" required />
+    <button class="btn" type="submit">Submit</button>
+</form>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/user.css">
+    <link rel="stylesheet" href="~/css/login.css">
+}
+@section Scripts {
+        <partial name="_ValidationScriptsPartial"/>
+}

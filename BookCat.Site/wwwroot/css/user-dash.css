@@ -68,6 +68,18 @@
     margin-top: 20px;
 }
 
+.change-btns a{
+    text-align: center;
+    margin-right: clamp(5px, 2vw, 30px);
+}
+
+.change-btns{
+    margin: clamp(5px, 2vw, 15px);
+    display: flex;
+    justify-content: center;
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+}
+
 @media screen and (min-width: 480px)  {
     .login-form > input{
         font-size: clamp(1rem, 2vw, 1.1rem);

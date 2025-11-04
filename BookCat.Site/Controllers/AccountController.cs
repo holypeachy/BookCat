@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using BookCat.Site.Data;
 using BookCat.Site.Repos;
 using Microsoft.AspNetCore.Authentication;
+using Newtonsoft.Json.Serialization;
 
 namespace BookCat.Site.Controllers;
 
@@ -72,6 +73,78 @@ public class AccountController : Controller
         await _userManager.UpdateAsync(user);
 
         return RedirectToAction("Index");
+    }
+
+    [Authorize]
+    public async Task<IActionResult> ChangeEmail()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        ChangeEmailViewModel model = new()
+        {
+            Email = user.Email
+        };
+        return View(model);
+    }
+
+    [Authorize, HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        var user = await _userManager.GetUserAsync(User);
+        user.Email = model.NewEmail;
+
+        var result = await _userManager.UpdateAsync(user);
+
+        if (result.Succeeded) return RedirectToAction("Index");
+
+        foreach (var error in result.Errors) ModelState.AddModelError("NewEmail", error.Description);
+
+        return View(model);
+    }
+
+    [Authorize]
+    public async Task<IActionResult> ChangePassword()
+    {
+        return View(new ChangePasswordViewModel());
+    }
+
+    [Authorize, HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        var user = await _userManager.GetUserAsync(User);
+
+        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+        if (result.Succeeded) return RedirectToAction("Index");
+
+        foreach (var error in result.Errors) ModelState.AddModelError("OldPassword", error.Description);
+
+        return View(model);
+    }
+
+    [Authorize]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        return View(new DeleteAccountViewModel());
+    }
+
+    [Authorize, HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteAccount(DeleteAccountViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        var user = await _userManager.GetUserAsync(User);
+
+        var result = await _userManager.DeleteAsync(user);
+
+        if (result.Succeeded) return RedirectToAction("Index", "Home");
+
+        foreach (var error in result.Errors) ModelState.AddModelError("ConfirmDelete", error.Description);
+
+        return View(model);
     }
 
     public async Task<IActionResult> Login(string? returnUrl = null)
@@ -186,5 +259,34 @@ public class AccountController : Controller
         public AppUser User { get; set; }
         public int BooksAdded { get; set; }
         public int TotalReviews { get; set; }
+    }
+
+    public class ChangeEmailViewModel
+    {
+        public string? Email { get; set; }
+
+        [Required(ErrorMessage = "Enter your new email"), EmailAddress(ErrorMessage = "Please enter a valid email address")]
+        public string NewEmail { get; set; }
+    }
+
+    public class ChangePasswordViewModel
+    {
+        [Required(ErrorMessage = "Entered password doesn't match your old password"), DataType(DataType.Password)]
+        public string OldPassword { get; set; } = string.Empty;
+
+        [Required, DataType(DataType.Password)]
+        public string NewPassword { get; set; } = string.Empty;
+
+        [DataType(DataType.Password), Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+
+    public class DeleteAccountViewModel
+    {
+        [Required, DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Type \"Delete\""), ConfirmText("Delete")]
+        public string ConfirmDelete { get; set; }
     }
 }

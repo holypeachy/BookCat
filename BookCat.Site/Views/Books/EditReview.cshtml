@@ -61,6 +61,11 @@
     <textarea class="form-comment input-border" asp-for="Comment" placeholder="Your Review" required></textarea>
     <input class="btn form-btn" type="submit" value="Post">
 </form>
+@* <form asp-controller="Books" asp-action="DeleteReview" method="post" onsubmit="return confirm('Are you sure you want to delete this review?');">
+    <input class="hidden" type="text" value="@Model.ReviewId" name="id">
+    <input class="hidden" type="text" value="/Books/Details/@Model.Book.Id" name="returnUrl">
+    <input class="btn-danger" type="submit" value="Delete">
+</form> *@
 <div class="spacing">
 </div>
 
