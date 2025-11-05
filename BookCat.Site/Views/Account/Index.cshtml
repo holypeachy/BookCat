@@ -20,7 +20,7 @@
                 <a href="@Model.User.UserImageUrl" target="_blank"><img class="profile-picture" src="@Model.User.UserImageUrl" alt="User profile picture"></a>
             }
             <h2>@Model.User.UserName</h2>
-            <a class="btn clean-link t-align-center" asp-controller="User" asp-action="Index" asp-route-id="@Model.User.Id">Public Profile</a>
+            <a class="btn clean-link t-align-center" asp-controller="User" asp-action="Index" asp-route-username="@Model.User.UserName">Public Profile</a>
         </div>
         <div class="user-details">
             <p>Email: @Model.User.Email</p>

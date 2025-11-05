@@ -19,13 +19,13 @@ public class UserController : Controller
         _userManager = userManager;
     }
 
-    [HttpGet("User/{id}/{page?}")]
-    public async Task<IActionResult> Index(string id, int page = 1)
+    [HttpGet("User/{username}/{page?}")]
+    public async Task<IActionResult> Index(string username, int page = 1)
     {
         int pageSize = 10;
 
-        var user = await _userManager.FindByIdAsync(id);
-        if (user is null) return View("Error", $"User with id \"{id}\" not found.");
+        var user = await _userManager.FindByNameAsync(username);
+        if (user is null) return View("Error", $"User with username \"{username}\" not found.");
         var model = new UserViewModel
         {
             User = user,

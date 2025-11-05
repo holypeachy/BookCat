@@ -51,7 +51,7 @@
         @foreach (Review review in Model.Reviews){
             <div class="review-card">
                 <div class="user-info">
-                    <a asp-controller="User" asp-action="@review.UserId">
+                    <a asp-controller="User" asp-action="Index" asp-route-username="@review.User.UserName">
                         @if(string.IsNullOrEmpty(review.User.UserImageUrl)){
                             <img src="~/images/default_user.png" alt="User profile picture">
                         }

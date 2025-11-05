@@ -84,5 +84,6 @@ app.Run();
 
 /*
 * Changes
+* User endpoint now uses username instead of id
 * 
 */
