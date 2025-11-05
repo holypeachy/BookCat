@@ -11,6 +11,10 @@ This project was built under a tight timeline, but I’ve identified areas I’d
 - Add moderation tools leveraging existing role flags.
 - Improve CSS naming and modularity for more reusable components.
 
+## 🧪 Testing
+Special thanks to my buddy [JK_Bizcuits](https://github.com/JKBizcuits): 
+> I shit talked my friend's project until he fixed it.
+
 ## 🧰 Tech Stack (Summary)
 | Layer          | Technologies                              |
 | -------------- | ----------------------------------------- |
