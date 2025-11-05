@@ -83,20 +83,6 @@ app.Run();
 
 
 /*
-? Things I could improve (for readme)
-? Since this is my first full stack project I can see a lot I could improve.
-    I typically iterate on projects a lot while I'm working on them but I'm in a bit of a time crunch on this one.
-    So here are some things that bother me that I could change:
-? I'm sure I could rethink the IRepo interface a little bit more. I actually don't think it was too necessary to use a repository pattern but it didn't hurt.
-? Better usage of LINQ and DbContext SQL. Pagination in Books/Details/ is kinda useless when talking about performance because I request all reviews either way and they are loaded into memory, but ideally I would implement pagination in the repos
-    to prevent it all being loaded to memory. Also, the book repos load navigation properties automatically, which is really bad.
-? There are roles and a flag for reviews to be admin deleted, but I didn't implement any kind of moderation.
-? CSS could be reworked, after working with CSS a lot more I can see ways of improving the way I approach styling pages.
-? CSS naming was quite messy, I know now what sort of code I should turn into reusable classes.
-
 * Changes
-* Fix pagination bug
-* Change Book AddedOn to DateTime
-* Make sure reviews are loaded in searches and AllBooks
 * 
 */
