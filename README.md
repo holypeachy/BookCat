@@ -1,19 +1,28 @@
 # 😺 BookCat
-#### BookCat is a full-stack web application built with ASP.NET Core MVC designed for users to browse, review, and catalog books. The platform integrates server-side rendering and clean REST-style endpoints.
-- BookCat is a web application built for discovering and reviewing books.
-- Users can create accounts, search for books locally or add books via external data sources.
-- Users can see and write reviews.
-- Users can see other users' profiles in which they can see the user's reviews, bio, and other relevant information.
+#### BookCat is a **full-stack ASP.NET Core MVC web application** for discovering, reviewing, and cataloging books. It integrates server-side rendering, clean REST-style endpoints, and responsive front-end design.
+- Create an account and browse the catalog.
+- Add books from local or external sources (Google Books API).
+- Write and edit reviews, rate titles, and view other users’ profiles.
 
-## ✅ Possible Improvements
-Since this is my first full stack project I can see a lot I could improve. I typically iterate on projects a lot while I'm working on them but I'm in a bit short on time on this one. So here are some things that bother me that I would change:
-- Rethink the IRepo interface a little bit more. I also don't think it was too necessary to use a repository pattern but it didn't hurt.
-- Better usage of LINQ and DbContext SQL. Pagination in Books/Details/ is kinda useless when it comes to performance because I request all reviews either way and they are all loaded into memory, but ideally I would implement pagination in the repos.
-  Also, the repos load navigation properties automatically, which is really bad.
-- There are roles and a flag for reviews to be admin deleted, but I didn't implement any kind of moderation.
-- CSS could be reworked, after working with CSS a lot more I can see ways of improving the way I approach styling pages. CSS naming was quite messy, I know now what sort of code I should turn into reusable classes.
+## 🧩 Future Improvements
+This project was built under a tight timeline, but I’ve identified areas I’d like to revisit:
+- Refine the repository pattern (consider leaner abstractions or direct DbContext queries).
+- Implement true pagination in the reviews repo to avoid loading large collections.
+- Add moderation tools leveraging existing role flags.
+- Improve CSS naming and modularity for more reusable components.
 
-## 🧱 Architecture
+## 🧰 Tech Stack (Summary)
+| Layer          | Technologies                              |
+| -------------- | ----------------------------------------- |
+| Backend        | ASP.NET Core 9, C#, Entity Framework Core |
+| Database       | SQL Server Express                        |
+| Frontend       | Razor Views, HTML5, CSS3, JavaScript      |
+| Auth           | ASP.NET Identity                          |
+| External APIs  | Google Books API                          |
+| Image Handling | ImageSharp                                |
+
+
+### 🧱 Architecture
 - ASP.NET Core MVC for the presentation and controller layer.
 - Entity Framework Core as ORM for database interaction (SQL Server).
 - Repository pattern to abstract data access.
@@ -49,6 +58,7 @@ Since this is my first full stack project I can see a lot I could improve. I typ
 - Responsive UI with mobile support.
 
 ## 🚀 Getting Started
+Prerequisites: .NET 9 SDK, SQL Server Express, and a Google Books API key.
 ```bash
 git clone git@github.com:holypeachy/BookCat.git
 
