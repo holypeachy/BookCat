@@ -6,7 +6,7 @@
 - Users can see other users' profiles in which they can see the user's reviews, bio, and other relevant information.
 
 ## ✅ Possible Improvements
-Since this is my first full stack project I can see a lot I could improve. I typically iterate on projects a lot while I'm working on them but I'm in a bit short on time on this one. So here are some things that bother me that I could change:
+Since this is my first full stack project I can see a lot I could improve. I typically iterate on projects a lot while I'm working on them but I'm in a bit short on time on this one. So here are some things that bother me that I would change:
 - Rethink the IRepo interface a little bit more. I also don't think it was too necessary to use a repository pattern but it didn't hurt.
 - Better usage of LINQ and DbContext SQL. Pagination in Books/Details/ is kinda useless when it comes to performance because I request all reviews either way and they are all loaded into memory, but ideally I would implement pagination in the repos.
   Also, the repos load navigation properties automatically, which is really bad.
