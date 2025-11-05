@@ -27,7 +27,7 @@ public class BookRepo : IRepo<Book>
 
     public async Task<IEnumerable<Book>> GetAllAsync()
     {
-        return await _db.Books.Include(b => b.Identifiers).ToListAsync();
+        return await _db.Books.Include(b => b.Identifiers).Include(b => b.AddedBy).ToListAsync();
     }
 
     public async Task<Book?> GetByIdAsync(Guid id)

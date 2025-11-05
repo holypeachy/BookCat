@@ -10,7 +10,7 @@ public class Book
     public string? Publisher { get; set; }
     public string? PublishedDate { get; set; }
     public string? CoverUrl { get; set; }
-    public required DateOnly AddedOn { get; set; }
+    public required DateTime AddedOn { get; set; }
     public string? AddedById { get; set; }
 
     public ICollection<BookIdentifier> Identifiers { get; set; } = [];

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authentication;
+using BookCat.Site.Data;
 
 namespace BookCat.Site.Controllers;
 
@@ -18,17 +19,20 @@ public class BooksController : Controller
     private readonly IRepo<Review> _reviews;
     private readonly IRepo<BookIdentifier> _identifiers;
     private readonly UserManager<AppUser> _userManager;
+    private readonly AppDbContext _db;
 
     public BooksController(GoogleBooksService googleBooksService,
         IRepo<Book> bookRepo, IRepo<Review> reviewRepo,
         IRepo<BookIdentifier> identifierRepo,
-        UserManager<AppUser> userManager)
+        UserManager<AppUser> userManager,
+        AppDbContext db)
     {
         _googleAPI = googleBooksService;
         _books = bookRepo;
         _reviews = reviewRepo;
         _identifiers = identifierRepo;
         _userManager = userManager;
+        _db = db;
     }
 
     [HttpGet("Books/")]
@@ -63,8 +67,8 @@ public class BooksController : Controller
         }
         int reviewCount = book.Reviews.Count;
 
-        int maxPages = book.Reviews.Count / pageSize;
-        if (book.Reviews.Count % pageSize != 0) maxPages++;
+        int maxPages = reviewCount / pageSize;
+        if (reviewCount % pageSize != 0) maxPages++;
 
         if (page >= maxPages)
         {
@@ -78,7 +82,7 @@ public class BooksController : Controller
             });
         }
 
-        book.Reviews = book.Reviews.Skip((page < 1 ? 1 : page) - 1).Take(pageSize).ToList();
+        book.Reviews = book.Reviews.Skip(((page < 1 ? 1 : page) - 1) * pageSize).Take(pageSize).ToList();
         return View("Details", new BookDetailsViewModel
         {
             Book = book,
@@ -100,8 +104,8 @@ public class BooksController : Controller
             TotalBooks = await _books.GetCountAsync(),
         };
 
-        int maxPages = model.Books.Count / pageSize;
-        if (model.Books.Count % pageSize != 0) maxPages++;
+        int maxPages = model.TotalBooks / pageSize;
+        if (model.TotalBooks % pageSize != 0) maxPages++;
 
 
         if (page >= maxPages)
@@ -112,9 +116,14 @@ public class BooksController : Controller
             return View(model);
         }
 
-        model.CurrentPage = page < -1 ? 1 : page;
-        model.Books = model.Books.Skip(model.CurrentPage - 1).Take(pageSize).ToList();
+        model.CurrentPage = page < 1 ? 1 : page;
+        model.Books = model.Books.Skip((model.CurrentPage - 1) * pageSize).Take(pageSize).ToList();
         model.TotalPages = maxPages;
+
+        foreach (var book in model.Books)
+        {
+            await _db.Entry(book).Collection(b => b.Reviews).LoadAsync();
+        }
 
         return View(model);
     }
@@ -138,6 +147,12 @@ public class BooksController : Controller
             {
                 books.Add(item.Book);
             }
+            
+            foreach (var book in books)
+            {
+                await _db.Entry(book).Collection(b => b.Reviews).LoadAsync();
+            }
+            
             return View("Results", new ResultsViewModel { Books = books, Query = query });
         }
         else
@@ -148,6 +163,11 @@ public class BooksController : Controller
             {
                 var bookDtos = await _googleAPI.BookSearchName(cleanQuery);
                 return View("AddResults", bookDtos);
+            }
+
+            foreach (var book in books)
+            {
+                await _db.Entry(book).Collection(b => b.Reviews).LoadAsync();
             }
 
             return View("Results", new ResultsViewModel { Books = books, Query = query });
@@ -193,7 +213,7 @@ public class BooksController : Controller
             Publisher = dto.Publisher,
             PublishedDate = dto.PublishedDate,
             CoverUrl = dto.CoverUrl,
-            AddedOn = DateOnly.FromDateTime(DateTime.Now),
+            AddedOn = DateTime.Now,
             AddedById = (await _userManager.GetUserAsync(User))?.Id
         };
 

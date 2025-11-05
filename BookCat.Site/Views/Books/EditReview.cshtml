@@ -33,7 +33,7 @@
         @if(Model.Book.AddedById is not null && Model.Book.AddedBy is not null){
             <p>Added By: <a asp-controller="User" asp-action="Index" asp-route-id="@Model.Book.AddedById">@Model.Book.AddedBy.UserName</a></p>
         }
-        <p>Date Added: @Model.Book.AddedOn</p>
+        <p>Date Added: @(DateOnly.FromDateTime(Model.Book.AddedOn))</p>
     </div>
 </div>
 <div class="book-description">

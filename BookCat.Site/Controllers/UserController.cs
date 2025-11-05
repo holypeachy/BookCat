@@ -34,8 +34,8 @@ public class UserController : Controller
         };
         model.TotalReviews = model.Reviews.Count;
 
-        int maxPages = model.Reviews.Count / pageSize;
-        if (model.Reviews.Count % pageSize != 0) maxPages++;
+        int maxPages = model.TotalReviews / pageSize;
+        if (model.TotalReviews % pageSize != 0) maxPages++;
 
         if (page >= maxPages)
         {

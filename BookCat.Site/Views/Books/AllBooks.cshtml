@@ -19,7 +19,7 @@
         <div class="book-cover-wrapper">
             @if(string.IsNullOrEmpty(item.CoverUrl)){
             <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">
-                <img class="book-cover" src="~/images/default_book.png" alt="@item.CoverUrl Book Cover">
+                <img class="book-cover" src="~/images/default_book2.png" alt="@item.CoverUrl Book Cover">
             </a>
             }
             else{
@@ -50,8 +50,13 @@
                     result = string.Format("{0:0.00}", value);
                 }
             }
-            <p>Score: @result / 5</p>
-            <p>Reviews: @item.Reviews.Count</p>
+            @if(item.Reviews.Count > 0){
+                <p>Rating: @result / 5</p>
+                <p>Reviews: @item.Reviews.Count</p>
+            }
+            else{
+                <p>No Reviews</p>
+            }
             @if (item.AddedBy is not null){
                 <p>Added By: @(item.AddedBy.UserName)</p>
             }

@@ -24,6 +24,10 @@
     font-size: 1.2em;
 }
 
+.book-info-wrapper h4 {
+    margin: 10px;
+}
+
 .book-cover-wrapper{
     padding: 5px;
 }
