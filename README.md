@@ -5,9 +5,9 @@
 - Write and edit reviews, rate titles, and view other users’ profiles.
 
 ## 🧩 Future Improvements
-This project was built under a tight timeline, but I’ve identified areas I’d like to revisit:
+This project was built under a tight timeline, but here are some things I’d like to revisit:
 - Refine the repository pattern (consider leaner abstractions or direct DbContext queries).
-- Implement true pagination in the reviews repo to avoid loading large collections.
+- Implement true pagination in the repos to avoid unnecessarily loading navigation properties into memory.
 - Add moderation tools leveraging existing role flags.
 - Improve CSS naming and modularity for more reusable components.
 
